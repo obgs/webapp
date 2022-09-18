@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useGoogleLogin } from '@react-oauth/google';
 import NextLink from "next/link";
 import useAuth from "../../utils/auth/useAuth";
 
@@ -26,7 +27,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { signin } = useAuth();
+  const { signin, oAuthGoogleSignin } = useAuth();
 
   const login = async () => {
     setError("");
@@ -40,6 +41,21 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
       console.error(err);
     }
   };
+
+  const oAuthGoogleLogin = useGoogleLogin({
+    onSuccess: async tokenResponse => {
+      setError("");
+      try {
+        await oAuthGoogleSignin(tokenResponse.access_token);
+        onClose();
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        }
+        console.error(err);
+      }
+    }
+  })
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -89,6 +105,11 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
         <Box mt={2} mb={2}>
           <Button onClick={login} fullWidth variant="contained">
             Log in
+          </Button>
+        </Box>
+        <Box mb={2}>
+          <Button onClick={oAuthGoogleLogin} fullWidth variant="contained">
+            Log in with google
           </Button>
         </Box>
         <Typography>

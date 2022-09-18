@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { PropsWithChildren, useCallback, useState } from "react";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import storage from "../storage";
 import client from "./client";
 import AuthContext from "./context";
@@ -48,6 +49,15 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     [router, saveTokens]
   );
 
+  const oAuthGoogleSignin = useCallback(
+    async (token: string) => {
+      const { access_token, refresh_token } = await client.oAuthGoogleSignin(token);
+      saveTokens(access_token, refresh_token);
+      router.push("/");
+    },
+    [router, saveTokens]
+  )
+
   const signout = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
@@ -62,12 +72,15 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         signin,
         signup,
         signout,
+        oAuthGoogleSignin,
         accessToken,
         refreshToken,
         authenticated,
       }}
     >
-      {children}
+      <GoogleOAuthProvider clientId="43480745913-1lhqt43oe2gir7fqdv5058m5l3q1hl2p.apps.googleusercontent.com">
+        {children}
+      </GoogleOAuthProvider>
     </AuthContext.Provider>
   );
 };
