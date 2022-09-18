@@ -1,7 +1,16 @@
 import styled from "@emotion/styled";
-import { Box, Button, Link, Modal, TextField, Typography } from "@mui/material";
-import React from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  Link,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import NextLink from "next/link";
+import useAuth from "../../utils/auth/useAuth";
 
 interface Props {
   open: boolean;
@@ -13,6 +22,35 @@ const Input = styled(TextField)`
 `;
 
 const LoginModal: React.FC<Props> = ({ open, onClose }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const { signin } = useAuth();
+
+  const login = async () => {
+    setError("");
+    try {
+      await signin(email, password);
+      onClose();
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+      console.error(err);
+    }
+  };
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+    setError("");
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+    setError("");
+  };
+
   return (
     <Modal
       open={open}
@@ -27,16 +65,29 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
         sx={{
           backgroundColor: "white",
           borderRadius: "10px",
-          padding: "20px",
+          padding: "20px 40px",
           display: "flex",
           flexDirection: "column",
         }}
       >
         <Typography>Log in</Typography>
-        <Input variant="outlined" label="Email" type="email" />
-        <Input variant="outlined" label="Password" type="password" />
+        <Input
+          variant="outlined"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={handleEmailChange}
+        />
+        <Input
+          variant="outlined"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        {error && <Alert severity="error">{error}</Alert>}
         <Box mt={2} mb={2}>
-          <Button fullWidth variant="contained">
+          <Button onClick={login} fullWidth variant="contained">
             Log in
           </Button>
         </Box>
