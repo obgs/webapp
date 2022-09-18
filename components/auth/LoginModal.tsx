@@ -42,7 +42,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
     }
   };
 
-  const oAuthGoogleLogin = useGoogleLogin({
+  const oAuthGoogle = useGoogleLogin({
     onSuccess: async tokenResponse => {
       setError("");
       try {
@@ -108,7 +108,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
           </Button>
         </Box>
         <Box mb={2}>
-          <Button onClick={oAuthGoogleLogin} fullWidth variant="contained">
+          <Button onClick={() => oAuthGoogle()} fullWidth variant="contained">
             Log in with google
           </Button>
         </Box>
