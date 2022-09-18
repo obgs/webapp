@@ -43,7 +43,9 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
         <Typography>
           Not registered? Sign up{" "}
           <NextLink href="/auth/signup" passHref>
-            <Link sx={{ cursor: "pointer" }}>here</Link>
+            <Link sx={{ cursor: "pointer" }} onClick={onClose}>
+              here
+            </Link>
           </NextLink>
         </Typography>
       </Box>
