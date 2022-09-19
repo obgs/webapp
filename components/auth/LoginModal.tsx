@@ -27,7 +27,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { signin, oAuthGoogleSignin } = useAuth();
+  const { signin, googleSignin } = useAuth();
 
   const login = async () => {
     setError("");
@@ -46,7 +46,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
     onSuccess: async tokenResponse => {
       setError("");
       try {
-        await oAuthGoogleSignin(tokenResponse.access_token);
+        await googleSignin(tokenResponse.access_token);
         onClose();
       } catch (err) {
         if (err instanceof Error) {

@@ -49,9 +49,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     [router, saveTokens]
   );
 
-  const oAuthGoogleSignin = useCallback(
+  const googleSignin = useCallback(
     async (token: string) => {
-      const { access_token, refresh_token } = await client.oAuthGoogleSignin(token);
+      const { access_token, refresh_token } = await client.googleSignin(token);
       saveTokens(access_token, refresh_token);
       router.push("/");
     },
@@ -66,19 +66,21 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     router.push("/");
   }, [router]);
 
+  const googleClientID = process.env.NEXT_PUBLIC_OAUTH_GOOGLE_CLIENT_ID || ""
+
   return (
     <AuthContext.Provider
       value={{
         signin,
         signup,
         signout,
-        oAuthGoogleSignin,
+        googleSignin,
         accessToken,
         refreshToken,
         authenticated,
       }}
     >
-      <GoogleOAuthProvider clientId="43480745913-1lhqt43oe2gir7fqdv5058m5l3q1hl2p.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={googleClientID}>
         {children}
       </GoogleOAuthProvider>
     </AuthContext.Provider>
