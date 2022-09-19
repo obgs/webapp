@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { PropsWithChildren, useCallback, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import storage from "../storage";
 import client from "./client";
 import AuthContext from "./context";
@@ -55,6 +55,15 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     setAuthenticated(false);
     router.push("/");
   }, [router]);
+
+  useEffect(() => {
+    const { accessToken: access, refreshToken: refresh } = storage.loadTokens();
+    if (access && refresh) {
+      setAccessToken(access);
+      setRefreshToken(refresh);
+      setAuthenticated(true);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider
