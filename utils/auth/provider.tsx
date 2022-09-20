@@ -57,10 +57,10 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   }, [router]);
 
   useEffect(() => {
-    const { accessToken: access, refreshToken: refresh } = storage.loadTokens();
-    if (access && refresh) {
-      setAccessToken(access);
-      setRefreshToken(refresh);
+    const tokens = storage.loadTokens();
+    if (tokens) {
+      setAccessToken(tokens.accessToken);
+      setRefreshToken(tokens.refreshToken);
       setAuthenticated(true);
     }
   }, []);
