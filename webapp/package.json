@@ -18,6 +18,7 @@
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.10.1",
+    "@react-oauth/google": "^0.2.8",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "next": "12.2.5",
