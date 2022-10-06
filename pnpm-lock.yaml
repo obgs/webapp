@@ -15,6 +15,7 @@ specifiers:
   '@mui/icons-material': ^5.8.4
   '@mui/lab': 5.0.0-alpha.102
   '@mui/material': ^5.10.1
+  '@react-oauth/google': ^0.2.8
   '@types/node': 18.7.7
   '@types/react': 18.0.17
   '@types/react-dom': 18.0.6
@@ -43,6 +44,7 @@ dependencies:
   '@mui/lab': 5.0.0-alpha.102_rxrgbjxmbxa6cxvmfcmtfba2ii
   '@mui/material': 5.10.1_sqzxty2p7kxc2tmue4tecplwku
   formik: 2.2.9_react@18.2.0
+  '@react-oauth/google': 0.2.8_biqbaboplfbrettd7655fr4n2y
   graphql: 16.6.0
   graphql-tag: 2.12.6_graphql@16.6.0
   next: 12.2.5_twoewwu6sg7cdf3ao6njtbftne
@@ -1960,6 +1962,16 @@ packages:
 
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
+
+  /@react-oauth/google/0.2.8_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-W3sRcU6kSZMGUOk10Vy5kPZPzvsi7+UpM2MxnT6fMVp+whDMKCVope5R01gwRydK9OI+0rozAARCD2NgrbkV7w==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@rushstack/eslint-patch/1.1.4:
