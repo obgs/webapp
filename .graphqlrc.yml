@@ -1,0 +1,24 @@
+schema: graphql/schema.json
+documents: "graphql/**/*.gql"
+extensions:
+  codegen:
+    overwrite: true
+    hooks:
+      afterAllFileWrite:
+        - prettier --write
+    generates:
+      graphql/generated.tsx:
+        plugins:
+          - "typescript"
+          - "typescript-operations"
+          - "typescript-react-apollo"
+          - "typescript-resolvers"
+        config:
+          withComponent: false
+          withHOC: false
+          withHooks: true
+          useIndexSignature: true
+          exportFragmentSpreadSubTypes: true
+      graphql/introspection-result.ts:
+        plugins:
+          - fragment-matcher

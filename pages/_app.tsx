@@ -7,6 +7,7 @@ import "@fontsource/roboto/700.css";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Layout from "../components/Layout";
 import AuthProvider from "../utils/auth/provider";
+import ApolloProvider from "../utils/apollo/provider";
 
 const theme = createTheme();
 
@@ -14,9 +15,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ApolloProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ApolloProvider>
       </AuthProvider>
     </ThemeProvider>
   );
