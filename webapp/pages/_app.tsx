@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import Layout from "../components/Layout";
 import AuthProvider from "../utils/auth/provider";
 import ApolloProvider from "../utils/apollo/provider";
+import UserProvider from "../utils/user/provider";
 
 const theme = createTheme();
 
@@ -16,9 +17,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <ApolloProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <UserProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </UserProvider>
         </ApolloProvider>
       </AuthProvider>
     </ThemeProvider>

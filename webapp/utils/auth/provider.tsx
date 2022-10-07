@@ -69,10 +69,10 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const googleClientID = process.env.NEXT_PUBLIC_OAUTH_GOOGLE_CLIENT_ID || "";
 
   useEffect(() => {
-    const { accessToken: access, refreshToken: refresh } = storage.loadTokens();
-    if (access && refresh) {
-      setAccessToken(access);
-      setRefreshToken(refresh);
+    const tokens = storage.loadTokens();
+    if (tokens) {
+      setAccessToken(tokens.accessToken);
+      setRefreshToken(tokens.refreshToken);
       setAuthenticated(true);
     }
   }, []);
