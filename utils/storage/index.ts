@@ -5,7 +5,7 @@ interface Tokens {
 
 interface Storage {
   saveTokens: (tokens: Tokens) => void;
-  loadTokens: () => Tokens;
+  loadTokens: () => Tokens | undefined;
   clean: () => void;
 }
 
@@ -17,10 +17,7 @@ const storage: Storage = {
   loadTokens: () => {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    if (!accessToken || !refreshToken) {
-      throw new Error("Failed to load tokens");
-    }
-    return { accessToken, refreshToken };
+    if (accessToken && refreshToken) return { accessToken, refreshToken };
   },
   clean: () => {
     localStorage.removeItem("accessToken");
