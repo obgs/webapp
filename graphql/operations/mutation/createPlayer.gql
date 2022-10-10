@@ -1,0 +1,6 @@
+mutation CreatePlayer($name: String!) {
+  createPlayer(input: { name: $name }) {
+    id
+    name
+  }
+}
