@@ -1,0 +1,11 @@
+fragment playerFields on Player {
+  id
+  name
+  owner {
+    id
+  }
+  supervisors {
+    id
+    name
+  }
+}

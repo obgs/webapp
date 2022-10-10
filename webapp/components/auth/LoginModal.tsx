@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from "@react-oauth/google";
 import NextLink from "next/link";
 import useAuth from "../../utils/auth/useAuth";
 
@@ -43,7 +43,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
   };
 
   const oAuthGoogle = useGoogleLogin({
-    onSuccess: async tokenResponse => {
+    onSuccess: async (tokenResponse) => {
       setError("");
       try {
         await googleSignin(tokenResponse.access_token);
@@ -54,8 +54,8 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
         }
         console.error(err);
       }
-    }
-  })
+    },
+  });
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -79,7 +79,7 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
     >
       <Box
         sx={{
-          backgroundColor: "white",
+          bgcolor: "background.paper",
           borderRadius: "10px",
           padding: "20px 40px",
           display: "flex",
