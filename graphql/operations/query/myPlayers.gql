@@ -1,0 +1,7 @@
+query MyPlayers {
+  me {
+    players {
+      ...playerFields
+    }
+  }
+}

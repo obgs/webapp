@@ -5,7 +5,7 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    Node: ["User"],
+    Node: ["Player", "User"],
   },
 };
 export default result;
