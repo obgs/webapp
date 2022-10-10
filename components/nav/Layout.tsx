@@ -4,16 +4,21 @@ import {
   Avatar,
   Box,
   Button,
+  Drawer,
   Menu,
   MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
-import LoginModal from "./auth/LoginModal";
-import useAuth from "../utils/auth/useAuth";
+import LoginModal from "../auth/LoginModal";
+import useAuth from "../../utils/auth/useAuth";
 
 import { useRouter } from "next/router";
-import useUser from "../utils/user/useUser";
+import useUser from "../../utils/user/useUser";
+import NavBar from "./NavBar";
+import Breadcrumbs from "./Breadcrumbs";
+
+const drawerWidth = 240;
 
 const Layout = ({ children }: React.PropsWithChildren) => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -44,9 +49,13 @@ const Layout = ({ children }: React.PropsWithChildren) => {
   const { authenticated, signout } = useAuth();
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ display: "flex" }}>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar>
+          <Breadcrumbs />
           <Box sx={{ flexGrow: 1 }} />
           {authenticated ? (
             <Box>
@@ -82,7 +91,27 @@ const Layout = ({ children }: React.PropsWithChildren) => {
           )}
         </Toolbar>
       </AppBar>
-      {children}
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: "auto" }}>
+          <NavBar />
+        </Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+        {children}
+      </Box>
       <LoginModal
         open={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
