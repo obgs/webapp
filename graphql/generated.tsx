@@ -294,7 +294,7 @@ export type PlayerFieldsFragment = {
   __typename?: "Player";
   id: string;
   name: string;
-  owner?: { __typename?: "User"; id: string } | null;
+  owner?: { __typename?: "User"; id: string; name: string } | null;
   supervisors?: Array<{ __typename?: "User"; id: string; name: string }> | null;
 };
 
@@ -347,13 +347,51 @@ export type MyPlayersQuery = {
       __typename?: "Player";
       id: string;
       name: string;
-      owner?: { __typename?: "User"; id: string } | null;
+      owner?: { __typename?: "User"; id: string; name: string } | null;
       supervisors?: Array<{
         __typename?: "User";
         id: string;
         name: string;
       }> | null;
     }> | null;
+  };
+};
+
+export type SearchPlayersQueryVariables = Exact<{
+  before?: InputMaybe<Scalars["Cursor"]>;
+  after?: InputMaybe<Scalars["Cursor"]>;
+  where: PlayerWhereInput;
+  first?: InputMaybe<Scalars["Int"]>;
+  last?: InputMaybe<Scalars["Int"]>;
+}>;
+
+export type SearchPlayersQuery = {
+  __typename?: "Query";
+  players: {
+    __typename?: "PlayerConnection";
+    totalCount: number;
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: any | null;
+      endCursor?: any | null;
+    };
+    edges?: Array<{
+      __typename?: "PlayerEdge";
+      cursor: any;
+      node?: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      } | null;
+    } | null> | null;
   };
 };
 
@@ -371,6 +409,7 @@ export const PlayerFieldsFragmentDoc = gql`
     name
     owner {
       id
+      name
     }
     supervisors {
       id
@@ -630,6 +669,91 @@ export type MyPlayersLazyQueryHookResult = ReturnType<
 export type MyPlayersQueryResult = Apollo.QueryResult<
   MyPlayersQuery,
   MyPlayersQueryVariables
+>;
+export const SearchPlayersDocument = gql`
+  query SearchPlayers(
+    $before: Cursor
+    $after: Cursor
+    $where: PlayerWhereInput!
+    $first: Int
+    $last: Int
+  ) {
+    players(
+      before: $before
+      after: $after
+      where: $where
+      first: $first
+      last: $last
+    ) {
+      pageInfo {
+        ...pageInfoFields
+      }
+      totalCount
+      edges {
+        cursor
+        node {
+          ...playerFields
+        }
+      }
+    }
+  }
+  ${PageInfoFieldsFragmentDoc}
+  ${PlayerFieldsFragmentDoc}
+`;
+
+/**
+ * __useSearchPlayersQuery__
+ *
+ * To run a query within a React component, call `useSearchPlayersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPlayersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchPlayersQuery({
+ *   variables: {
+ *      before: // value for 'before'
+ *      after: // value for 'after'
+ *      where: // value for 'where'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *   },
+ * });
+ */
+export function useSearchPlayersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchPlayersQuery,
+    SearchPlayersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchPlayersQuery, SearchPlayersQueryVariables>(
+    SearchPlayersDocument,
+    options
+  );
+}
+export function useSearchPlayersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchPlayersQuery,
+    SearchPlayersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SearchPlayersQuery, SearchPlayersQueryVariables>(
+    SearchPlayersDocument,
+    options
+  );
+}
+export type SearchPlayersQueryHookResult = ReturnType<
+  typeof useSearchPlayersQuery
+>;
+export type SearchPlayersLazyQueryHookResult = ReturnType<
+  typeof useSearchPlayersLazyQuery
+>;
+export type SearchPlayersQueryResult = Apollo.QueryResult<
+  SearchPlayersQuery,
+  SearchPlayersQueryVariables
 >;
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;

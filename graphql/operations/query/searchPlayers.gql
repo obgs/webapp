@@ -1,0 +1,26 @@
+query SearchPlayers(
+  $before: Cursor
+  $after: Cursor
+  $where: PlayerWhereInput!
+  $first: Int
+  $last: Int
+) {
+  players(
+    before: $before
+    after: $after
+    where: $where
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...pageInfoFields
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ...playerFields
+      }
+    }
+  }
+}
