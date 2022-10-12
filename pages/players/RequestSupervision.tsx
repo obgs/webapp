@@ -15,11 +15,13 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import PlayersList from "../../components/players/List";
 import {
+  PlayerFieldsFragment,
   PlayerWhereInput,
   useSearchPlayersLazyQuery,
 } from "../../graphql/generated";
 import ReplayIcon from "@mui/icons-material/Replay";
 import useUser from "../../utils/user/useUser";
+import RequestPlayerSupervisionModal from "./RequestSupervisionModal";
 
 const rowsPerPageOptions = [10, 20, 50];
 
@@ -136,6 +138,14 @@ const RequestSupervision = () => {
     [data?.players.pageInfo, page, rowsPerPage, search, where]
   );
 
+  const [requestModalOpen, setRequestModalOpen] = useState(false);
+  const [requestedPlayer, setRequestedPlayer] =
+    useState<PlayerFieldsFragment>();
+  const onSelect = useCallback((player: PlayerFieldsFragment) => {
+    setRequestedPlayer(player);
+    setRequestModalOpen(true);
+  }, []);
+
   return (
     <>
       <Typography variant="body1">
@@ -187,7 +197,15 @@ const RequestSupervision = () => {
           page,
           onPageChange: handlePageChange,
         }}
+        onSelect={onSelect}
       />
+      {requestedPlayer && (
+        <RequestPlayerSupervisionModal
+          open={requestModalOpen}
+          onClose={() => setRequestModalOpen(false)}
+          player={requestedPlayer}
+        />
+      )}
       <Snackbar open={!!error}>
         <Alert severity="error">
           {error?.message || "Something went wrong"}

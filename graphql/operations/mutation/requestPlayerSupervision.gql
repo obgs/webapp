@@ -1,0 +1,5 @@
+mutation RequestPlayerSupervision($input: RequestPlayerSupervisionInput!) {
+  requestPlayerSupervision(input: $input) {
+    id
+  }
+}

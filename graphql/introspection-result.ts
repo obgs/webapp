@@ -5,7 +5,12 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    Node: ["Player", "User"],
+    Node: [
+      "Player",
+      "PlayerSupervisionRequest",
+      "PlayerSupervisionRequestApproval",
+      "User",
+    ],
   },
 };
 export default result;

@@ -17,6 +17,7 @@ interface Props {
   loading: boolean;
   toolbar?: React.ReactNode;
   paginationProps?: TablePaginationProps;
+  onSelect?: (player: PlayerFieldsFragment) => void;
 }
 
 const PlayersList: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const PlayersList: React.FC<Props> = ({
   loading,
   toolbar,
   paginationProps,
+  onSelect,
 }) => {
   return (
     <Paper>
@@ -40,14 +42,14 @@ const PlayersList: React.FC<Props> = ({
         <TableBody>
           {loading && (
             <TableRow>
-              <TableCell>
+              <TableCell rowSpan={4}>
                 <Typography>Loading...</Typography>
               </TableCell>
             </TableRow>
           )}
           {players?.length === 0 && (
             <TableRow>
-              <TableCell>
+              <TableCell rowSpan={4}>
                 <Typography>Nothing found</Typography>
               </TableCell>
             </TableRow>
@@ -55,7 +57,11 @@ const PlayersList: React.FC<Props> = ({
           {players?.map(
             (player) =>
               player && (
-                <TableRow key={player.id}>
+                <TableRow
+                  hover
+                  onClick={() => onSelect?.(player)}
+                  key={player.id}
+                >
                   <TableCell>{player.id}</TableCell>
                   <TableCell>{player.name}</TableCell>
                   <TableCell>
