@@ -19,6 +19,7 @@ import {
   useSearchPlayersLazyQuery,
 } from "../../graphql/generated";
 import ReplayIcon from "@mui/icons-material/Replay";
+import useUser from "../../utils/user/useUser";
 
 const rowsPerPageOptions = [10, 20, 50];
 
@@ -30,15 +31,52 @@ const RequestSupervision = () => {
 
   const [search, { data, loading, error }] = useSearchPlayersLazyQuery();
 
+  const { user } = useUser();
+
+  const notSupervisedOrOwnedByMe: PlayerWhereInput = useMemo(
+    () => ({
+      and: [
+        {
+          not: {
+            hasSupervisorsWith: [
+              {
+                id: user?.id,
+              },
+            ],
+          },
+        },
+        {
+          or: [
+            {
+              hasOwner: false,
+            },
+            {
+              not: {
+                hasOwnerWith: [
+                  {
+                    id: user?.id,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    }),
+    [user?.id]
+  );
+
   // do the initial search
   useEffect(() => {
     search({
       variables: {
         first: rowsPerPageOptions[0],
-        where: {},
+        where: {
+          ...notSupervisedOrOwnedByMe,
+        },
       },
     });
-  }, [search]);
+  }, [notSupervisedOrOwnedByMe, search]);
 
   const players = useMemo(
     () => data?.players.edges?.map((e) => e?.node),
@@ -50,7 +88,9 @@ const RequestSupervision = () => {
   const where = useMemo(() => {
     // we have to assing the where object to a variable because otherwise
     // typescript will allow any property to be set on it
-    const clause: PlayerWhereInput = {};
+    const clause: PlayerWhereInput = {
+      ...notSupervisedOrOwnedByMe,
+    };
     if (!name) return clause;
     if (strictSearch) {
       clause.name = name;
@@ -58,7 +98,7 @@ const RequestSupervision = () => {
       clause.nameContains = name;
     }
     return clause;
-  }, [name, strictSearch]);
+  }, [name, notSupervisedOrOwnedByMe, strictSearch]);
 
   const searchWithCriteria = useCallback(() => {
     setPage(0);
