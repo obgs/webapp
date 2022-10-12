@@ -3,6 +3,7 @@ import { Box, Tab, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
 
 import MyPlayers from "./MyPlayers";
+import PendingSupervisionRequests from "./PendingSupervisionRequests";
 import RequestSupervision from "./RequestSupervision";
 
 const Players = () => {
@@ -37,6 +38,9 @@ const Players = () => {
         </TabPanel>
         <TabPanel value="request-supervision">
           <RequestSupervision />
+        </TabPanel>
+        <TabPanel value="pending-requests">
+          <PendingSupervisionRequests />
         </TabPanel>
       </TabContext>
     </Box>

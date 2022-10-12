@@ -480,6 +480,36 @@ export type MyPlayersQuery = {
   };
 };
 
+export type PendingSupervisionRequestsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type PendingSupervisionRequestsQuery = {
+  __typename?: "Query";
+  me: {
+    __typename?: "User";
+    sentSupervisionRequests?: Array<{
+      __typename?: "PlayerSupervisionRequest";
+      player: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      };
+      approvals?: Array<{
+        __typename?: "PlayerSupervisionRequestApproval";
+        approved?: boolean | null;
+        approver: { __typename?: "User"; id: string; name: string };
+      }> | null;
+    }> | null;
+  };
+};
+
 export type SearchPlayersQueryVariables = Exact<{
   before?: InputMaybe<Scalars["Cursor"]>;
   after?: InputMaybe<Scalars["Cursor"]>;
@@ -843,6 +873,75 @@ export type MyPlayersLazyQueryHookResult = ReturnType<
 export type MyPlayersQueryResult = Apollo.QueryResult<
   MyPlayersQuery,
   MyPlayersQueryVariables
+>;
+export const PendingSupervisionRequestsDocument = gql`
+  query PendingSupervisionRequests {
+    me {
+      sentSupervisionRequests {
+        player {
+          ...playerFields
+        }
+        approvals {
+          approved
+          approver {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+  ${PlayerFieldsFragmentDoc}
+`;
+
+/**
+ * __usePendingSupervisionRequestsQuery__
+ *
+ * To run a query within a React component, call `usePendingSupervisionRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePendingSupervisionRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePendingSupervisionRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePendingSupervisionRequestsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PendingSupervisionRequestsQuery,
+    PendingSupervisionRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    PendingSupervisionRequestsQuery,
+    PendingSupervisionRequestsQueryVariables
+  >(PendingSupervisionRequestsDocument, options);
+}
+export function usePendingSupervisionRequestsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PendingSupervisionRequestsQuery,
+    PendingSupervisionRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    PendingSupervisionRequestsQuery,
+    PendingSupervisionRequestsQueryVariables
+  >(PendingSupervisionRequestsDocument, options);
+}
+export type PendingSupervisionRequestsQueryHookResult = ReturnType<
+  typeof usePendingSupervisionRequestsQuery
+>;
+export type PendingSupervisionRequestsLazyQueryHookResult = ReturnType<
+  typeof usePendingSupervisionRequestsLazyQuery
+>;
+export type PendingSupervisionRequestsQueryResult = Apollo.QueryResult<
+  PendingSupervisionRequestsQuery,
+  PendingSupervisionRequestsQueryVariables
 >;
 export const SearchPlayersDocument = gql`
   query SearchPlayers(
