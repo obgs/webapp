@@ -33,6 +33,11 @@ const PendingSupervisionRequests = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {!requests?.length && (
+                <TableRow>
+                  <TableCell colSpan={3}>No requests</TableCell>
+                </TableRow>
+              )}
               {requests?.map((request) => {
                 if (!request) return;
                 const total = request?.approvals?.length;

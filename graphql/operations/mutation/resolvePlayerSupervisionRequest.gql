@@ -1,0 +1,5 @@
+mutation ResolvePlayerSupervisionRequest(
+  $input: ResolvePlayerSupervisionRequestInput!
+) {
+  resolvePlayerSupervisionRequest(input: $input)
+}

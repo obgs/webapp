@@ -312,7 +312,8 @@ export type User = Node & {
   mainPlayer?: Maybe<Player>;
   name: Scalars["String"];
   players?: Maybe<Array<Player>>;
-  sentSupervisionRequests?: Maybe<Array<PlayerSupervisionRequest>>;
+  receivedSupervisionRequests: Array<PlayerSupervisionRequest>;
+  sentSupervisionRequests: Array<PlayerSupervisionRequest>;
 };
 
 /** A connection to a list of items. */
@@ -361,11 +362,6 @@ export type UserWhereInput = {
   /** players edge predicates */
   hasPlayers?: InputMaybe<Scalars["Boolean"]>;
   hasPlayersWith?: InputMaybe<Array<PlayerWhereInput>>;
-  /** sent_supervision_requests edge predicates */
-  hasSentSupervisionRequests?: InputMaybe<Scalars["Boolean"]>;
-  hasSentSupervisionRequestsWith?: InputMaybe<
-    Array<PlayerSupervisionRequestWhereInput>
-  >;
   /** id field predicates */
   id?: InputMaybe<Scalars["ID"]>;
   idGT?: InputMaybe<Scalars["ID"]>;
@@ -409,6 +405,34 @@ export type PlayerFieldsFragment = {
   supervisors?: Array<{ __typename?: "User"; id: string; name: string }> | null;
 };
 
+export type PlayerSupervisionRequestFieldsFragment = {
+  __typename?: "PlayerSupervisionRequest";
+  id: string;
+  message?: string | null;
+  sender: { __typename?: "User"; id: string; name: string; avatarURL: string };
+  player: {
+    __typename?: "Player";
+    id: string;
+    name: string;
+    owner?: { __typename?: "User"; id: string; name: string } | null;
+    supervisors?: Array<{
+      __typename?: "User";
+      id: string;
+      name: string;
+    }> | null;
+  };
+  approvals?: Array<{
+    __typename?: "PlayerSupervisionRequestApproval";
+    approved?: boolean | null;
+    approver: {
+      __typename?: "User";
+      id: string;
+      name: string;
+      avatarURL: string;
+    };
+  }> | null;
+};
+
 export type CreatePlayerMutationVariables = Exact<{
   name: Scalars["String"];
 }>;
@@ -430,6 +454,15 @@ export type RequestPlayerSupervisionMutation = {
   };
 };
 
+export type ResolvePlayerSupervisionRequestMutationVariables = Exact<{
+  input: ResolvePlayerSupervisionRequestInput;
+}>;
+
+export type ResolvePlayerSupervisionRequestMutation = {
+  __typename?: "Mutation";
+  resolvePlayerSupervisionRequest: boolean;
+};
+
 export type UpdateUserMutationVariables = Exact<{
   id: Scalars["ID"];
   input: UpdateUserInput;
@@ -445,6 +478,49 @@ export type GetFileUploadUrlQueryVariables = Exact<{ [key: string]: never }>;
 export type GetFileUploadUrlQuery = {
   __typename?: "Query";
   getFileUploadURL: string;
+};
+
+export type IncomingSupervisionRequestsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type IncomingSupervisionRequestsQuery = {
+  __typename?: "Query";
+  me: {
+    __typename?: "User";
+    receivedSupervisionRequests: Array<{
+      __typename?: "PlayerSupervisionRequest";
+      id: string;
+      message?: string | null;
+      sender: {
+        __typename?: "User";
+        id: string;
+        name: string;
+        avatarURL: string;
+      };
+      player: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      };
+      approvals?: Array<{
+        __typename?: "PlayerSupervisionRequestApproval";
+        approved?: boolean | null;
+        approver: {
+          __typename?: "User";
+          id: string;
+          name: string;
+          avatarURL: string;
+        };
+      }> | null;
+    }>;
+  };
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
@@ -488,8 +564,16 @@ export type PendingSupervisionRequestsQuery = {
   __typename?: "Query";
   me: {
     __typename?: "User";
-    sentSupervisionRequests?: Array<{
+    sentSupervisionRequests: Array<{
       __typename?: "PlayerSupervisionRequest";
+      id: string;
+      message?: string | null;
+      sender: {
+        __typename?: "User";
+        id: string;
+        name: string;
+        avatarURL: string;
+      };
       player: {
         __typename?: "Player";
         id: string;
@@ -504,9 +588,14 @@ export type PendingSupervisionRequestsQuery = {
       approvals?: Array<{
         __typename?: "PlayerSupervisionRequestApproval";
         approved?: boolean | null;
-        approver: { __typename?: "User"; id: string; name: string };
+        approver: {
+          __typename?: "User";
+          id: string;
+          name: string;
+          avatarURL: string;
+        };
       }> | null;
-    }> | null;
+    }>;
   };
 };
 
@@ -569,6 +658,29 @@ export const PlayerFieldsFragmentDoc = gql`
       name
     }
   }
+`;
+export const PlayerSupervisionRequestFieldsFragmentDoc = gql`
+  fragment playerSupervisionRequestFields on PlayerSupervisionRequest {
+    id
+    message
+    sender {
+      id
+      name
+      avatarURL
+    }
+    player {
+      ...playerFields
+    }
+    approvals {
+      approved
+      approver {
+        id
+        name
+        avatarURL
+      }
+    }
+  }
+  ${PlayerFieldsFragmentDoc}
 `;
 export const CreatePlayerDocument = gql`
   mutation CreatePlayer($name: String!) {
@@ -671,6 +783,57 @@ export type RequestPlayerSupervisionMutationOptions =
   Apollo.BaseMutationOptions<
     RequestPlayerSupervisionMutation,
     RequestPlayerSupervisionMutationVariables
+  >;
+export const ResolvePlayerSupervisionRequestDocument = gql`
+  mutation ResolvePlayerSupervisionRequest(
+    $input: ResolvePlayerSupervisionRequestInput!
+  ) {
+    resolvePlayerSupervisionRequest(input: $input)
+  }
+`;
+export type ResolvePlayerSupervisionRequestMutationFn = Apollo.MutationFunction<
+  ResolvePlayerSupervisionRequestMutation,
+  ResolvePlayerSupervisionRequestMutationVariables
+>;
+
+/**
+ * __useResolvePlayerSupervisionRequestMutation__
+ *
+ * To run a mutation, you first call `useResolvePlayerSupervisionRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResolvePlayerSupervisionRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resolvePlayerSupervisionRequestMutation, { data, loading, error }] = useResolvePlayerSupervisionRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useResolvePlayerSupervisionRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResolvePlayerSupervisionRequestMutation,
+    ResolvePlayerSupervisionRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ResolvePlayerSupervisionRequestMutation,
+    ResolvePlayerSupervisionRequestMutationVariables
+  >(ResolvePlayerSupervisionRequestDocument, options);
+}
+export type ResolvePlayerSupervisionRequestMutationHookResult = ReturnType<
+  typeof useResolvePlayerSupervisionRequestMutation
+>;
+export type ResolvePlayerSupervisionRequestMutationResult =
+  Apollo.MutationResult<ResolvePlayerSupervisionRequestMutation>;
+export type ResolvePlayerSupervisionRequestMutationOptions =
+  Apollo.BaseMutationOptions<
+    ResolvePlayerSupervisionRequestMutation,
+    ResolvePlayerSupervisionRequestMutationVariables
   >;
 export const UpdateUserDocument = gql`
   mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
@@ -778,6 +941,66 @@ export type GetFileUploadUrlQueryResult = Apollo.QueryResult<
   GetFileUploadUrlQuery,
   GetFileUploadUrlQueryVariables
 >;
+export const IncomingSupervisionRequestsDocument = gql`
+  query IncomingSupervisionRequests {
+    me {
+      receivedSupervisionRequests {
+        ...playerSupervisionRequestFields
+      }
+    }
+  }
+  ${PlayerSupervisionRequestFieldsFragmentDoc}
+`;
+
+/**
+ * __useIncomingSupervisionRequestsQuery__
+ *
+ * To run a query within a React component, call `useIncomingSupervisionRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIncomingSupervisionRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIncomingSupervisionRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useIncomingSupervisionRequestsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    IncomingSupervisionRequestsQuery,
+    IncomingSupervisionRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    IncomingSupervisionRequestsQuery,
+    IncomingSupervisionRequestsQueryVariables
+  >(IncomingSupervisionRequestsDocument, options);
+}
+export function useIncomingSupervisionRequestsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    IncomingSupervisionRequestsQuery,
+    IncomingSupervisionRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    IncomingSupervisionRequestsQuery,
+    IncomingSupervisionRequestsQueryVariables
+  >(IncomingSupervisionRequestsDocument, options);
+}
+export type IncomingSupervisionRequestsQueryHookResult = ReturnType<
+  typeof useIncomingSupervisionRequestsQuery
+>;
+export type IncomingSupervisionRequestsLazyQueryHookResult = ReturnType<
+  typeof useIncomingSupervisionRequestsLazyQuery
+>;
+export type IncomingSupervisionRequestsQueryResult = Apollo.QueryResult<
+  IncomingSupervisionRequestsQuery,
+  IncomingSupervisionRequestsQueryVariables
+>;
 export const MeDocument = gql`
   query Me {
     me {
@@ -878,20 +1101,11 @@ export const PendingSupervisionRequestsDocument = gql`
   query PendingSupervisionRequests {
     me {
       sentSupervisionRequests {
-        player {
-          ...playerFields
-        }
-        approvals {
-          approved
-          approver {
-            id
-            name
-          }
-        }
+        ...playerSupervisionRequestFields
       }
     }
   }
-  ${PlayerFieldsFragmentDoc}
+  ${PlayerSupervisionRequestFieldsFragmentDoc}
 `;
 
 /**
@@ -1443,8 +1657,13 @@ export type UserResolvers<
     ParentType,
     ContextType
   >;
+  receivedSupervisionRequests?: Resolver<
+    Array<ResolversTypes["PlayerSupervisionRequest"]>,
+    ParentType,
+    ContextType
+  >;
   sentSupervisionRequests?: Resolver<
-    Maybe<Array<ResolversTypes["PlayerSupervisionRequest"]>>,
+    Array<ResolversTypes["PlayerSupervisionRequest"]>,
     ParentType,
     ContextType
   >;

@@ -1,16 +1,7 @@
 query PendingSupervisionRequests {
   me {
     sentSupervisionRequests {
-      player {
-        ...playerFields
-      }
-      approvals {
-        approved
-        approver {
-          id
-          name
-        }
-      }
+      ...playerSupervisionRequestFields
     }
   }
 }
