@@ -13,7 +13,7 @@ import {
 import React, { useMemo } from "react";
 import { usePendingSupervisionRequestsQuery } from "../../graphql/generated";
 
-const PendingSupervisionRequests = () => {
+const OutgoingSupervisionRequests = () => {
   const { data, error, loading } = usePendingSupervisionRequestsQuery();
 
   const requests = useMemo(() => data?.me.sentSupervisionRequests, [data]);
@@ -69,4 +69,4 @@ const PendingSupervisionRequests = () => {
   );
 };
 
-export default PendingSupervisionRequests;
+export default OutgoingSupervisionRequests;

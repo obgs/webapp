@@ -17,7 +17,7 @@ import {
 } from "../../graphql/generated";
 import PlayersList from "../../components/players/List";
 
-const MyPlayers = () => {
+const Supervised = () => {
   const { data, loading, error } = useMyPlayersQuery();
   const players = useMemo(() => data?.me.players, [data]);
 
@@ -129,4 +129,4 @@ const MyPlayers = () => {
   );
 };
 
-export default MyPlayers;
+export default Supervised;
