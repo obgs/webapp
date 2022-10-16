@@ -10,6 +10,7 @@ import { onError } from "@apollo/client/link/error";
 
 import result from "../../graphql/introspection-result";
 import useAuth from "../auth/useAuth";
+import typePolicies from "./typePolicies";
 
 const ApolloProvider = ({ children }: PropsWithChildren) => {
   const { authenticated, accessToken } = useAuth();
@@ -55,6 +56,7 @@ const ApolloProvider = ({ children }: PropsWithChildren) => {
       new ApolloClient({
         cache: new InMemoryCache({
           possibleTypes: result.possibleTypes,
+          typePolicies,
         }),
         defaultOptions: {
           watchQuery: {

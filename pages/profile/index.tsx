@@ -102,7 +102,9 @@ const Profile = () => {
   useEffect(() => {
     if (!user || userLoading) return;
     setValues({
-      ...user,
+      name: user.name,
+      email: user.email,
+      avatarURL: user.avatarURL,
     });
   }, [setValues, user, userLoading]);
 

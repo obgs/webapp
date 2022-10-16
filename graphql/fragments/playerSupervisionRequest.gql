@@ -1,0 +1,20 @@
+fragment playerSupervisionRequestFields on PlayerSupervisionRequest {
+  id
+  message
+  sender {
+    id
+    name
+    avatarURL
+  }
+  player {
+    ...playerFields
+  }
+  approvals {
+    approved
+    approver {
+      id
+      name
+      avatarURL
+    }
+  }
+}
