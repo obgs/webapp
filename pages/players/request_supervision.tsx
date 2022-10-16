@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import PlayersList from "../../components/players/List";
+import PlayersList from "./components/List";
 import {
   PlayerFieldsFragment,
   PlayerWhereInput,
@@ -21,7 +21,7 @@ import {
 } from "../../graphql/generated";
 import ReplayIcon from "@mui/icons-material/Replay";
 import useUser from "../../utils/user/useUser";
-import RequestPlayerSupervisionModal from "./RequestSupervisionModal";
+import RequestPlayerSupervisionModal from "./components/RequestSupervisionModal";
 
 const rowsPerPageOptions = [10, 20, 50];
 

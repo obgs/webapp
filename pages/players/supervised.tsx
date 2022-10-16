@@ -15,7 +15,7 @@ import {
   MyPlayersQuery,
   MyPlayersDocument,
 } from "../../graphql/generated";
-import PlayersList from "../../components/players/List";
+import PlayersList from "./components/List";
 
 const Supervised = () => {
   const { data, loading, error } = useMyPlayersQuery();

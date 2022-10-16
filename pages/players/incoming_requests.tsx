@@ -15,7 +15,7 @@ import {
   PlayerSupervisionRequestFieldsFragment,
   useIncomingSupervisionRequestsQuery,
 } from "../../graphql/generated";
-import ResolvePlayerSupervisionRequestModal from "./ResolveSupervisionRequestModal";
+import ResolvePlayerSupervisionRequestModal from "./components/ResolveSupervisionRequestModal";
 
 const IncomingSupervisionRequests = () => {
   const { data, loading, error } = useIncomingSupervisionRequestsQuery();
