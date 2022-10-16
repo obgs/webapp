@@ -1,0 +1,7 @@
+query IncomingSupervisionRequests {
+  me {
+    receivedSupervisionRequests {
+      ...playerSupervisionRequestFields
+    }
+  }
+}

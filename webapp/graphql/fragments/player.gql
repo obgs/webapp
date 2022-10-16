@@ -3,6 +3,7 @@ fragment playerFields on Player {
   name
   owner {
     id
+    name
   }
   supervisors {
     id
