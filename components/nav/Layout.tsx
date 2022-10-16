@@ -16,7 +16,6 @@ import useAuth from "../../utils/auth/useAuth";
 import { useRouter } from "next/router";
 import useUser from "../../utils/user/useUser";
 import NavBar from "./NavBar";
-import Breadcrumbs from "./Breadcrumbs";
 
 const drawerWidth = 240;
 
@@ -55,7 +54,6 @@ const Layout = ({ children }: React.PropsWithChildren) => {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar>
-          <Breadcrumbs />
           <Box sx={{ flexGrow: 1 }} />
           {authenticated ? (
             <Box>
