@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import PlayerSearch from "./components/Search";
 
 const Players = () => {
   return (
@@ -12,6 +13,7 @@ const Players = () => {
         don&apos;t want to have an account at OBGS. These are called supervised
         players and all the management for them is done here.
       </Typography>
+      <PlayerSearch />
     </Box>
   );
 };
