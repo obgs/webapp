@@ -65,15 +65,18 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
     return clause;
   }, [filter, name, strictSearch]);
 
-  const searchWithCriteria = useCallback(() => {
-    setPage(0);
-    search({
-      variables: {
-        first: rowsPerPage,
-        where,
-      },
-    });
-  }, [search, rowsPerPage, where]);
+  const searchWithCriteria = useCallback(
+    (first = rowsPerPage) => {
+      setPage(0);
+      search({
+        variables: {
+          first,
+          where,
+        },
+      });
+    },
+    [search, rowsPerPage, where]
+  );
 
   // when the amount of rows per page changes, go back to page 0
   const handleRowsPerPageChange = useCallback(
@@ -81,7 +84,7 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
       const newRowsPerPage = parseInt(event.target.value, 10);
       setRowsPerPage(newRowsPerPage);
       setPage(0);
-      searchWithCriteria();
+      searchWithCriteria(newRowsPerPage);
     },
     [searchWithCriteria]
   );
@@ -121,7 +124,7 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
               label="Use strict search"
             />
           </Box>
-          <Button variant="contained" onClick={searchWithCriteria}>
+          <Button variant="contained" onClick={() => searchWithCriteria()}>
             Search
           </Button>
         </Stack>
@@ -133,7 +136,7 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
           <Toolbar>
             <Stack alignItems="flex-end" flex={1}>
               <Tooltip title="Reload">
-                <IconButton onClick={searchWithCriteria}>
+                <IconButton onClick={() => searchWithCriteria()}>
                   <ReplayIcon />
                 </IconButton>
               </Tooltip>
