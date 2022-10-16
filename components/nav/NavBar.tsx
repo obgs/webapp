@@ -8,6 +8,8 @@ const NavBar = () => {
 
   return (
     <List dense>
+      <ListSubheader>OBGS</ListSubheader>
+      <NavLink href="/">Home</NavLink>
       <ListSubheader>Players</ListSubheader>
       <NavLink href="/players">Browse</NavLink>
       {authenticated && (
