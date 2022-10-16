@@ -12,7 +12,7 @@ import React, { useCallback, useState } from "react";
 import {
   PlayerFieldsFragment,
   useRequestPlayerSupervisionMutation,
-} from "../../graphql/generated";
+} from "../../../graphql/generated";
 
 interface Props {
   open: boolean;
