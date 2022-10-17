@@ -1,4 +1,3 @@
-import React, { PropsWithChildren, useMemo } from "react";
 import {
   ApolloClient,
   ApolloProvider as DefaultProvider,
@@ -7,6 +6,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
+import React, { PropsWithChildren, useMemo } from "react";
 
 import result from "../../graphql/introspection-result";
 import useAuth from "../auth/useAuth";

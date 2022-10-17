@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         mode:
-          - name: Lint
-            command: pnpm lint
+          - name: Eslint
+            command: pnpm eslint:check
 
           - name: Prettier
             command: pnpm prettier:check
