@@ -1,0 +1,41 @@
+name: code
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  code:
+    strategy:
+      matrix:
+        mode:
+          - name: Lint
+            command: pnpm lint
+
+          - name: Prettier
+            command: pnpm prettier:check
+
+          - name: Check generate
+            command: .github/scripts/check-generate.sh
+      fail-fast: false
+    name: ${{ matrix.mode.name }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.17.6
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install
+
+      - run: ${{ matrix.mode.command }}
