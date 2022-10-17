@@ -75,7 +75,7 @@ const client: AuthClient = {
       default:
         throw new Error("Something went wrong");
     }
-  }
+  },
 };
 
 export default client;
