@@ -1,8 +1,5 @@
 query Me {
   me {
-    id
-    name
-    email
-    avatarURL
+    ...userFields
   }
 }
