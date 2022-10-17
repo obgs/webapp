@@ -20,7 +20,6 @@ import {
 } from "../../graphql/generated";
 import useUser from "../../utils/user/useUser";
 
-
 const Input = styled(TextField)`
   margin: 10px 0;
 `;
