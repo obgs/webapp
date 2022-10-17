@@ -9,6 +9,7 @@ import {
 } from "../../graphql/generated";
 import PlayersList from "./components/List";
 import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import { useSnackbar } from "notistack";
 
 const Supervised = () => {
   const { data, loading, error } = useMyPlayersQuery();
@@ -23,6 +24,7 @@ const Supervised = () => {
   ] = useCreatePlayerMutation();
   useSnackbarError(error || createPlayerError);
 
+  const { enqueueSnackbar } = useSnackbar();
   const handleCreatePlayer = useCallback(async () => {
     await createPlayer({
       variables: {
@@ -45,9 +47,12 @@ const Supervised = () => {
         });
       },
     });
+    enqueueSnackbar(`Player ${newPlayerName} created.`, {
+      variant: "success",
+    });
     setNewPlayerModalOpen(false);
     setNewPlayerName("");
-  }, [createPlayer, newPlayerName]);
+  }, [createPlayer, enqueueSnackbar, newPlayerName]);
 
   return (
     <>

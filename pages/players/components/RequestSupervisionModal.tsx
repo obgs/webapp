@@ -1,6 +1,5 @@
 import { LoadingButton } from "@mui/lab";
 import {
-  Alert,
   Box,
   Button,
   Modal,
@@ -8,6 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 import {
   PlayerFieldsFragment,
@@ -28,10 +28,11 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
 }) => {
   const [message, setMessage] = useState("");
 
-  const [request, { error, loading, called }] =
-    useRequestPlayerSupervisionMutation();
+  const [request, { error, loading }] = useRequestPlayerSupervisionMutation();
   useSnackbarError(error);
 
+  const playerName = player.name || player.id;
+  const { enqueueSnackbar } = useSnackbar();
   const makeRequest = useCallback(async () => {
     await request({
       variables: {
@@ -41,9 +42,12 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
         },
       },
     });
+    enqueueSnackbar(`Request for supervising ${playerName} sent.`, {
+      variant: "success",
+    });
     setMessage("");
     onClose();
-  }, [message, onClose, player.id, request]);
+  }, [enqueueSnackbar, message, onClose, player.id, playerName, request]);
 
   return (
     <Modal
@@ -63,7 +67,7 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
         }}
       >
         <Typography>
-          Requesting supervision of player <b>{player.name || player.id}</b>
+          Requesting supervision of player <b>{playerName}</b>
         </Typography>
         <Box mt={2} mb={2}>
           <TextField
@@ -93,7 +97,6 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
             Request
           </LoadingButton>
         </Stack>
-        {called && !loading && <Alert severity="success">Request sent</Alert>}
       </Box>
     </Modal>
   );
