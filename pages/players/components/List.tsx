@@ -1,5 +1,5 @@
 import React from "react";
-import { PlayerFieldsFragment } from "../../graphql/generated";
+import { PlayerFieldsFragment } from "../../../graphql/generated";
 import {
   Paper,
   Table,
