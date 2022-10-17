@@ -1,9 +1,7 @@
 import {
-  Alert,
   Box,
   CircularProgress,
   Paper,
-  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -12,9 +10,11 @@ import {
 } from "@mui/material";
 import React, { useMemo } from "react";
 import { usePendingSupervisionRequestsQuery } from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 
 const OutgoingSupervisionRequests = () => {
   const { data, error, loading } = usePendingSupervisionRequestsQuery();
+  useSnackbarError(error);
 
   const requests = useMemo(() => data?.me.sentSupervisionRequests, [data]);
 
@@ -57,13 +57,6 @@ const OutgoingSupervisionRequests = () => {
             </TableBody>
           </Table>
         </Paper>
-      )}
-      {error && (
-        <Snackbar>
-          <Alert severity="error">
-            {error.message || "Something went wrong"}
-          </Alert>
-        </Snackbar>
       )}
     </Box>
   );
