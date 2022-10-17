@@ -1,5 +1,3 @@
-import React from "react";
-import { PlayerFieldsFragment } from "../../../graphql/generated";
 import {
   Paper,
   Table,
@@ -11,6 +9,9 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import React from "react";
+
+import { PlayerFieldsFragment } from "../../../graphql/generated";
 
 interface Props {
   players?: Array<PlayerFieldsFragment | null | undefined> | null;

@@ -1,15 +1,16 @@
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo, useState } from "react";
+
 import {
   useMyPlayersQuery,
   useCreatePlayerMutation,
   MyPlayersQuery,
   MyPlayersDocument,
 } from "../../graphql/generated";
-import PlayersList from "./components/List";
 import useSnackbarError from "../../utils/apollo/useSnackbarError";
-import { useSnackbar } from "notistack";
+import PlayersList from "./components/List";
 
 const Supervised = () => {
   const { data, loading, error } = useMyPlayersQuery();

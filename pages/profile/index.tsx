@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { LoadingButton } from "@mui/lab";
 import {
   Avatar,
   Box,
@@ -7,17 +8,18 @@ import {
   Container,
   TextField,
 } from "@mui/material";
-import React, { useCallback, useEffect, useMemo } from "react";
-import useUser from "../../utils/user/useUser";
 import { useFormik } from "formik";
+import Image from "next/image";
+import React, { useCallback, useEffect, useMemo } from "react";
+
 import {
   useUpdateUserMutation,
   useGetFileUploadUrlLazyQuery,
   MeQuery,
   MeDocument,
 } from "../../graphql/generated";
-import Image from "next/image";
-import { LoadingButton } from "@mui/lab";
+import useUser from "../../utils/user/useUser";
+
 
 const Input = styled(TextField)`
   margin: 10px 0;

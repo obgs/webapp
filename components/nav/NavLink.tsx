@@ -1,3 +1,5 @@
+import { UrlObject } from "url";
+
 import {
   ListItem,
   ListItemButton,
@@ -7,7 +9,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { PropsWithChildren } from "react";
-import { UrlObject } from "url";
 
 interface Props {
   href: string | UrlObject;
