@@ -5,7 +5,8 @@ extensions:
     overwrite: true
     hooks:
       afterAllFileWrite:
-        - prettier --write
+        - pnpm eslint:fix
+        - pnpm prettier:fix
     generates:
       graphql/generated.tsx:
         plugins:

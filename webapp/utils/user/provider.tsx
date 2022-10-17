@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+
 import { useMeQuery } from "../../graphql/generated";
 import useAuth from "../auth/useAuth";
 import { UserContext } from "./context";

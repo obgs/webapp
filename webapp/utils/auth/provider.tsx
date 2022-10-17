@@ -1,6 +1,7 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import storage from "../storage";
 import client from "./client";
 import AuthContext from "./context";
