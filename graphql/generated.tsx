@@ -433,6 +433,14 @@ export type PlayerSupervisionRequestFieldsFragment = {
   }> | null;
 };
 
+export type UserFieldsFragment = {
+  __typename?: "User";
+  id: string;
+  name: string;
+  email: string;
+  avatarURL: string;
+};
+
 export type CreatePlayerMutationVariables = Exact<{
   name: Scalars["String"];
 }>;
@@ -681,6 +689,14 @@ export const PlayerSupervisionRequestFieldsFragmentDoc = gql`
     }
   }
   ${PlayerFieldsFragmentDoc}
+`;
+export const UserFieldsFragmentDoc = gql`
+  fragment userFields on User {
+    id
+    name
+    email
+    avatarURL
+  }
 `;
 export const CreatePlayerDocument = gql`
   mutation CreatePlayer($name: String!) {
@@ -1004,12 +1020,10 @@ export type IncomingSupervisionRequestsQueryResult = Apollo.QueryResult<
 export const MeDocument = gql`
   query Me {
     me {
-      id
-      name
-      email
-      avatarURL
+      ...userFields
     }
   }
+  ${UserFieldsFragmentDoc}
 `;
 
 /**
