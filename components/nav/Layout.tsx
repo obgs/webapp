@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   AppBar,
   Avatar,
@@ -10,11 +9,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import LoginModal from "../auth/LoginModal";
-import useAuth from "../../utils/auth/useAuth";
-
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+
+import useAuth from "../../utils/auth/useAuth";
 import useUser from "../../utils/user/useUser";
+import LoginModal from "../auth/LoginModal";
 import NavBar from "./NavBar";
 
 const drawerWidth = 240;

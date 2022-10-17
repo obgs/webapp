@@ -12,6 +12,16 @@
     "unused-imports/no-unused-imports": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-shadow": "error",
-    "no-console": "warn"
+    "no-console": "warn",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
   }
 }
