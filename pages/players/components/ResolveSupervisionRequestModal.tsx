@@ -1,17 +1,11 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Modal,
-  Snackbar,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Modal, Stack, Typography } from "@mui/material";
+import { useSnackbar } from "notistack";
 import React, { useCallback } from "react";
 import {
   PlayerSupervisionRequestFieldsFragment,
   useResolvePlayerSupervisionRequestMutation,
 } from "../../../graphql/generated";
+import useSnackbarError from "../../../utils/apollo/useSnackbarError";
 
 interface Props {
   open: boolean;
@@ -25,7 +19,10 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
   request,
 }) => {
   const [resolve, { error }] = useResolvePlayerSupervisionRequestMutation();
+  useSnackbarError(error);
 
+  const playerName = request.player.name || request.player.id;
+  const { enqueueSnackbar } = useSnackbar();
   const handleResolve = useCallback(
     (approved: boolean) => async () => {
       await resolve({
@@ -36,9 +33,15 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
           },
         },
       });
+      enqueueSnackbar(
+        `Request for supervising ${playerName} ${
+          approved ? "approved" : "rejected"
+        }.`,
+        { variant: "success" }
+      );
       onClose();
     },
-    [onClose, request.id, resolve]
+    [enqueueSnackbar, onClose, playerName, request.id, resolve]
   );
 
   return (
@@ -60,7 +63,7 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
       >
         <Typography variant="body2">
           Allow {request.sender.name || request.sender.id} supervision of{" "}
-          {request.player.name || request.player.id}?
+          {playerName}?
         </Typography>
         <Stack mt={2} direction="row" flex={1} justifyContent="space-between">
           <Button
@@ -78,13 +81,6 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
             Allow
           </Button>
         </Stack>
-        {error && (
-          <Snackbar>
-            <Alert severity="error">
-              {error.message || "Something went wrong"}
-            </Alert>
-          </Snackbar>
-        )}
       </Box>
     </Modal>
   );

@@ -9,21 +9,24 @@ import Layout from "../components/nav/Layout";
 import AuthProvider from "../utils/auth/provider";
 import ApolloProvider from "../utils/apollo/provider";
 import UserProvider from "../utils/user/provider";
+import { SnackbarProvider } from "notistack";
 
 const theme = createTheme();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <ApolloProvider>
-          <UserProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </UserProvider>
-        </ApolloProvider>
-      </AuthProvider>
+      <SnackbarProvider>
+        <AuthProvider>
+          <ApolloProvider>
+            <UserProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </UserProvider>
+          </ApolloProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

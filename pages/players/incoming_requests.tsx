@@ -1,9 +1,7 @@
 import {
-  Alert,
   Box,
   CircularProgress,
   Paper,
-  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -15,10 +13,12 @@ import {
   PlayerSupervisionRequestFieldsFragment,
   useIncomingSupervisionRequestsQuery,
 } from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import ResolvePlayerSupervisionRequestModal from "./components/ResolveSupervisionRequestModal";
 
 const IncomingSupervisionRequests = () => {
   const { data, loading, error } = useIncomingSupervisionRequestsQuery();
+  useSnackbarError(error);
 
   const requests = useMemo(
     () => data?.me.receivedSupervisionRequests,
@@ -80,13 +80,6 @@ const IncomingSupervisionRequests = () => {
           onClose={() => setResolveModalOpen(false)}
           request={selectedRequest}
         />
-      )}
-      {error && (
-        <Snackbar>
-          <Alert severity="error">
-            {error.message || "Something went wrong"}
-          </Alert>
-        </Snackbar>
       )}
     </Box>
   );
