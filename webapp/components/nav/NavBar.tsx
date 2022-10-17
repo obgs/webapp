@@ -1,7 +1,8 @@
 import { List, ListSubheader } from "@mui/material";
 import React from "react";
-import NavLink from "./NavLink";
+
 import useAuth from "../../utils/auth/useAuth";
+import NavLink from "./NavLink";
 
 const NavBar = () => {
   const { authenticated } = useAuth();

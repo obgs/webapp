@@ -1,3 +1,4 @@
+import ReplayIcon from "@mui/icons-material/Replay";
 import {
   Box,
   Button,
@@ -10,14 +11,14 @@ import {
   Tooltip,
 } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import PlayersList from "./List";
+
 import {
   PlayerFieldsFragment,
   PlayerWhereInput,
   useSearchPlayersLazyQuery,
 } from "../../../graphql/generated";
-import ReplayIcon from "@mui/icons-material/Replay";
 import useSnackbarError from "../../../utils/apollo/useSnackbarError";
+import PlayersList from "./List";
 
 interface Props {
   onSelect?: (player: PlayerFieldsFragment) => void;
