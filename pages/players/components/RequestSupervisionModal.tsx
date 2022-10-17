@@ -13,6 +13,7 @@ import {
   PlayerFieldsFragment,
   useRequestPlayerSupervisionMutation,
 } from "../../../graphql/generated";
+import useSnackbarError from "../../../utils/apollo/useSnackbarError";
 
 interface Props {
   open: boolean;
@@ -29,6 +30,7 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
 
   const [request, { error, loading, called }] =
     useRequestPlayerSupervisionMutation();
+  useSnackbarError(error);
 
   const makeRequest = useCallback(async () => {
     await request({
@@ -91,10 +93,7 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
             Request
           </LoadingButton>
         </Stack>
-        {error && <Alert severity="error">{error.message}</Alert>}
-        {called && !loading && !error && (
-          <Alert severity="success">Request sent</Alert>
-        )}
+        {called && !loading && <Alert severity="success">Request sent</Alert>}
       </Box>
     </Modal>
   );

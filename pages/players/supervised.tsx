@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Modal,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import React, { useCallback, useMemo, useState } from "react";
 import {
@@ -16,6 +8,7 @@ import {
   MyPlayersDocument,
 } from "../../graphql/generated";
 import PlayersList from "./components/List";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 
 const Supervised = () => {
   const { data, loading, error } = useMyPlayersQuery();
@@ -28,6 +21,7 @@ const Supervised = () => {
     createPlayer,
     { loading: createPlayerLoading, error: createPlayerError },
   ] = useCreatePlayerMutation();
+  useSnackbarError(error || createPlayerError);
 
   const handleCreatePlayer = useCallback(async () => {
     await createPlayer({
@@ -118,13 +112,6 @@ const Supervised = () => {
           </Box>
         </Box>
       </Modal>
-      <Snackbar open={!!error || !!createPlayerError}>
-        <Alert severity="error">
-          {error?.message ||
-            createPlayerError?.message ||
-            "Something went wrong"}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

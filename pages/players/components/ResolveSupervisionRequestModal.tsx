@@ -1,17 +1,10 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Modal,
-  Snackbar,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Modal, Stack, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import {
   PlayerSupervisionRequestFieldsFragment,
   useResolvePlayerSupervisionRequestMutation,
 } from "../../../graphql/generated";
+import useSnackbarError from "../../../utils/apollo/useSnackbarError";
 
 interface Props {
   open: boolean;
@@ -25,6 +18,7 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
   request,
 }) => {
   const [resolve, { error }] = useResolvePlayerSupervisionRequestMutation();
+  useSnackbarError(error);
 
   const handleResolve = useCallback(
     (approved: boolean) => async () => {
@@ -78,13 +72,6 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
             Allow
           </Button>
         </Stack>
-        {error && (
-          <Snackbar>
-            <Alert severity="error">
-              {error.message || "Something went wrong"}
-            </Alert>
-          </Snackbar>
-        )}
       </Box>
     </Modal>
   );

@@ -1,11 +1,9 @@
 import {
-  Alert,
   Box,
   Button,
   Checkbox,
   FormControlLabel,
   IconButton,
-  Snackbar,
   Stack,
   TextField,
   Toolbar,
@@ -19,6 +17,7 @@ import {
   useSearchPlayersLazyQuery,
 } from "../../../graphql/generated";
 import ReplayIcon from "@mui/icons-material/Replay";
+import useSnackbarError from "../../../utils/apollo/useSnackbarError";
 
 interface Props {
   onSelect?: (player: PlayerFieldsFragment) => void;
@@ -34,6 +33,7 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
   const [page, setPage] = useState(0);
 
   const [search, { data, loading, error }] = useSearchPlayersLazyQuery();
+  useSnackbarError(error);
 
   // do the initial search
   useEffect(() => {
@@ -153,11 +153,6 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
         }}
         onSelect={onSelect}
       />
-      <Snackbar open={!!error}>
-        <Alert severity="error">
-          {error?.message || "Something went wrong"}
-        </Alert>
-      </Snackbar>
     </>
   );
 };
