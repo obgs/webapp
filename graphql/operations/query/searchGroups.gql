@@ -1,0 +1,25 @@
+query SearchGroups(
+  $before: Cursor
+  $after: Cursor
+  $where: GroupWhereInput!
+  $first: Int
+  $last: Int
+) {
+  groups(
+    before: $before
+    after: $after
+    where: $where
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...pageInfoFields
+    }
+    totalCount
+    edges {
+      node {
+        ...groupFields
+      }
+    }
+  }
+}

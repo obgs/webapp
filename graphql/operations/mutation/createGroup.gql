@@ -1,0 +1,21 @@
+mutation CreateGroup(
+  $name: String!
+  $description: String!
+  $logoUrl: String!
+  $visibility: GroupSettingsVisibility!
+  $joinPolicy: GroupSettingsJoinPolicy!
+  $minimumRoleToInvite: GroupMembershipRole
+) {
+  createGroup(
+    input: {
+      name: $name
+      description: $description
+      logoUrl: $logoUrl
+      visibility: $visibility
+      joinPolicy: $joinPolicy
+      minimumRoleToInvite: $minimumRoleToInvite
+    }
+  ) {
+    ...groupFields
+  }
+}
