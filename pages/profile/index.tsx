@@ -1,20 +1,12 @@
 import styled from "@emotion/styled";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import { LoadingButton } from "@mui/lab";
-import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Container,
-  TextField,
-} from "@mui/material";
+import { Box, CircularProgress, Container, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import Image from "next/image";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
+import { useImageInput, ImageInput } from "../../components/ImageInput";
 import {
   useUpdateUserMutation,
-  useGetFileUploadUrlLazyQuery,
   MeQuery,
   MeDocument,
 } from "../../graphql/generated";
@@ -63,41 +55,22 @@ const Profile = () => {
     },
   });
 
-  const [file, setFile] = React.useState<File | null>(null);
+  const {
+    loading: getFileUploadURLLoading,
+    onChange,
+    url: avatarURL,
+  } = useImageInput();
 
-  const [getUploadURL, { loading: getFileUploadURLLoading }] =
-    useGetFileUploadUrlLazyQuery({
-      onCompleted: async (data) => {
-        if (!data || !file) return;
-        const response = await fetch(data.getFileUploadURL, {
-          method: "PUT",
-          body: file,
-          headers: {
-            "Content-Type": file.type,
-          },
-        });
-        if (response.ok) {
-          setValues({
-            ...values,
-            avatarURL: data.getFileUploadURL.split("?")[0],
-          });
-        }
-      },
+  useEffect(() => {
+    setValues({
+      ...values,
+      avatarURL,
     });
+  }, [avatarURL, setValues, values]);
 
   const operationLoading = useMemo(
     () => updateLoading || getFileUploadURLLoading,
     [updateLoading, getFileUploadURLLoading]
-  );
-
-  const handleAvatarChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const f = e.target.files?.[0];
-      if (!f) return;
-      setFile(f);
-      getUploadURL();
-    },
-    [getUploadURL]
   );
 
   useEffect(() => {
@@ -139,38 +112,10 @@ const Profile = () => {
             }}
             mb={5}
           >
-            <label htmlFor="upload-avatar">
-              <Avatar
-                sx={{
-                  width: 200,
-                  height: 200,
-                  "&:hover": {
-                    cursor: "pointer",
-                    background: "rgba(0, 0, 0, 0.5)",
-                  },
-                }}
-              >
-                {values.avatarURL ? (
-                  <Image src={values.avatarURL} alt="avatar" layout="fill" />
-                ) : (
-                  <AccountCircle
-                    sx={{
-                      width: 200,
-                      height: 200,
-                    }}
-                    color="inherit"
-                  />
-                )}
-              </Avatar>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="upload-avatar"
-                name="upload-avatar"
-                accept="image/*"
-                onChange={handleAvatarChange}
-              />
-            </label>
+            <ImageInput
+              onChange={onChange}
+              existingAvatarURL={values.avatarURL}
+            />
             <Box
               sx={{
                 display: "flex",
