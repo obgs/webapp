@@ -331,17 +331,13 @@
               "deprecationReason": null
             },
             {
-              "name": "isMember",
-              "description": null,
+              "name": "role",
+              "description": "Role of the current user in the group",
               "args": [],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
+                "kind": "ENUM",
+                "name": "GroupMembershipRole",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null

@@ -652,6 +652,35 @@ export type GroupFieldsFragment = {
   members: { __typename?: "GroupMembershipConnection"; totalCount: number };
 };
 
+export type GroupMembershipApplicationFieldsFragment = {
+  __typename?: "GroupMembershipApplication";
+  id: string;
+  message: string;
+  user: Array<{
+    __typename?: "User";
+    id: string;
+    name: string;
+    email: string;
+    avatarURL: string;
+  }>;
+  group: Array<{
+    __typename?: "Group";
+    id: string;
+    name: string;
+    description: string;
+    logoURL: string;
+    isMember: boolean;
+    settings: {
+      __typename?: "GroupSettings";
+      id: string;
+      visibility: GroupSettingsVisibility;
+      joinPolicy: GroupSettingsJoinPolicy;
+      minimumRoleToInvite?: GroupMembershipRole | null;
+    };
+    members: { __typename?: "GroupMembershipConnection"; totalCount: number };
+  }>;
+};
+
 export type PageInfoFieldsFragment = {
   __typename?: "PageInfo";
   hasNextPage: boolean;
@@ -702,6 +731,42 @@ export type UserFieldsFragment = {
   name: string;
   email: string;
   avatarURL: string;
+};
+
+export type ApplyToGroupMutationVariables = Exact<{
+  input: GroupApplicationInput;
+}>;
+
+export type ApplyToGroupMutation = {
+  __typename?: "Mutation";
+  applyToGroup: {
+    __typename?: "GroupMembershipApplication";
+    id: string;
+    message: string;
+    user: Array<{
+      __typename?: "User";
+      id: string;
+      name: string;
+      email: string;
+      avatarURL: string;
+    }>;
+    group: Array<{
+      __typename?: "Group";
+      id: string;
+      name: string;
+      description: string;
+      logoURL: string;
+      isMember: boolean;
+      settings: {
+        __typename?: "GroupSettings";
+        id: string;
+        visibility: GroupSettingsVisibility;
+        joinPolicy: GroupSettingsJoinPolicy;
+        minimumRoleToInvite?: GroupMembershipRole | null;
+      };
+      members: { __typename?: "GroupMembershipConnection"; totalCount: number };
+    }>;
+  };
 };
 
 export type CreateGroupMutationVariables = Exact<{
@@ -988,6 +1053,14 @@ export type SearchPlayersQuery = {
   };
 };
 
+export const UserFieldsFragmentDoc = gql`
+  fragment userFields on User {
+    id
+    name
+    email
+    avatarURL
+  }
+`;
 export const GroupFieldsFragmentDoc = gql`
   fragment groupFields on Group {
     id
@@ -1005,6 +1078,20 @@ export const GroupFieldsFragmentDoc = gql`
     }
     isMember
   }
+`;
+export const GroupMembershipApplicationFieldsFragmentDoc = gql`
+  fragment groupMembershipApplicationFields on GroupMembershipApplication {
+    id
+    message
+    user {
+      ...userFields
+    }
+    group {
+      ...groupFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+  ${GroupFieldsFragmentDoc}
 `;
 export const PageInfoFieldsFragmentDoc = gql`
   fragment pageInfoFields on PageInfo {
@@ -1051,14 +1138,57 @@ export const PlayerSupervisionRequestFieldsFragmentDoc = gql`
   }
   ${PlayerFieldsFragmentDoc}
 `;
-export const UserFieldsFragmentDoc = gql`
-  fragment userFields on User {
-    id
-    name
-    email
-    avatarURL
+export const ApplyToGroupDocument = gql`
+  mutation ApplyToGroup($input: GroupApplicationInput!) {
+    applyToGroup(input: $input) {
+      ...groupMembershipApplicationFields
+    }
   }
+  ${GroupMembershipApplicationFieldsFragmentDoc}
 `;
+export type ApplyToGroupMutationFn = Apollo.MutationFunction<
+  ApplyToGroupMutation,
+  ApplyToGroupMutationVariables
+>;
+
+/**
+ * __useApplyToGroupMutation__
+ *
+ * To run a mutation, you first call `useApplyToGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApplyToGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [applyToGroupMutation, { data, loading, error }] = useApplyToGroupMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useApplyToGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ApplyToGroupMutation,
+    ApplyToGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ApplyToGroupMutation,
+    ApplyToGroupMutationVariables
+  >(ApplyToGroupDocument, options);
+}
+export type ApplyToGroupMutationHookResult = ReturnType<
+  typeof useApplyToGroupMutation
+>;
+export type ApplyToGroupMutationResult =
+  Apollo.MutationResult<ApplyToGroupMutation>;
+export type ApplyToGroupMutationOptions = Apollo.BaseMutationOptions<
+  ApplyToGroupMutation,
+  ApplyToGroupMutationVariables
+>;
 export const CreateGroupDocument = gql`
   mutation CreateGroup(
     $name: String!

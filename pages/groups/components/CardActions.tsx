@@ -1,7 +1,7 @@
 import { LoadingButton } from "@mui/lab";
 import { CardActions } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 import {
   GroupFieldsFragment,
@@ -11,6 +11,7 @@ import {
 } from "../../../graphql/generated";
 import useSnackbarError from "../../../utils/apollo/useSnackbarError";
 import useAuth from "../../../utils/auth/useAuth";
+import GroupMembershipApplicationModal from "./ApplicationModal";
 
 interface Props {
   group: GroupFieldsFragment;
@@ -49,6 +50,7 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
     });
     enqueueSnackbar(`Joined group ${group.name}.`, { variant: "success" });
   }, [group, joinGroup, enqueueSnackbar]);
+  const [applyModalOpen, setApplyModalOpen] = useState(false);
 
   if (!authenticated || group.isMember) {
     return null;
@@ -69,13 +71,26 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
   }
   if (group.settings.joinPolicy === GroupSettingsJoinPolicy.ApplicationOnly) {
     joinButton = (
-      <LoadingButton variant="contained" loading={false}>
+      <LoadingButton
+        variant="contained"
+        loading={false}
+        onClick={() => setApplyModalOpen(true)}
+      >
         Apply
       </LoadingButton>
     );
   }
 
-  return <CardActions>{joinButton}</CardActions>;
+  return (
+    <>
+      <CardActions>{joinButton}</CardActions>
+      <GroupMembershipApplicationModal
+        group={group}
+        open={applyModalOpen}
+        onClose={() => setApplyModalOpen(false)}
+      />
+    </>
+  );
 };
 
 export default GroupCardActions;

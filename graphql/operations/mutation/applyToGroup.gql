@@ -1,0 +1,5 @@
+mutation ApplyToGroup($input: GroupApplicationInput!) {
+  applyToGroup(input: $input) {
+    ...groupMembershipApplicationFields
+  }
+}
