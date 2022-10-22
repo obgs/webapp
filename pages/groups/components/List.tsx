@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Chip,
   Container,
   Stack,
   TablePagination,
@@ -16,6 +15,7 @@ import React from "react";
 import { GroupFieldsFragment } from "../../../graphql/generated";
 import GroupCardActions from "./CardActions";
 import GroupJoinPolicyChip from "./JoinPolicyChip";
+import GroupRoleChip from "./RoleChip";
 
 interface Props {
   groups?: Array<GroupFieldsFragment | null | undefined> | null;
@@ -47,7 +47,7 @@ const GroupList: React.FC<Props> = ({
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography variant="h5">{group.name}</Typography>
                     <GroupJoinPolicyChip group={group} />
-                    {group.isMember && <Chip size="small" label="Member" />}
+                    <GroupRoleChip group={group} />
                   </Stack>
                 }
                 subheader={

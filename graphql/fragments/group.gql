@@ -12,5 +12,5 @@ fragment groupFields on Group {
   members {
     totalCount
   }
-  isMember
+  role
 }

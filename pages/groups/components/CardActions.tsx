@@ -6,6 +6,7 @@ import React, { useCallback, useState } from "react";
 import {
   GroupFieldsFragment,
   GroupFieldsFragmentDoc,
+  GroupMembershipRole,
   GroupSettingsJoinPolicy,
   useJoinGroupMutation,
 } from "../../../graphql/generated";
@@ -34,12 +35,13 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
           id: `Group:${group.id}`,
           fragment: GroupFieldsFragmentDoc,
         });
-        cache.writeFragment({
+        if (!fragment) return;
+        cache.writeFragment<GroupFieldsFragment>({
           id: `Group:${group.id}`,
           fragment: GroupFieldsFragmentDoc,
           data: {
             ...fragment,
-            isMember: true,
+            role: GroupMembershipRole.Member,
             members: {
               ...fragment?.members,
               totalCount: (fragment?.members.totalCount || 0) + 1,
@@ -52,7 +54,7 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
   }, [group, joinGroup, enqueueSnackbar]);
   const [applyModalOpen, setApplyModalOpen] = useState(false);
 
-  if (!authenticated || group.isMember) {
+  if (!authenticated || group.role) {
     return null;
   }
 

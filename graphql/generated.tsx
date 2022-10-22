@@ -48,10 +48,11 @@ export type Group = Node & {
   applications?: Maybe<Array<GroupMembershipApplication>>;
   description: Scalars["String"];
   id: Scalars["ID"];
-  isMember: Scalars["Boolean"];
   logoURL: Scalars["String"];
   members: GroupMembershipConnection;
   name: Scalars["String"];
+  /** Role of the current user in the group */
+  role?: Maybe<GroupMembershipRole>;
   settings: GroupSettings;
 };
 
@@ -641,7 +642,7 @@ export type GroupFieldsFragment = {
   name: string;
   description: string;
   logoURL: string;
-  isMember: boolean;
+  role?: GroupMembershipRole | null;
   settings: {
     __typename?: "GroupSettings";
     id: string;
@@ -669,7 +670,7 @@ export type GroupMembershipApplicationFieldsFragment = {
     name: string;
     description: string;
     logoURL: string;
-    isMember: boolean;
+    role?: GroupMembershipRole | null;
     settings: {
       __typename?: "GroupSettings";
       id: string;
@@ -756,7 +757,7 @@ export type ApplyToGroupMutation = {
       name: string;
       description: string;
       logoURL: string;
-      isMember: boolean;
+      role?: GroupMembershipRole | null;
       settings: {
         __typename?: "GroupSettings";
         id: string;
@@ -786,7 +787,7 @@ export type CreateGroupMutation = {
     name: string;
     description: string;
     logoURL: string;
-    isMember: boolean;
+    role?: GroupMembershipRole | null;
     settings: {
       __typename?: "GroupSettings";
       id: string;
@@ -998,7 +999,7 @@ export type SearchGroupsQuery = {
         name: string;
         description: string;
         logoURL: string;
-        isMember: boolean;
+        role?: GroupMembershipRole | null;
         settings: {
           __typename?: "GroupSettings";
           id: string;
@@ -1076,7 +1077,7 @@ export const GroupFieldsFragmentDoc = gql`
     members {
       totalCount
     }
-    isMember
+    role
   }
 `;
 export const GroupMembershipApplicationFieldsFragmentDoc = gql`
@@ -2213,7 +2214,6 @@ export type GroupResolvers<
   >;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  isMember?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   logoURL?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   members?: Resolver<
     ResolversTypes["GroupMembershipConnection"],
@@ -2222,6 +2222,11 @@ export type GroupResolvers<
     Partial<GroupMembersArgs>
   >;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  role?: Resolver<
+    Maybe<ResolversTypes["GroupMembershipRole"]>,
+    ParentType,
+    ContextType
+  >;
   settings?: Resolver<ResolversTypes["GroupSettings"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
