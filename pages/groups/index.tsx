@@ -14,9 +14,12 @@ const Groups = () => {
   const { authenticated } = useAuth();
 
   const where = useMemo(() => ({}), []);
-  // we don't need the searchWithCriteria for now
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { searchWithCriteria: _, ...pagination } = usePagination({
+  // we don't need these vars for now
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    searchWithCriteria: _,
+    ...pagination
+  } = usePagination({
     query: search,
     where,
     pageInfo: data?.groups.pageInfo,
@@ -33,7 +36,7 @@ const Groups = () => {
       loading={loading}
       toolbar={
         authenticated && (
-          <Box m={2}>
+          <Box mb={2}>
             <Button
               variant="contained"
               onClick={() => router.push("/groups/new")}

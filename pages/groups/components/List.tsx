@@ -1,17 +1,20 @@
 import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Stack,
   TablePagination,
   TablePaginationProps,
-  TableRow,
   Typography,
 } from "@mui/material";
+import pluralize from "pluralize";
 import React from "react";
 
 import { GroupFieldsFragment } from "../../../graphql/generated";
+import GroupCardActions from "./CardActions";
+import GroupJoinPolicyChip from "./JoinPolicyChip";
 
 interface Props {
   groups?: Array<GroupFieldsFragment | null | undefined> | null;
@@ -27,47 +30,49 @@ const GroupList: React.FC<Props> = ({
   paginationProps,
 }) => {
   return (
-    <Paper>
+    <Container>
       {toolbar}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Members</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {loading && (
-            <TableRow>
-              <TableCell rowSpan={2}>
-                <Typography>Loading...</Typography>
-              </TableCell>
-            </TableRow>
-          )}
-          {groups?.length === 0 && (
-            <TableRow>
-              <TableCell rowSpan={2}>
-                <Typography>Nothing found</Typography>
-              </TableCell>
-            </TableRow>
-          )}
-          {groups?.map(
-            (group) =>
-              group && (
-                <TableRow hover key={group.id}>
-                  <TableCell>{group.name}</TableCell>
-                  <TableCell>{group.members.totalCount}</TableCell>
-                </TableRow>
-              )
-          )}
-          {paginationProps && (
-            <TableRow>
-              <TablePagination {...paginationProps} />
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </Paper>
+      {loading && <Typography>Loading...</Typography>}
+      {groups?.length === 0 && (
+        <Typography variant="h4">No groups found</Typography>
+      )}
+      {groups?.map(
+        (group) =>
+          group && (
+            <Card key={group.id} sx={{ mb: 2 }} variant="outlined">
+              <CardHeader
+                avatar={<Avatar src={group.logoURL} />}
+                title={
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="h5">{group.name}</Typography>
+                    <GroupJoinPolicyChip group={group} />
+                  </Stack>
+                }
+                subheader={
+                  <Typography variant="body2" color="text.secondary">
+                    {group.members.totalCount}{" "}
+                    {pluralize("member", group.members.totalCount)}
+                  </Typography>
+                }
+              />
+              {group.description && (
+                <CardContent>
+                  <Typography variant="body1">{group.description}</Typography>
+                </CardContent>
+              )}
+              <GroupCardActions group={group} />
+            </Card>
+          )
+      )}
+      {/* https://github.com/mui/material-ui/issues/15827 */}
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
+      <TablePagination
+        component="div"
+        {...paginationProps}
+        labelRowsPerPage="Results per page:"
+      />
+    </Container>
   );
 };
 
