@@ -45,6 +45,7 @@ export type CreatePlayerInput = {
 
 export type Group = Node & {
   __typename?: "Group";
+  applications?: Maybe<Array<GroupMembershipApplication>>;
   description: Scalars["String"];
   id: Scalars["ID"];
   isMember: Scalars["Boolean"];
@@ -60,6 +61,11 @@ export type GroupMembersArgs = {
   first?: InputMaybe<Scalars["Int"]>;
   last?: InputMaybe<Scalars["Int"]>;
   where?: InputMaybe<GroupMembershipWhereInput>;
+};
+
+export type GroupApplicationInput = {
+  groupId: Scalars["ID"];
+  message?: InputMaybe<Scalars["String"]>;
 };
 
 /** A connection to a list of items. */
@@ -88,6 +94,14 @@ export type GroupMembership = Node & {
   id: Scalars["ID"];
   role: GroupMembershipRole;
   user: User;
+};
+
+export type GroupMembershipApplication = Node & {
+  __typename?: "GroupMembershipApplication";
+  group: Array<Group>;
+  id: Scalars["ID"];
+  message: Scalars["String"];
+  user: Array<User>;
 };
 
 /** A connection to a list of items. */
@@ -239,11 +253,17 @@ export type GroupWhereInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  applyToGroup: GroupMembershipApplication;
   createGroup: Group;
   createPlayer: Player;
+  joinGroup: Scalars["Boolean"];
   requestPlayerSupervision: PlayerSupervisionRequest;
   resolvePlayerSupervisionRequest: Scalars["Boolean"];
   updateUser: User;
+};
+
+export type MutationApplyToGroupArgs = {
+  input: GroupApplicationInput;
 };
 
 export type MutationCreateGroupArgs = {
@@ -252,6 +272,10 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreatePlayerArgs = {
   input: CreatePlayerInput;
+};
+
+export type MutationJoinGroupArgs = {
+  groupId: Scalars["ID"];
 };
 
 export type MutationRequestPlayerSupervisionArgs = {
@@ -525,6 +549,7 @@ export type User = Node & {
   __typename?: "User";
   avatarURL: Scalars["String"];
   email: Scalars["String"];
+  groupMembershipApplications?: Maybe<Array<GroupMembershipApplication>>;
   groupMemberships?: Maybe<Array<GroupMembership>>;
   id: Scalars["ID"];
   mainPlayer?: Maybe<Player>;
@@ -716,6 +741,12 @@ export type CreatePlayerMutation = {
   __typename?: "Mutation";
   createPlayer: { __typename?: "Player"; id: string; name: string };
 };
+
+export type JoinGroupMutationVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type JoinGroupMutation = { __typename?: "Mutation"; joinGroup: boolean };
 
 export type RequestPlayerSupervisionMutationVariables = Exact<{
   input: RequestPlayerSupervisionInput;
@@ -1150,6 +1181,53 @@ export type CreatePlayerMutationResult =
 export type CreatePlayerMutationOptions = Apollo.BaseMutationOptions<
   CreatePlayerMutation,
   CreatePlayerMutationVariables
+>;
+export const JoinGroupDocument = gql`
+  mutation JoinGroup($id: ID!) {
+    joinGroup(groupId: $id)
+  }
+`;
+export type JoinGroupMutationFn = Apollo.MutationFunction<
+  JoinGroupMutation,
+  JoinGroupMutationVariables
+>;
+
+/**
+ * __useJoinGroupMutation__
+ *
+ * To run a mutation, you first call `useJoinGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinGroupMutation, { data, loading, error }] = useJoinGroupMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useJoinGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    JoinGroupMutation,
+    JoinGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<JoinGroupMutation, JoinGroupMutationVariables>(
+    JoinGroupDocument,
+    options
+  );
+}
+export type JoinGroupMutationHookResult = ReturnType<
+  typeof useJoinGroupMutation
+>;
+export type JoinGroupMutationResult = Apollo.MutationResult<JoinGroupMutation>;
+export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<
+  JoinGroupMutation,
+  JoinGroupMutationVariables
 >;
 export const RequestPlayerSupervisionDocument = gql`
   mutation RequestPlayerSupervision($input: RequestPlayerSupervisionInput!) {
@@ -1858,9 +1936,11 @@ export type ResolversTypes = ResolversObject<{
   Cursor: ResolverTypeWrapper<Scalars["Cursor"]>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
   Group: ResolverTypeWrapper<Group>;
+  GroupApplicationInput: GroupApplicationInput;
   GroupConnection: ResolverTypeWrapper<GroupConnection>;
   GroupEdge: ResolverTypeWrapper<GroupEdge>;
   GroupMembership: ResolverTypeWrapper<GroupMembership>;
+  GroupMembershipApplication: ResolverTypeWrapper<GroupMembershipApplication>;
   GroupMembershipConnection: ResolverTypeWrapper<GroupMembershipConnection>;
   GroupMembershipEdge: ResolverTypeWrapper<GroupMembershipEdge>;
   GroupMembershipRole: GroupMembershipRole;
@@ -1876,6 +1956,7 @@ export type ResolversTypes = ResolversObject<{
   Node:
     | ResolversTypes["Group"]
     | ResolversTypes["GroupMembership"]
+    | ResolversTypes["GroupMembershipApplication"]
     | ResolversTypes["GroupSettings"]
     | ResolversTypes["Player"]
     | ResolversTypes["PlayerSupervisionRequest"]
@@ -1910,9 +1991,11 @@ export type ResolversParentTypes = ResolversObject<{
   Cursor: Scalars["Cursor"];
   Float: Scalars["Float"];
   Group: Group;
+  GroupApplicationInput: GroupApplicationInput;
   GroupConnection: GroupConnection;
   GroupEdge: GroupEdge;
   GroupMembership: GroupMembership;
+  GroupMembershipApplication: GroupMembershipApplication;
   GroupMembershipConnection: GroupMembershipConnection;
   GroupMembershipEdge: GroupMembershipEdge;
   GroupMembershipWhereInput: GroupMembershipWhereInput;
@@ -1925,6 +2008,7 @@ export type ResolversParentTypes = ResolversObject<{
   Node:
     | ResolversParentTypes["Group"]
     | ResolversParentTypes["GroupMembership"]
+    | ResolversParentTypes["GroupMembershipApplication"]
     | ResolversParentTypes["GroupSettings"]
     | ResolversParentTypes["Player"]
     | ResolversParentTypes["PlayerSupervisionRequest"]
@@ -1992,6 +2076,11 @@ export type GroupResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Group"] = ResolversParentTypes["Group"]
 > = ResolversObject<{
+  applications?: Resolver<
+    Maybe<Array<ResolversTypes["GroupMembershipApplication"]>>,
+    ParentType,
+    ContextType
+  >;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   isMember?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
@@ -2042,6 +2131,17 @@ export type GroupMembershipResolvers<
     ContextType
   >;
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GroupMembershipApplicationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["GroupMembershipApplication"] = ResolversParentTypes["GroupMembershipApplication"]
+> = ResolversObject<{
+  group?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2099,6 +2199,12 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
 > = ResolversObject<{
+  applyToGroup?: Resolver<
+    ResolversTypes["GroupMembershipApplication"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationApplyToGroupArgs, "input">
+  >;
   createGroup?: Resolver<
     ResolversTypes["Group"],
     ParentType,
@@ -2110,6 +2216,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreatePlayerArgs, "input">
+  >;
+  joinGroup?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationJoinGroupArgs, "groupId">
   >;
   requestPlayerSupervision?: Resolver<
     ResolversTypes["PlayerSupervisionRequest"],
@@ -2138,6 +2250,7 @@ export type NodeResolvers<
   __resolveType: TypeResolveFn<
     | "Group"
     | "GroupMembership"
+    | "GroupMembershipApplication"
     | "GroupSettings"
     | "Player"
     | "PlayerSupervisionRequest"
@@ -2298,6 +2411,11 @@ export type UserResolvers<
 > = ResolversObject<{
   avatarURL?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  groupMembershipApplications?: Resolver<
+    Maybe<Array<ResolversTypes["GroupMembershipApplication"]>>,
+    ParentType,
+    ContextType
+  >;
   groupMemberships?: Resolver<
     Maybe<Array<ResolversTypes["GroupMembership"]>>,
     ParentType,
@@ -2357,6 +2475,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   GroupConnection?: GroupConnectionResolvers<ContextType>;
   GroupEdge?: GroupEdgeResolvers<ContextType>;
   GroupMembership?: GroupMembershipResolvers<ContextType>;
+  GroupMembershipApplication?: GroupMembershipApplicationResolvers<ContextType>;
   GroupMembershipConnection?: GroupMembershipConnectionResolvers<ContextType>;
   GroupMembershipEdge?: GroupMembershipEdgeResolvers<ContextType>;
   GroupSettings?: GroupSettingsResolvers<ContextType>;

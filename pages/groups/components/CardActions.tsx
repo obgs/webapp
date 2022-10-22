@@ -1,11 +1,15 @@
 import { LoadingButton } from "@mui/lab";
 import { CardActions } from "@mui/material";
-import React from "react";
+import { useSnackbar } from "notistack";
+import React, { useCallback } from "react";
 
 import {
   GroupFieldsFragment,
+  GroupFieldsFragmentDoc,
   GroupSettingsJoinPolicy,
+  useJoinGroupMutation,
 } from "../../../graphql/generated";
+import useSnackbarError from "../../../utils/apollo/useSnackbarError";
 import useAuth from "../../../utils/auth/useAuth";
 
 interface Props {
@@ -15,6 +19,37 @@ interface Props {
 const GroupCardActions: React.FC<Props> = ({ group }) => {
   const { authenticated } = useAuth();
 
+  const [joinGroup, { error, loading }] = useJoinGroupMutation();
+  useSnackbarError(error);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const handleJoinGroup = useCallback(async () => {
+    await joinGroup({
+      variables: {
+        id: group.id,
+      },
+      update: (cache) => {
+        const fragment = cache.readFragment<GroupFieldsFragment>({
+          id: `Group:${group.id}`,
+          fragment: GroupFieldsFragmentDoc,
+        });
+        cache.writeFragment({
+          id: `Group:${group.id}`,
+          fragment: GroupFieldsFragmentDoc,
+          data: {
+            ...fragment,
+            isMember: true,
+            members: {
+              ...fragment?.members,
+              totalCount: (fragment?.members.totalCount || 0) + 1,
+            },
+          },
+        });
+      },
+    });
+    enqueueSnackbar(`Joined group ${group.name}.`, { variant: "success" });
+  }, [group, joinGroup, enqueueSnackbar]);
+
   if (!authenticated || group.isMember) {
     return null;
   }
@@ -23,7 +58,11 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
 
   if (group.settings.joinPolicy === GroupSettingsJoinPolicy.Open) {
     joinButton = (
-      <LoadingButton variant="contained" loading={false}>
+      <LoadingButton
+        onClick={handleJoinGroup}
+        variant="contained"
+        loading={loading}
+      >
         Join
       </LoadingButton>
     );

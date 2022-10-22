@@ -1,0 +1,3 @@
+mutation JoinGroup($id: ID!) {
+  joinGroup(groupId: $id)
+}

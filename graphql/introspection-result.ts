@@ -8,6 +8,7 @@ const result: PossibleTypesResultData = {
     Node: [
       "Group",
       "GroupMembership",
+      "GroupMembershipApplication",
       "GroupSettings",
       "Player",
       "PlayerSupervisionRequest",
