@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Chip,
   Container,
   Stack,
   TablePagination,
@@ -46,6 +47,7 @@ const GroupList: React.FC<Props> = ({
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography variant="h5">{group.name}</Typography>
                     <GroupJoinPolicyChip group={group} />
+                    {group.isMember && <Chip size="small" label="Member" />}
                   </Stack>
                 }
                 subheader={

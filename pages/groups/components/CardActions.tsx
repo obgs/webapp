@@ -15,7 +15,7 @@ interface Props {
 const GroupCardActions: React.FC<Props> = ({ group }) => {
   const { authenticated } = useAuth();
 
-  if (!authenticated) {
+  if (!authenticated || group.isMember) {
     return null;
   }
 
