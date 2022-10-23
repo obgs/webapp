@@ -46,6 +46,8 @@ export type CreatePlayerInput = {
 export type Group = Node & {
   __typename?: "Group";
   applications?: Maybe<Array<GroupMembershipApplication>>;
+  /** Shows if the current user already applied to the group */
+  applied?: Maybe<Scalars["Boolean"]>;
   description: Scalars["String"];
   id: Scalars["ID"];
   logoURL: Scalars["String"];
@@ -643,6 +645,7 @@ export type GroupFieldsFragment = {
   description: string;
   logoURL: string;
   role?: GroupMembershipRole | null;
+  applied?: boolean | null;
   settings: {
     __typename?: "GroupSettings";
     id: string;
@@ -671,6 +674,7 @@ export type GroupMembershipApplicationFieldsFragment = {
     description: string;
     logoURL: string;
     role?: GroupMembershipRole | null;
+    applied?: boolean | null;
     settings: {
       __typename?: "GroupSettings";
       id: string;
@@ -758,6 +762,7 @@ export type ApplyToGroupMutation = {
       description: string;
       logoURL: string;
       role?: GroupMembershipRole | null;
+      applied?: boolean | null;
       settings: {
         __typename?: "GroupSettings";
         id: string;
@@ -788,6 +793,7 @@ export type CreateGroupMutation = {
     description: string;
     logoURL: string;
     role?: GroupMembershipRole | null;
+    applied?: boolean | null;
     settings: {
       __typename?: "GroupSettings";
       id: string;
@@ -1000,6 +1006,7 @@ export type SearchGroupsQuery = {
         description: string;
         logoURL: string;
         role?: GroupMembershipRole | null;
+        applied?: boolean | null;
         settings: {
           __typename?: "GroupSettings";
           id: string;
@@ -1078,6 +1085,7 @@ export const GroupFieldsFragmentDoc = gql`
       totalCount
     }
     role
+    applied
   }
 `;
 export const GroupMembershipApplicationFieldsFragmentDoc = gql`
@@ -2212,6 +2220,7 @@ export type GroupResolvers<
     ParentType,
     ContextType
   >;
+  applied?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   logoURL?: Resolver<ResolversTypes["String"], ParentType, ContextType>;

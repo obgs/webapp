@@ -1,5 +1,6 @@
+import CheckIcon from "@mui/icons-material/Check";
 import { LoadingButton } from "@mui/lab";
-import { CardActions } from "@mui/material";
+import { Button, CardActions, Tooltip } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 
@@ -71,8 +72,19 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
       </LoadingButton>
     );
   }
-  if (group.settings.joinPolicy === GroupSettingsJoinPolicy.ApplicationOnly) {
-    joinButton = (
+  if (
+    [
+      GroupSettingsJoinPolicy.ApplicationOnly,
+      GroupSettingsJoinPolicy.InviteOrApplication,
+    ].includes(group.settings.joinPolicy)
+  ) {
+    joinButton = group.applied ? (
+      <Tooltip title="You have already applied to join this group">
+        <Button variant="contained" color="success" startIcon={<CheckIcon />}>
+          Applied
+        </Button>
+      </Tooltip>
+    ) : (
       <LoadingButton
         variant="contained"
         loading={false}

@@ -13,4 +13,5 @@ fragment groupFields on Group {
     totalCount
   }
   role
+  applied
 }
