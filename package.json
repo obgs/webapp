@@ -10,6 +10,7 @@
     "prettier:check": "prettier -c .",
     "eslint:check": "eslint .",
     "eslint:fix": "eslint . --fix",
+    "tsc:check": "tsc --noEmit",
     "generate": "graphql-codegen"
   },
   "dependencies": {
