@@ -62,6 +62,7 @@ const Profile = () => {
   } = useImageInput();
 
   useEffect(() => {
+    if (values.avatarURL === avatarURL) return;
     setValues({
       ...values,
       avatarURL,
