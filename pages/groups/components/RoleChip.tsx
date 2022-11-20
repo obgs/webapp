@@ -1,20 +1,12 @@
 import { Chip, Tooltip } from "@mui/material";
 import React from "react";
 
-import {
-  GroupFieldsFragment,
-  GroupMembershipRole,
-} from "../../../graphql/generated";
+import { GroupFieldsFragment } from "../../../graphql/generated";
+import roles from "../helpers/roles";
 
 interface Props {
   group: GroupFieldsFragment;
 }
-
-const roles: Record<GroupMembershipRole, string> = {
-  [GroupMembershipRole.Admin]: "Admin",
-  [GroupMembershipRole.Member]: "Member",
-  [GroupMembershipRole.Owner]: "Owner",
-};
 
 const GroupRoleChip: React.FC<Props> = ({ group }) => {
   if (!group.role) {

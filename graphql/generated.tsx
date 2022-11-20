@@ -858,6 +858,94 @@ export type GetFileUploadUrlQuery = {
   getFileUploadURL: string;
 };
 
+export type GroupQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GroupQuery = {
+  __typename?: "Query";
+  node?:
+    | {
+        __typename?: "Group";
+        id: string;
+        name: string;
+        description: string;
+        logoURL: string;
+        role?: GroupMembershipRole | null;
+        applied?: boolean | null;
+        settings: {
+          __typename?: "GroupSettings";
+          id: string;
+          visibility: GroupSettingsVisibility;
+          joinPolicy: GroupSettingsJoinPolicy;
+          minimumRoleToInvite?: GroupMembershipRole | null;
+        };
+        members: {
+          __typename?: "GroupMembershipConnection";
+          totalCount: number;
+        };
+      }
+    | { __typename?: "GroupMembership"; id: string }
+    | { __typename?: "GroupMembershipApplication"; id: string }
+    | { __typename?: "GroupSettings"; id: string }
+    | { __typename?: "Player"; id: string }
+    | { __typename?: "PlayerSupervisionRequest"; id: string }
+    | { __typename?: "PlayerSupervisionRequestApproval"; id: string }
+    | { __typename?: "User"; id: string }
+    | null;
+};
+
+export type GroupMembersQueryVariables = Exact<{
+  groupId: Scalars["ID"];
+  before?: InputMaybe<Scalars["Cursor"]>;
+  after?: InputMaybe<Scalars["Cursor"]>;
+  first?: InputMaybe<Scalars["Int"]>;
+  last?: InputMaybe<Scalars["Int"]>;
+  where?: InputMaybe<GroupMembershipWhereInput>;
+}>;
+
+export type GroupMembersQuery = {
+  __typename?: "Query";
+  node?:
+    | {
+        __typename?: "Group";
+        members: {
+          __typename?: "GroupMembershipConnection";
+          totalCount: number;
+          pageInfo: {
+            __typename?: "PageInfo";
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: any | null;
+            endCursor?: any | null;
+          };
+          edges?: Array<{
+            __typename?: "GroupMembershipEdge";
+            node?: {
+              __typename?: "GroupMembership";
+              id: string;
+              role: GroupMembershipRole;
+              user: {
+                __typename?: "User";
+                id: string;
+                name: string;
+                email: string;
+                avatarURL: string;
+              };
+            } | null;
+          } | null> | null;
+        };
+      }
+    | { __typename?: "GroupMembership" }
+    | { __typename?: "GroupMembershipApplication" }
+    | { __typename?: "GroupSettings" }
+    | { __typename?: "Player" }
+    | { __typename?: "PlayerSupervisionRequest" }
+    | { __typename?: "PlayerSupervisionRequestApproval" }
+    | { __typename?: "User" }
+    | null;
+};
+
 export type IncomingSupervisionRequestsQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -1575,6 +1663,150 @@ export type GetFileUploadUrlLazyQueryHookResult = ReturnType<
 export type GetFileUploadUrlQueryResult = Apollo.QueryResult<
   GetFileUploadUrlQuery,
   GetFileUploadUrlQueryVariables
+>;
+export const GroupDocument = gql`
+  query Group($id: ID!) {
+    node(id: $id) {
+      id
+      ...groupFields
+    }
+  }
+  ${GroupFieldsFragmentDoc}
+`;
+
+/**
+ * __useGroupQuery__
+ *
+ * To run a query within a React component, call `useGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<GroupQuery, GroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GroupQuery, GroupQueryVariables>(
+    GroupDocument,
+    options
+  );
+}
+export function useGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GroupQuery, GroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GroupQuery, GroupQueryVariables>(
+    GroupDocument,
+    options
+  );
+}
+export type GroupQueryHookResult = ReturnType<typeof useGroupQuery>;
+export type GroupLazyQueryHookResult = ReturnType<typeof useGroupLazyQuery>;
+export type GroupQueryResult = Apollo.QueryResult<
+  GroupQuery,
+  GroupQueryVariables
+>;
+export const GroupMembersDocument = gql`
+  query GroupMembers(
+    $groupId: ID!
+    $before: Cursor
+    $after: Cursor
+    $first: Int
+    $last: Int
+    $where: GroupMembershipWhereInput
+  ) {
+    node(id: $groupId) {
+      ... on Group {
+        members(
+          before: $before
+          after: $after
+          first: $first
+          last: $last
+          where: $where
+        ) {
+          totalCount
+          pageInfo {
+            ...pageInfoFields
+          }
+          edges {
+            node {
+              id
+              role
+              user {
+                ...userFields
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ${PageInfoFieldsFragmentDoc}
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useGroupMembersQuery__
+ *
+ * To run a query within a React component, call `useGroupMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupMembersQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      before: // value for 'before'
+ *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGroupMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GroupMembersQuery,
+    GroupMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GroupMembersQuery, GroupMembersQueryVariables>(
+    GroupMembersDocument,
+    options
+  );
+}
+export function useGroupMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupMembersQuery,
+    GroupMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GroupMembersQuery, GroupMembersQueryVariables>(
+    GroupMembersDocument,
+    options
+  );
+}
+export type GroupMembersQueryHookResult = ReturnType<
+  typeof useGroupMembersQuery
+>;
+export type GroupMembersLazyQueryHookResult = ReturnType<
+  typeof useGroupMembersLazyQuery
+>;
+export type GroupMembersQueryResult = Apollo.QueryResult<
+  GroupMembersQuery,
+  GroupMembersQueryVariables
 >;
 export const IncomingSupervisionRequestsDocument = gql`
   query IncomingSupervisionRequests {
