@@ -16,9 +16,9 @@ import {
   GroupFieldsFragment,
   PageInfoFieldsFragment,
   useGroupMembersLazyQuery,
-} from "../../../graphql/generated";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
-import roles from "../helpers/roles";
+} from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import groupRoles from "../../utils/groupRoles";
 import useGroupMembersPagination from "./useGroupMembersPagination";
 
 interface Props {
@@ -103,7 +103,7 @@ const Members: React.FC<Props> = ({ group }) => {
                       </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{roles[member.role]}</TableCell>
+                  <TableCell>{groupRoles[member.role]}</TableCell>
                 </TableRow>
               )
           )}

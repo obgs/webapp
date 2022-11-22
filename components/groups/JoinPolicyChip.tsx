@@ -4,7 +4,7 @@ import React from "react";
 import {
   GroupFieldsFragment,
   GroupSettingsJoinPolicy,
-} from "../../../graphql/generated";
+} from "../../graphql/generated";
 
 interface Props {
   group: GroupFieldsFragment;

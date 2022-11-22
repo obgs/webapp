@@ -10,7 +10,7 @@ import Link from "next/link";
 import pluralize from "pluralize";
 import React from "react";
 
-import { GroupFieldsFragment } from "../../../graphql/generated";
+import { GroupFieldsFragment } from "../../graphql/generated";
 import GroupCardActions from "./CardActions";
 import GroupJoinPolicyChip from "./JoinPolicyChip";
 import GroupRoleChip from "./RoleChip";

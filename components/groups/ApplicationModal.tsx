@@ -6,9 +6,9 @@ import React, { useCallback, useState } from "react";
 import {
   GroupFieldsFragment,
   useApplyToGroupMutation,
-} from "../../../graphql/generated";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
-import onChangeText from "../../../utils/onChangeText";
+} from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import onChangeText from "../../utils/onChangeText";
 
 interface Props {
   open: boolean;

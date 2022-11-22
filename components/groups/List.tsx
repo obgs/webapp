@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-import { GroupFieldsFragment } from "../../../graphql/generated";
+import { GroupFieldsFragment } from "../../graphql/generated";
 import GroupCard from "./Card";
 
 interface Props {

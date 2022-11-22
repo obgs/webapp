@@ -2,11 +2,11 @@ import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 
+import GroupList from "../../components/groups/List";
 import { useSearchGroupsLazyQuery } from "../../graphql/generated";
 import usePagination from "../../utils/apollo/usePagination";
 import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import useAuth from "../../utils/auth/useAuth";
-import GroupList from "./components/List";
 
 const Groups = () => {
   const [search, { data, error, loading }] = useSearchGroupsLazyQuery();

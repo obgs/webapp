@@ -10,9 +10,9 @@ import {
   GroupMembershipRole,
   GroupSettingsJoinPolicy,
   useJoinGroupMutation,
-} from "../../../graphql/generated";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
-import useAuth from "../../../utils/auth/useAuth";
+} from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import useAuth from "../../utils/auth/useAuth";
 import GroupMembershipApplicationModal from "./ApplicationModal";
 
 interface Props {
