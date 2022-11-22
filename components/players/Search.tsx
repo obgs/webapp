@@ -16,9 +16,9 @@ import {
   PlayerFieldsFragment,
   PlayerWhereInput,
   useSearchPlayersLazyQuery,
-} from "../../../graphql/generated";
-import usePagination from "../../../utils/apollo/usePagination";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
+} from "../../graphql/generated";
+import usePagination from "../../utils/apollo/usePagination";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import PlayersList from "./List";
 
 interface Props {

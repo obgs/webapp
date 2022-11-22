@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-import PlayerSearch from "./components/Search";
+import PlayerSearch from "../../components/players/Search";
 
 const Players = () => {
   return (
