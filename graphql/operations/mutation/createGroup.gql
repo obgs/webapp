@@ -1,6 +1,6 @@
 mutation CreateGroup(
   $name: String!
-  $description: String!
+  $description: String
   $logoUrl: String!
   $visibility: GroupSettingsVisibility!
   $joinPolicy: GroupSettingsJoinPolicy!

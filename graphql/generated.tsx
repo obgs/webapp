@@ -777,7 +777,7 @@ export type ApplyToGroupMutation = {
 
 export type CreateGroupMutationVariables = Exact<{
   name: Scalars["String"];
-  description: Scalars["String"];
+  description?: InputMaybe<Scalars["String"]>;
   logoUrl: Scalars["String"];
   visibility: GroupSettingsVisibility;
   joinPolicy: GroupSettingsJoinPolicy;
@@ -1289,7 +1289,7 @@ export type ApplyToGroupMutationOptions = Apollo.BaseMutationOptions<
 export const CreateGroupDocument = gql`
   mutation CreateGroup(
     $name: String!
-    $description: String!
+    $description: String
     $logoUrl: String!
     $visibility: GroupSettingsVisibility!
     $joinPolicy: GroupSettingsJoinPolicy!
