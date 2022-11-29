@@ -3,6 +3,7 @@ import { Container, Tab, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
+import Members from "../../../components/groups/Members";
 import GroupApplications from "../../../components/groups/manage/Applications";
 import GroupSettings from "../../../components/groups/manage/Settings";
 
@@ -25,7 +26,6 @@ const ManageGroup = () => {
         <TabList onChange={(_, t) => setTab(t)}>
           <Tab label="Settings" value="settings" />
           <Tab label="Applications" value="applications" />
-          <Tab label="Invites" value="invites" />
           <Tab label="Members" value="members" />
         </TabList>
 
@@ -35,8 +35,9 @@ const ManageGroup = () => {
         <TabPanel value="applications">
           <GroupApplications groupId={id} />
         </TabPanel>
-        <TabPanel value="invites">Invites</TabPanel>
-        <TabPanel value="members">Members</TabPanel>
+        <TabPanel value="members">
+          <Members manage groupId={id} />
+        </TabPanel>
       </TabContext>
     </Container>
   );

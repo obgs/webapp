@@ -262,6 +262,7 @@ export type GroupWhereInput = {
 export type Mutation = {
   __typename?: "Mutation";
   applyToGroup: GroupMembershipApplication;
+  changeUserGroupMembershipRole: Scalars["Boolean"];
   createOrUpdateGroup: Group;
   createPlayer: Player;
   joinGroup: Scalars["Boolean"];
@@ -273,6 +274,12 @@ export type Mutation = {
 
 export type MutationApplyToGroupArgs = {
   input: GroupApplicationInput;
+};
+
+export type MutationChangeUserGroupMembershipRoleArgs = {
+  groupId: Scalars["ID"];
+  role: GroupMembershipRole;
+  userId: Scalars["ID"];
 };
 
 export type MutationCreateOrUpdateGroupArgs = {
@@ -667,6 +674,19 @@ export type GroupFieldsFragment = {
   members: { __typename?: "GroupMembershipConnection"; totalCount: number };
 };
 
+export type GroupMembershipFieldsFragment = {
+  __typename?: "GroupMembership";
+  id: string;
+  role: GroupMembershipRole;
+  user: {
+    __typename?: "User";
+    id: string;
+    name: string;
+    email: string;
+    avatarURL: string;
+  };
+};
+
 export type GroupMembershipApplicationFieldsFragment = {
   __typename?: "GroupMembershipApplication";
   id: string;
@@ -784,6 +804,17 @@ export type ApplyToGroupMutation = {
       members: { __typename?: "GroupMembershipConnection"; totalCount: number };
     };
   };
+};
+
+export type ChangeUserGroupMembershipRoleMutationVariables = Exact<{
+  userId: Scalars["ID"];
+  groupId: Scalars["ID"];
+  role: GroupMembershipRole;
+}>;
+
+export type ChangeUserGroupMembershipRoleMutation = {
+  __typename?: "Mutation";
+  changeUserGroupMembershipRole: boolean;
 };
 
 export type CreateOrUpdateGroupMutationVariables = Exact<{
@@ -1242,6 +1273,16 @@ export const UserFieldsFragmentDoc = gql`
     avatarURL
   }
 `;
+export const GroupMembershipFieldsFragmentDoc = gql`
+  fragment groupMembershipFields on GroupMembership {
+    id
+    role
+    user {
+      ...userFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const GroupFieldsFragmentDoc = gql`
   fragment groupFields on Group {
     id
@@ -1371,6 +1412,65 @@ export type ApplyToGroupMutationOptions = Apollo.BaseMutationOptions<
   ApplyToGroupMutation,
   ApplyToGroupMutationVariables
 >;
+export const ChangeUserGroupMembershipRoleDocument = gql`
+  mutation ChangeUserGroupMembershipRole(
+    $userId: ID!
+    $groupId: ID!
+    $role: GroupMembershipRole!
+  ) {
+    changeUserGroupMembershipRole(
+      userId: $userId
+      groupId: $groupId
+      role: $role
+    )
+  }
+`;
+export type ChangeUserGroupMembershipRoleMutationFn = Apollo.MutationFunction<
+  ChangeUserGroupMembershipRoleMutation,
+  ChangeUserGroupMembershipRoleMutationVariables
+>;
+
+/**
+ * __useChangeUserGroupMembershipRoleMutation__
+ *
+ * To run a mutation, you first call `useChangeUserGroupMembershipRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeUserGroupMembershipRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeUserGroupMembershipRoleMutation, { data, loading, error }] = useChangeUserGroupMembershipRoleMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      groupId: // value for 'groupId'
+ *      role: // value for 'role'
+ *   },
+ * });
+ */
+export function useChangeUserGroupMembershipRoleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ChangeUserGroupMembershipRoleMutation,
+    ChangeUserGroupMembershipRoleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ChangeUserGroupMembershipRoleMutation,
+    ChangeUserGroupMembershipRoleMutationVariables
+  >(ChangeUserGroupMembershipRoleDocument, options);
+}
+export type ChangeUserGroupMembershipRoleMutationHookResult = ReturnType<
+  typeof useChangeUserGroupMembershipRoleMutation
+>;
+export type ChangeUserGroupMembershipRoleMutationResult =
+  Apollo.MutationResult<ChangeUserGroupMembershipRoleMutation>;
+export type ChangeUserGroupMembershipRoleMutationOptions =
+  Apollo.BaseMutationOptions<
+    ChangeUserGroupMembershipRoleMutation,
+    ChangeUserGroupMembershipRoleMutationVariables
+  >;
 export const CreateOrUpdateGroupDocument = gql`
   mutation CreateOrUpdateGroup(
     $id: ID
@@ -1951,11 +2051,7 @@ export const GroupMembersDocument = gql`
           }
           edges {
             node {
-              id
-              role
-              user {
-                ...userFields
-              }
+              ...groupMembershipFields
             }
           }
         }
@@ -1963,7 +2059,7 @@ export const GroupMembersDocument = gql`
     }
   }
   ${PageInfoFieldsFragmentDoc}
-  ${UserFieldsFragmentDoc}
+  ${GroupMembershipFieldsFragmentDoc}
 `;
 
 /**
@@ -2864,6 +2960,15 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationApplyToGroupArgs, "input">
+  >;
+  changeUserGroupMembershipRole?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationChangeUserGroupMembershipRoleArgs,
+      "groupId" | "role" | "userId"
+    >
   >;
   createOrUpdateGroup?: Resolver<
     ResolversTypes["Group"],

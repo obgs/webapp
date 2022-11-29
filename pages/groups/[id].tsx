@@ -62,7 +62,7 @@ const Group: React.FC = () => {
         </TabList>
 
         <TabPanel value="members">
-          <Members group={group} />
+          <Members groupId={group.id} />
         </TabPanel>
       </TabContext>
     </Box>

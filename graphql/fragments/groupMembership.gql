@@ -1,0 +1,7 @@
+fragment groupMembershipFields on GroupMembership {
+  id
+  role
+  user {
+    ...userFields
+  }
+}

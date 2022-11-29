@@ -1,6 +1,9 @@
 import {
   Avatar,
   Box,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -10,11 +13,15 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useMemo } from "react";
+import { useSnackbar } from "notistack";
+import React, { useCallback, useMemo } from "react";
 
 import {
-  GroupFieldsFragment,
+  GroupMembershipFieldsFragment,
+  GroupMembershipFieldsFragmentDoc,
+  GroupMembershipRole,
   PageInfoFieldsFragment,
+  useChangeUserGroupMembershipRoleMutation,
   useGroupMembersLazyQuery,
 } from "../../graphql/generated";
 import useSnackbarError from "../../utils/apollo/useSnackbarError";
@@ -22,12 +29,52 @@ import groupRoles from "../../utils/groupRoles";
 import useGroupMembersPagination from "./useGroupMembersPagination";
 
 interface Props {
-  group: GroupFieldsFragment;
+  groupId: string;
+  manage?: boolean;
 }
 
-const Members: React.FC<Props> = ({ group }) => {
+const Members: React.FC<Props> = ({ groupId, manage }) => {
   const [query, { data, error, loading }] = useGroupMembersLazyQuery();
   useSnackbarError(error);
+
+  const [changeRole, { error: changeRoleError }] =
+    useChangeUserGroupMembershipRoleMutation();
+  useSnackbarError(changeRoleError);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const onChangeRole = useCallback(
+    (member: GroupMembershipFieldsFragment) =>
+      async (event: SelectChangeEvent) => {
+        const role = event.target.value as GroupMembershipRole;
+        await changeRole({
+          variables: {
+            userId: member.user.id,
+            groupId,
+            role,
+          },
+          update: (cache) => {
+            cache.updateFragment(
+              {
+                fragment: GroupMembershipFieldsFragmentDoc,
+                fragmentName: "groupMembershipFields",
+                id: `GroupMembership:${member.id}`,
+              },
+              (existing) => ({
+                ...existing,
+                role,
+              })
+            );
+          },
+        });
+        enqueueSnackbar(
+          `Changed role of ${member.user.name || member.user.id} to ${
+            groupRoles[role]
+          }.`,
+          { variant: "success" }
+        );
+      },
+    [changeRole, enqueueSnackbar, groupId]
+  );
 
   const pageInfo: PageInfoFieldsFragment = useMemo(
     () =>
@@ -44,7 +91,7 @@ const Members: React.FC<Props> = ({ group }) => {
   const pagination = useGroupMembersPagination({
     query,
     pageInfo,
-    groupId: group.id,
+    groupId,
     where,
   });
 
@@ -103,7 +150,23 @@ const Members: React.FC<Props> = ({ group }) => {
                       </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{groupRoles[member.role]}</TableCell>
+                  <TableCell>
+                    {manage ? (
+                      <Select
+                        sx={{ minWidth: 120 }}
+                        value={member.role}
+                        onChange={onChangeRole(member)}
+                      >
+                        {Object.entries(groupRoles).map(([key, value]) => (
+                          <MenuItem key={key} value={key}>
+                            {value}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : (
+                      groupRoles[member.role]
+                    )}
+                  </TableCell>
                 </TableRow>
               )
           )}

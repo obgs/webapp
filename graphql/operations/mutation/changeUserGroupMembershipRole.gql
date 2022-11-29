@@ -1,0 +1,7 @@
+mutation ChangeUserGroupMembershipRole(
+  $userId: ID!
+  $groupId: ID!
+  $role: GroupMembershipRole!
+) {
+  changeUserGroupMembershipRole(userId: $userId, groupId: $groupId, role: $role)
+}
