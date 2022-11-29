@@ -1,0 +1,16 @@
+query GroupSettings($id: ID!) {
+  node(id: $id) {
+    ... on Group {
+      id
+      name
+      description
+      logoURL
+      settings {
+        id
+        visibility
+        joinPolicy
+        minimumRoleToInvite
+      }
+    }
+  }
+}

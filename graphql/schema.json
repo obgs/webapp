@@ -23,11 +23,21 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "CreateGroupInput",
+          "name": "CreateOrUpdateGroupInput",
           "description": null,
           "specifiedByURL": null,
           "fields": [],
           "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "name",
               "description": null,
@@ -67,40 +77,16 @@
               "defaultValue": null
             },
             {
-              "name": "visibility",
+              "name": "settings",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "GroupSettingsVisibility",
+                  "kind": "INPUT_OBJECT",
+                  "name": "GroupSettingsInput",
                   "ofType": null
                 }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "joinPolicy",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "GroupSettingsJoinPolicy",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "minimumRoleToInvite",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "GroupMembershipRole",
-                "ofType": null
               },
               "defaultValue": null
             }
@@ -1157,6 +1143,56 @@
           "possibleTypes": []
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "GroupSettingsInput",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [
+            {
+              "name": "visibility",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "GroupSettingsVisibility",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "joinPolicy",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "GroupSettingsJoinPolicy",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "minimumRoleToInvite",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "GroupMembershipRole",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
           "kind": "ENUM",
           "name": "GroupSettingsJoinPolicy",
           "description": "GroupSettingsJoinPolicy is enum for the field join_policy",
@@ -1867,7 +1903,7 @@
           "specifiedByURL": null,
           "fields": [
             {
-              "name": "createGroup",
+              "name": "createOrUpdateGroup",
               "description": null,
               "args": [
                 {
@@ -1878,7 +1914,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "CreateGroupInput",
+                      "name": "CreateOrUpdateGroupInput",
                       "ofType": null
                     }
                   },

@@ -54,7 +54,7 @@ const Group: React.FC = () => {
 
   return (
     <Box>
-      <GroupCard group={group} />
+      <GroupCard showSettings group={group} />
 
       <TabContext value={tab}>
         <TabList onChange={(_, t) => setTab(t)}>

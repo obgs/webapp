@@ -30,13 +30,12 @@ export type Scalars = {
   Cursor: any;
 };
 
-export type CreateGroupInput = {
+export type CreateOrUpdateGroupInput = {
   description?: InputMaybe<Scalars["String"]>;
-  joinPolicy: GroupSettingsJoinPolicy;
+  id?: InputMaybe<Scalars["ID"]>;
   logoUrl: Scalars["String"];
-  minimumRoleToInvite?: InputMaybe<GroupMembershipRole>;
   name: Scalars["String"];
-  visibility: GroupSettingsVisibility;
+  settings: GroupSettingsInput;
 };
 
 export type CreatePlayerInput = {
@@ -172,6 +171,12 @@ export type GroupSettings = Node & {
   visibility: GroupSettingsVisibility;
 };
 
+export type GroupSettingsInput = {
+  joinPolicy: GroupSettingsJoinPolicy;
+  minimumRoleToInvite?: InputMaybe<GroupMembershipRole>;
+  visibility: GroupSettingsVisibility;
+};
+
 /** GroupSettingsJoinPolicy is enum for the field join_policy */
 export enum GroupSettingsJoinPolicy {
   ApplicationOnly = "APPLICATION_ONLY",
@@ -257,7 +262,7 @@ export type GroupWhereInput = {
 export type Mutation = {
   __typename?: "Mutation";
   applyToGroup: GroupMembershipApplication;
-  createGroup: Group;
+  createOrUpdateGroup: Group;
   createPlayer: Player;
   joinGroup: Scalars["Boolean"];
   requestPlayerSupervision: PlayerSupervisionRequest;
@@ -269,8 +274,8 @@ export type MutationApplyToGroupArgs = {
   input: GroupApplicationInput;
 };
 
-export type MutationCreateGroupArgs = {
-  input: CreateGroupInput;
+export type MutationCreateOrUpdateGroupArgs = {
+  input: CreateOrUpdateGroupInput;
 };
 
 export type MutationCreatePlayerArgs = {
@@ -775,7 +780,8 @@ export type ApplyToGroupMutation = {
   };
 };
 
-export type CreateGroupMutationVariables = Exact<{
+export type CreateOrUpdateGroupMutationVariables = Exact<{
+  id?: InputMaybe<Scalars["ID"]>;
   name: Scalars["String"];
   description?: InputMaybe<Scalars["String"]>;
   logoUrl: Scalars["String"];
@@ -784,9 +790,9 @@ export type CreateGroupMutationVariables = Exact<{
   minimumRoleToInvite?: InputMaybe<GroupMembershipRole>;
 }>;
 
-export type CreateGroupMutation = {
+export type CreateOrUpdateGroupMutation = {
   __typename?: "Mutation";
-  createGroup: {
+  createOrUpdateGroup: {
     __typename?: "Group";
     id: string;
     name: string;
@@ -885,13 +891,13 @@ export type GroupQuery = {
           totalCount: number;
         };
       }
-    | { __typename?: "GroupMembership"; id: string }
-    | { __typename?: "GroupMembershipApplication"; id: string }
-    | { __typename?: "GroupSettings"; id: string }
-    | { __typename?: "Player"; id: string }
-    | { __typename?: "PlayerSupervisionRequest"; id: string }
-    | { __typename?: "PlayerSupervisionRequestApproval"; id: string }
-    | { __typename?: "User"; id: string }
+    | { __typename?: "GroupMembership" }
+    | { __typename?: "GroupMembershipApplication" }
+    | { __typename?: "GroupSettings" }
+    | { __typename?: "Player" }
+    | { __typename?: "PlayerSupervisionRequest" }
+    | { __typename?: "PlayerSupervisionRequestApproval" }
+    | { __typename?: "User" }
     | null;
 };
 
@@ -934,6 +940,37 @@ export type GroupMembersQuery = {
               };
             } | null;
           } | null> | null;
+        };
+      }
+    | { __typename?: "GroupMembership" }
+    | { __typename?: "GroupMembershipApplication" }
+    | { __typename?: "GroupSettings" }
+    | { __typename?: "Player" }
+    | { __typename?: "PlayerSupervisionRequest" }
+    | { __typename?: "PlayerSupervisionRequestApproval" }
+    | { __typename?: "User" }
+    | null;
+};
+
+export type GroupSettingsQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GroupSettingsQuery = {
+  __typename?: "Query";
+  node?:
+    | {
+        __typename?: "Group";
+        id: string;
+        name: string;
+        description: string;
+        logoURL: string;
+        settings: {
+          __typename?: "GroupSettings";
+          id: string;
+          visibility: GroupSettingsVisibility;
+          joinPolicy: GroupSettingsJoinPolicy;
+          minimumRoleToInvite?: GroupMembershipRole | null;
         };
       }
     | { __typename?: "GroupMembership" }
@@ -1286,8 +1323,9 @@ export type ApplyToGroupMutationOptions = Apollo.BaseMutationOptions<
   ApplyToGroupMutation,
   ApplyToGroupMutationVariables
 >;
-export const CreateGroupDocument = gql`
-  mutation CreateGroup(
+export const CreateOrUpdateGroupDocument = gql`
+  mutation CreateOrUpdateGroup(
+    $id: ID
     $name: String!
     $description: String
     $logoUrl: String!
@@ -1295,14 +1333,17 @@ export const CreateGroupDocument = gql`
     $joinPolicy: GroupSettingsJoinPolicy!
     $minimumRoleToInvite: GroupMembershipRole
   ) {
-    createGroup(
+    createOrUpdateGroup(
       input: {
+        id: $id
         name: $name
         description: $description
         logoUrl: $logoUrl
-        visibility: $visibility
-        joinPolicy: $joinPolicy
-        minimumRoleToInvite: $minimumRoleToInvite
+        settings: {
+          visibility: $visibility
+          joinPolicy: $joinPolicy
+          minimumRoleToInvite: $minimumRoleToInvite
+        }
       }
     ) {
       ...groupFields
@@ -1310,24 +1351,25 @@ export const CreateGroupDocument = gql`
   }
   ${GroupFieldsFragmentDoc}
 `;
-export type CreateGroupMutationFn = Apollo.MutationFunction<
-  CreateGroupMutation,
-  CreateGroupMutationVariables
+export type CreateOrUpdateGroupMutationFn = Apollo.MutationFunction<
+  CreateOrUpdateGroupMutation,
+  CreateOrUpdateGroupMutationVariables
 >;
 
 /**
- * __useCreateGroupMutation__
+ * __useCreateOrUpdateGroupMutation__
  *
- * To run a mutation, you first call `useCreateGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGroupMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateOrUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrUpdateGroupMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createGroupMutation, { data, loading, error }] = useCreateGroupMutation({
+ * const [createOrUpdateGroupMutation, { data, loading, error }] = useCreateOrUpdateGroupMutation({
  *   variables: {
+ *      id: // value for 'id'
  *      name: // value for 'name'
  *      description: // value for 'description'
  *      logoUrl: // value for 'logoUrl'
@@ -1337,26 +1379,26 @@ export type CreateGroupMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateGroupMutation(
+export function useCreateOrUpdateGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateGroupMutation,
-    CreateGroupMutationVariables
+    CreateOrUpdateGroupMutation,
+    CreateOrUpdateGroupMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateGroupMutation, CreateGroupMutationVariables>(
-    CreateGroupDocument,
-    options
-  );
+  return Apollo.useMutation<
+    CreateOrUpdateGroupMutation,
+    CreateOrUpdateGroupMutationVariables
+  >(CreateOrUpdateGroupDocument, options);
 }
-export type CreateGroupMutationHookResult = ReturnType<
-  typeof useCreateGroupMutation
+export type CreateOrUpdateGroupMutationHookResult = ReturnType<
+  typeof useCreateOrUpdateGroupMutation
 >;
-export type CreateGroupMutationResult =
-  Apollo.MutationResult<CreateGroupMutation>;
-export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateGroupMutation,
-  CreateGroupMutationVariables
+export type CreateOrUpdateGroupMutationResult =
+  Apollo.MutationResult<CreateOrUpdateGroupMutation>;
+export type CreateOrUpdateGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateOrUpdateGroupMutation,
+  CreateOrUpdateGroupMutationVariables
 >;
 export const CreatePlayerDocument = gql`
   mutation CreatePlayer($name: String!) {
@@ -1667,7 +1709,6 @@ export type GetFileUploadUrlQueryResult = Apollo.QueryResult<
 export const GroupDocument = gql`
   query Group($id: ID!) {
     node(id: $id) {
-      id
       ...groupFields
     }
   }
@@ -1807,6 +1848,75 @@ export type GroupMembersLazyQueryHookResult = ReturnType<
 export type GroupMembersQueryResult = Apollo.QueryResult<
   GroupMembersQuery,
   GroupMembersQueryVariables
+>;
+export const GroupSettingsDocument = gql`
+  query GroupSettings($id: ID!) {
+    node(id: $id) {
+      ... on Group {
+        id
+        name
+        description
+        logoURL
+        settings {
+          id
+          visibility
+          joinPolicy
+          minimumRoleToInvite
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGroupSettingsQuery__
+ *
+ * To run a query within a React component, call `useGroupSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupSettingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGroupSettingsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GroupSettingsQuery,
+    GroupSettingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GroupSettingsQuery, GroupSettingsQueryVariables>(
+    GroupSettingsDocument,
+    options
+  );
+}
+export function useGroupSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupSettingsQuery,
+    GroupSettingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GroupSettingsQuery, GroupSettingsQueryVariables>(
+    GroupSettingsDocument,
+    options
+  );
+}
+export type GroupSettingsQueryHookResult = ReturnType<
+  typeof useGroupSettingsQuery
+>;
+export type GroupSettingsLazyQueryHookResult = ReturnType<
+  typeof useGroupSettingsLazyQuery
+>;
+export type GroupSettingsQueryResult = Apollo.QueryResult<
+  GroupSettingsQuery,
+  GroupSettingsQueryVariables
 >;
 export const IncomingSupervisionRequestsDocument = gql`
   query IncomingSupervisionRequests {
@@ -2302,7 +2412,7 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  CreateGroupInput: CreateGroupInput;
+  CreateOrUpdateGroupInput: CreateOrUpdateGroupInput;
   CreatePlayerInput: CreatePlayerInput;
   Cursor: ResolverTypeWrapper<Scalars["Cursor"]>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
@@ -2317,6 +2427,7 @@ export type ResolversTypes = ResolversObject<{
   GroupMembershipRole: GroupMembershipRole;
   GroupMembershipWhereInput: GroupMembershipWhereInput;
   GroupSettings: ResolverTypeWrapper<GroupSettings>;
+  GroupSettingsInput: GroupSettingsInput;
   GroupSettingsJoinPolicy: GroupSettingsJoinPolicy;
   GroupSettingsVisibility: GroupSettingsVisibility;
   GroupSettingsWhereInput: GroupSettingsWhereInput;
@@ -2357,7 +2468,7 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"];
-  CreateGroupInput: CreateGroupInput;
+  CreateOrUpdateGroupInput: CreateOrUpdateGroupInput;
   CreatePlayerInput: CreatePlayerInput;
   Cursor: Scalars["Cursor"];
   Float: Scalars["Float"];
@@ -2371,6 +2482,7 @@ export type ResolversParentTypes = ResolversObject<{
   GroupMembershipEdge: GroupMembershipEdge;
   GroupMembershipWhereInput: GroupMembershipWhereInput;
   GroupSettings: GroupSettings;
+  GroupSettingsInput: GroupSettingsInput;
   GroupSettingsWhereInput: GroupSettingsWhereInput;
   GroupWhereInput: GroupWhereInput;
   ID: Scalars["ID"];
@@ -2581,11 +2693,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationApplyToGroupArgs, "input">
   >;
-  createGroup?: Resolver<
+  createOrUpdateGroup?: Resolver<
     ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateGroupArgs, "input">
+    RequireFields<MutationCreateOrUpdateGroupArgs, "input">
   >;
   createPlayer?: Resolver<
     ResolversTypes["Player"],

@@ -11,8 +11,10 @@ interface Props {
   onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-export const useImageInput = () => {
-  const [url, setUrl] = useState("");
+export const useImageInput = (
+  { value }: { value?: string } | undefined = { value: "" }
+) => {
+  const [url, setUrl] = useState(value || "");
   const [file, setFile] = useState<File | null>(null);
   const [getUploadURL, { loading, error }] = useGetFileUploadUrlLazyQuery({
     onCompleted: async (data) => {

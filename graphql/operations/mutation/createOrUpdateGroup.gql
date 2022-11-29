@@ -1,4 +1,5 @@
-mutation CreateGroup(
+mutation CreateOrUpdateGroup(
+  $id: ID
   $name: String!
   $description: String
   $logoUrl: String!
@@ -6,14 +7,17 @@ mutation CreateGroup(
   $joinPolicy: GroupSettingsJoinPolicy!
   $minimumRoleToInvite: GroupMembershipRole
 ) {
-  createGroup(
+  createOrUpdateGroup(
     input: {
+      id: $id
       name: $name
       description: $description
       logoUrl: $logoUrl
-      visibility: $visibility
-      joinPolicy: $joinPolicy
-      minimumRoleToInvite: $minimumRoleToInvite
+      settings: {
+        visibility: $visibility
+        joinPolicy: $joinPolicy
+        minimumRoleToInvite: $minimumRoleToInvite
+      }
     }
   ) {
     ...groupFields

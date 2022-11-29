@@ -1,6 +1,5 @@
 query Group($id: ID!) {
   node(id: $id) {
-    id
     ...groupFields
   }
 }

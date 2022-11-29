@@ -22,7 +22,10 @@ import {
   GroupMembershipRole,
   GroupSettingsJoinPolicy,
   GroupSettingsVisibility,
+  SearchGroupsDocument,
+  useCreateOrUpdateGroupMutation,
 } from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -49,24 +52,50 @@ export type SubmitCallback = (values: FormValues) => Promise<void>;
 interface Props {
   buttonLabel: string;
   onSubmit: SubmitCallback;
-  loading: boolean;
+  id?: string;
   initialValues?: FormValues;
 }
 
 const GroupForm: React.FC<Props> = ({
   buttonLabel,
   onSubmit,
-  loading,
+  id,
   initialValues = defaultValues,
 }) => {
+  const [createOrUpdateGroup, { loading, error }] =
+    useCreateOrUpdateGroupMutation();
+  useSnackbarError(error);
+
   const { handleChange, setFieldValue, handleSubmit, values, errors, touched } =
     useFormik({
       validationSchema,
       initialValues,
-      onSubmit,
+      onSubmit: async () => {
+        await createOrUpdateGroup({
+          variables: {
+            id,
+            name: values.name,
+            description: values.description,
+            logoUrl: values.logoURL,
+            visibility: values.visibility,
+            joinPolicy: values.joinPolicy,
+            minimumRoleToInvite: values.minimumRoleToInvite,
+          },
+          // updating the cache manually would be harder, so we just refetch the whole list
+          refetchQueries: [
+            {
+              query: SearchGroupsDocument,
+              variables: { where: {}, first: 10 },
+            },
+          ],
+        });
+        onSubmit(values);
+      },
     });
 
-  const { onChange, url: logoURL } = useImageInput();
+  const { onChange, url: logoURL } = useImageInput({
+    value: initialValues.logoURL,
+  });
 
   useEffect(() => {
     if (values.logoURL === logoURL) return;
@@ -76,8 +105,6 @@ const GroupForm: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={2}>
-        <Typography variant="h4">Create a new group</Typography>
-
         <Typography variant="body1">General</Typography>
         <Stack direction="row" spacing={2}>
           <Box>

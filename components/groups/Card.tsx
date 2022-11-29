@@ -1,8 +1,10 @@
+import SettingsIcon from "@mui/icons-material/Settings";
 import {
   Avatar,
   Card,
   CardContent,
   CardHeader,
+  IconButton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -10,16 +12,20 @@ import Link from "next/link";
 import pluralize from "pluralize";
 import React from "react";
 
-import { GroupFieldsFragment } from "../../graphql/generated";
+import {
+  GroupFieldsFragment,
+  GroupMembershipRole,
+} from "../../graphql/generated";
 import GroupCardActions from "./CardActions";
 import GroupJoinPolicyChip from "./JoinPolicyChip";
 import GroupRoleChip from "./RoleChip";
 
 interface Props {
   group: GroupFieldsFragment;
+  showSettings?: boolean;
 }
 
-const GroupCard: React.FC<Props> = ({ group }) => {
+const GroupCard: React.FC<Props> = ({ group, showSettings }) => {
   return (
     <Card key={group.id} sx={{ mb: 2 }} variant="outlined">
       <CardHeader
@@ -40,6 +46,19 @@ const GroupCard: React.FC<Props> = ({ group }) => {
             {group.members.totalCount}{" "}
             {pluralize("member", group.members.totalCount)}
           </Typography>
+        }
+        action={
+          showSettings &&
+          group.role &&
+          [GroupMembershipRole.Admin, GroupMembershipRole.Owner].includes(
+            group.role
+          ) && (
+            <Link href={`/groups/${group.id}/manage`} passHref>
+              <IconButton>
+                <SettingsIcon />
+              </IconButton>
+            </Link>
+          )
         }
       />
       {group.description && (
