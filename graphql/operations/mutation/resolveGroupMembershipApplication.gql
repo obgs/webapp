@@ -1,0 +1,9 @@
+mutation ResolveGroupMembershipApplication(
+  $applicationId: ID!
+  $accepted: Boolean!
+) {
+  resolveGroupMembershipApplication(
+    applicationId: $applicationId
+    accepted: $accepted
+  )
+}

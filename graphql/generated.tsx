@@ -100,10 +100,10 @@ export type GroupMembership = Node & {
 
 export type GroupMembershipApplication = Node & {
   __typename?: "GroupMembershipApplication";
-  group: Array<Group>;
+  group: Group;
   id: Scalars["ID"];
   message: Scalars["String"];
-  user: Array<User>;
+  user: User;
 };
 
 /** A connection to a list of items. */
@@ -266,6 +266,7 @@ export type Mutation = {
   createPlayer: Player;
   joinGroup: Scalars["Boolean"];
   requestPlayerSupervision: PlayerSupervisionRequest;
+  resolveGroupMembershipApplication: Scalars["Boolean"];
   resolvePlayerSupervisionRequest: Scalars["Boolean"];
   updateUser: User;
 };
@@ -288,6 +289,11 @@ export type MutationJoinGroupArgs = {
 
 export type MutationRequestPlayerSupervisionArgs = {
   input?: InputMaybe<RequestPlayerSupervisionInput>;
+};
+
+export type MutationResolveGroupMembershipApplicationArgs = {
+  accepted: Scalars["Boolean"];
+  applicationId: Scalars["ID"];
 };
 
 export type MutationResolvePlayerSupervisionRequestArgs = {
@@ -665,14 +671,14 @@ export type GroupMembershipApplicationFieldsFragment = {
   __typename?: "GroupMembershipApplication";
   id: string;
   message: string;
-  user: Array<{
+  user: {
     __typename?: "User";
     id: string;
     name: string;
     email: string;
     avatarURL: string;
-  }>;
-  group: Array<{
+  };
+  group: {
     __typename?: "Group";
     id: string;
     name: string;
@@ -688,7 +694,7 @@ export type GroupMembershipApplicationFieldsFragment = {
       minimumRoleToInvite?: GroupMembershipRole | null;
     };
     members: { __typename?: "GroupMembershipConnection"; totalCount: number };
-  }>;
+  };
 };
 
 export type PageInfoFieldsFragment = {
@@ -753,14 +759,14 @@ export type ApplyToGroupMutation = {
     __typename?: "GroupMembershipApplication";
     id: string;
     message: string;
-    user: Array<{
+    user: {
       __typename?: "User";
       id: string;
       name: string;
       email: string;
       avatarURL: string;
-    }>;
-    group: Array<{
+    };
+    group: {
       __typename?: "Group";
       id: string;
       name: string;
@@ -776,7 +782,7 @@ export type ApplyToGroupMutation = {
         minimumRoleToInvite?: GroupMembershipRole | null;
       };
       members: { __typename?: "GroupMembershipConnection"; totalCount: number };
-    }>;
+    };
   };
 };
 
@@ -838,6 +844,16 @@ export type RequestPlayerSupervisionMutation = {
   };
 };
 
+export type ResolveGroupMembershipApplicationMutationVariables = Exact<{
+  applicationId: Scalars["ID"];
+  accepted: Scalars["Boolean"];
+}>;
+
+export type ResolveGroupMembershipApplicationMutation = {
+  __typename?: "Mutation";
+  resolveGroupMembershipApplication: boolean;
+};
+
 export type ResolvePlayerSupervisionRequestMutationVariables = Exact<{
   input: ResolvePlayerSupervisionRequestInput;
 }>;
@@ -890,6 +906,38 @@ export type GroupQuery = {
           __typename?: "GroupMembershipConnection";
           totalCount: number;
         };
+      }
+    | { __typename?: "GroupMembership" }
+    | { __typename?: "GroupMembershipApplication" }
+    | { __typename?: "GroupSettings" }
+    | { __typename?: "Player" }
+    | { __typename?: "PlayerSupervisionRequest" }
+    | { __typename?: "PlayerSupervisionRequestApproval" }
+    | { __typename?: "User" }
+    | null;
+};
+
+export type GroupApplicationsQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GroupApplicationsQuery = {
+  __typename?: "Query";
+  node?:
+    | {
+        __typename?: "Group";
+        applications?: Array<{
+          __typename?: "GroupMembershipApplication";
+          id: string;
+          message: string;
+          user: {
+            __typename?: "User";
+            id: string;
+            name: string;
+            email: string;
+            avatarURL: string;
+          };
+        }> | null;
       }
     | { __typename?: "GroupMembership" }
     | { __typename?: "GroupMembershipApplication" }
@@ -1549,6 +1597,63 @@ export type RequestPlayerSupervisionMutationOptions =
     RequestPlayerSupervisionMutation,
     RequestPlayerSupervisionMutationVariables
   >;
+export const ResolveGroupMembershipApplicationDocument = gql`
+  mutation ResolveGroupMembershipApplication(
+    $applicationId: ID!
+    $accepted: Boolean!
+  ) {
+    resolveGroupMembershipApplication(
+      applicationId: $applicationId
+      accepted: $accepted
+    )
+  }
+`;
+export type ResolveGroupMembershipApplicationMutationFn =
+  Apollo.MutationFunction<
+    ResolveGroupMembershipApplicationMutation,
+    ResolveGroupMembershipApplicationMutationVariables
+  >;
+
+/**
+ * __useResolveGroupMembershipApplicationMutation__
+ *
+ * To run a mutation, you first call `useResolveGroupMembershipApplicationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResolveGroupMembershipApplicationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resolveGroupMembershipApplicationMutation, { data, loading, error }] = useResolveGroupMembershipApplicationMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      accepted: // value for 'accepted'
+ *   },
+ * });
+ */
+export function useResolveGroupMembershipApplicationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResolveGroupMembershipApplicationMutation,
+    ResolveGroupMembershipApplicationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ResolveGroupMembershipApplicationMutation,
+    ResolveGroupMembershipApplicationMutationVariables
+  >(ResolveGroupMembershipApplicationDocument, options);
+}
+export type ResolveGroupMembershipApplicationMutationHookResult = ReturnType<
+  typeof useResolveGroupMembershipApplicationMutation
+>;
+export type ResolveGroupMembershipApplicationMutationResult =
+  Apollo.MutationResult<ResolveGroupMembershipApplicationMutation>;
+export type ResolveGroupMembershipApplicationMutationOptions =
+  Apollo.BaseMutationOptions<
+    ResolveGroupMembershipApplicationMutation,
+    ResolveGroupMembershipApplicationMutationVariables
+  >;
 export const ResolvePlayerSupervisionRequestDocument = gql`
   mutation ResolvePlayerSupervisionRequest(
     $input: ResolvePlayerSupervisionRequestInput!
@@ -1754,6 +1859,73 @@ export type GroupLazyQueryHookResult = ReturnType<typeof useGroupLazyQuery>;
 export type GroupQueryResult = Apollo.QueryResult<
   GroupQuery,
   GroupQueryVariables
+>;
+export const GroupApplicationsDocument = gql`
+  query GroupApplications($id: ID!) {
+    node(id: $id) {
+      ... on Group {
+        applications {
+          id
+          message
+          user {
+            ...userFields
+          }
+        }
+      }
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useGroupApplicationsQuery__
+ *
+ * To run a query within a React component, call `useGroupApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupApplicationsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGroupApplicationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GroupApplicationsQuery,
+    GroupApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GroupApplicationsQuery,
+    GroupApplicationsQueryVariables
+  >(GroupApplicationsDocument, options);
+}
+export function useGroupApplicationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupApplicationsQuery,
+    GroupApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GroupApplicationsQuery,
+    GroupApplicationsQueryVariables
+  >(GroupApplicationsDocument, options);
+}
+export type GroupApplicationsQueryHookResult = ReturnType<
+  typeof useGroupApplicationsQuery
+>;
+export type GroupApplicationsLazyQueryHookResult = ReturnType<
+  typeof useGroupApplicationsLazyQuery
+>;
+export type GroupApplicationsQueryResult = Apollo.QueryResult<
+  GroupApplicationsQuery,
+  GroupApplicationsQueryVariables
 >;
 export const GroupMembersDocument = gql`
   query GroupMembers(
@@ -2626,10 +2798,10 @@ export type GroupMembershipApplicationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["GroupMembershipApplication"] = ResolversParentTypes["GroupMembershipApplication"]
 > = ResolversObject<{
-  group?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  user?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2716,6 +2888,15 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     Partial<MutationRequestPlayerSupervisionArgs>
+  >;
+  resolveGroupMembershipApplication?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationResolveGroupMembershipApplicationArgs,
+      "accepted" | "applicationId"
+    >
   >;
   resolvePlayerSupervisionRequest?: Resolver<
     ResolversTypes["Boolean"],

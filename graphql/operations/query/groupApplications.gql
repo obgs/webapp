@@ -1,0 +1,13 @@
+query GroupApplications($id: ID!) {
+  node(id: $id) {
+    ... on Group {
+      applications {
+        id
+        message
+        user {
+          ...userFields
+        }
+      }
+    }
+  }
+}
