@@ -266,6 +266,7 @@ export type Mutation = {
   createOrUpdateGroup: Group;
   createPlayer: Player;
   joinGroup: Scalars["Boolean"];
+  kickUserFromGroup: Scalars["Boolean"];
   requestPlayerSupervision: PlayerSupervisionRequest;
   resolveGroupMembershipApplication: Scalars["Boolean"];
   resolvePlayerSupervisionRequest: Scalars["Boolean"];
@@ -292,6 +293,11 @@ export type MutationCreatePlayerArgs = {
 
 export type MutationJoinGroupArgs = {
   groupId: Scalars["ID"];
+};
+
+export type MutationKickUserFromGroupArgs = {
+  groupId: Scalars["ID"];
+  userId: Scalars["ID"];
 };
 
 export type MutationRequestPlayerSupervisionArgs = {
@@ -862,6 +868,16 @@ export type JoinGroupMutationVariables = Exact<{
 }>;
 
 export type JoinGroupMutation = { __typename?: "Mutation"; joinGroup: boolean };
+
+export type KickUserFromGroupMutationVariables = Exact<{
+  groupId: Scalars["ID"];
+  userId: Scalars["ID"];
+}>;
+
+export type KickUserFromGroupMutation = {
+  __typename?: "Mutation";
+  kickUserFromGroup: boolean;
+};
 
 export type RequestPlayerSupervisionMutationVariables = Exact<{
   input: RequestPlayerSupervisionInput;
@@ -1645,6 +1661,55 @@ export type JoinGroupMutationResult = Apollo.MutationResult<JoinGroupMutation>;
 export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<
   JoinGroupMutation,
   JoinGroupMutationVariables
+>;
+export const KickUserFromGroupDocument = gql`
+  mutation KickUserFromGroup($groupId: ID!, $userId: ID!) {
+    kickUserFromGroup(groupId: $groupId, userId: $userId)
+  }
+`;
+export type KickUserFromGroupMutationFn = Apollo.MutationFunction<
+  KickUserFromGroupMutation,
+  KickUserFromGroupMutationVariables
+>;
+
+/**
+ * __useKickUserFromGroupMutation__
+ *
+ * To run a mutation, you first call `useKickUserFromGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useKickUserFromGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [kickUserFromGroupMutation, { data, loading, error }] = useKickUserFromGroupMutation({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useKickUserFromGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    KickUserFromGroupMutation,
+    KickUserFromGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    KickUserFromGroupMutation,
+    KickUserFromGroupMutationVariables
+  >(KickUserFromGroupDocument, options);
+}
+export type KickUserFromGroupMutationHookResult = ReturnType<
+  typeof useKickUserFromGroupMutation
+>;
+export type KickUserFromGroupMutationResult =
+  Apollo.MutationResult<KickUserFromGroupMutation>;
+export type KickUserFromGroupMutationOptions = Apollo.BaseMutationOptions<
+  KickUserFromGroupMutation,
+  KickUserFromGroupMutationVariables
 >;
 export const RequestPlayerSupervisionDocument = gql`
   mutation RequestPlayerSupervision($input: RequestPlayerSupervisionInput!) {
@@ -2987,6 +3052,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationJoinGroupArgs, "groupId">
+  >;
+  kickUserFromGroup?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationKickUserFromGroupArgs, "groupId" | "userId">
   >;
   requestPlayerSupervision?: Resolver<
     ResolversTypes["PlayerSupervisionRequest"],

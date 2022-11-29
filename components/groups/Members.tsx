@@ -1,6 +1,8 @@
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {
   Avatar,
   Box,
+  IconButton,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -11,10 +13,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import {
   GroupMembershipFieldsFragment,
@@ -26,6 +29,8 @@ import {
 } from "../../graphql/generated";
 import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import groupRoles from "../../utils/groupRoles";
+import useUser from "../../utils/user/useUser";
+import KickMemberModal from "./manage/KickMemberModal";
 import useGroupMembersPagination from "./useGroupMembersPagination";
 
 interface Props {
@@ -109,6 +114,21 @@ const Members: React.FC<Props> = ({ groupId, manage }) => {
     [data]
   );
 
+  const fullRow = useMemo(() => (manage ? 3 : 2), [manage]);
+  const [kickMemberModalOpen, setKickMemberModalOpen] = useState(false);
+  const [kickedMember, setKickedMember] =
+    useState<GroupMembershipFieldsFragment | null>(null);
+
+  const onKickMember = useCallback(
+    (member: GroupMembershipFieldsFragment) => () => {
+      setKickedMember(member);
+      setKickMemberModalOpen(true);
+    },
+    []
+  );
+
+  const { user } = useUser();
+
   return (
     <Box>
       <Table>
@@ -116,19 +136,20 @@ const Members: React.FC<Props> = ({ groupId, manage }) => {
           <TableRow>
             <TableCell>User</TableCell>
             <TableCell>Role</TableCell>
+            {manage && <TableCell>Actions</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
           {loading && (
             <TableRow>
-              <TableCell colSpan={2}>
+              <TableCell colSpan={fullRow}>
                 <Typography>Loading...</Typography>
               </TableCell>
             </TableRow>
           )}
           {members.length === 0 && (
             <TableRow>
-              <TableCell colSpan={2}>
+              <TableCell colSpan={fullRow}>
                 <Typography>Nothing found</Typography>
               </TableCell>
             </TableRow>
@@ -138,13 +159,8 @@ const Members: React.FC<Props> = ({ groupId, manage }) => {
               member && (
                 <TableRow key={member.id}>
                   <TableCell>
-                    <Stack alignItems="center" direction="row">
-                      <Avatar
-                        src={member.user.avatarURL}
-                        sx={{
-                          mr: 1,
-                        }}
-                      />
+                    <Stack spacing={1} alignItems="center" direction="row">
+                      <Avatar src={member.user.avatarURL} />
                       <Typography>
                         {member.user.name || member.user.id}
                       </Typography>
@@ -167,6 +183,19 @@ const Members: React.FC<Props> = ({ groupId, manage }) => {
                       groupRoles[member.role]
                     )}
                   </TableCell>
+                  {manage && (
+                    <TableCell>
+                      {member.user.id !== user?.id && (
+                        <Tooltip
+                          title={`Kick ${member.user.name || member.user.id}`}
+                        >
+                          <IconButton onClick={onKickMember(member)}>
+                            <PersonRemoveIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                  )}
                 </TableRow>
               )
           )}
@@ -175,6 +204,14 @@ const Members: React.FC<Props> = ({ groupId, manage }) => {
           </TableRow>
         </TableBody>
       </Table>
+      {kickedMember && (
+        <KickMemberModal
+          open={kickMemberModalOpen}
+          onClose={() => setKickMemberModalOpen(false)}
+          member={kickedMember}
+          groupId={groupId}
+        />
+      )}
     </Box>
   );
 };
