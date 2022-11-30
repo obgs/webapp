@@ -24,19 +24,19 @@ const ManageGroup = () => {
     <Container>
       <TabContext value={tab}>
         <TabList onChange={(_, t) => setTab(t)}>
-          <Tab label="Settings" value="settings" />
-          <Tab label="Applications" value="applications" />
           <Tab label="Members" value="members" />
+          <Tab label="Applications" value="applications" />
+          <Tab label="Settings" value="settings" />
         </TabList>
 
-        <TabPanel value="settings">
-          <GroupSettings groupId={id} />
+        <TabPanel value="members">
+          <Members manage groupId={id} />
         </TabPanel>
         <TabPanel value="applications">
           <GroupApplications groupId={id} />
         </TabPanel>
-        <TabPanel value="members">
-          <Members manage groupId={id} />
+        <TabPanel value="settings">
+          <GroupSettings groupId={id} />
         </TabPanel>
       </TabContext>
     </Container>
