@@ -2,9 +2,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 
-import storage from "../storage";
 import client from "./client";
 import AuthContext from "./context";
+import storage from "modules/storage";
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
