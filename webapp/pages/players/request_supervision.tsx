@@ -1,13 +1,13 @@
 import { Typography } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
 
+import RequestPlayerSupervisionModal from "../../components/players/RequestSupervisionModal";
+import PlayerSearch from "../../components/players/Search";
 import {
   PlayerFieldsFragment,
   PlayerWhereInput,
 } from "../../graphql/generated";
 import useUser from "../../utils/user/useUser";
-import RequestPlayerSupervisionModal from "./components/RequestSupervisionModal";
-import PlayerSearch from "./components/Search";
 
 const RequestSupervision = () => {
   const { user } = useUser();

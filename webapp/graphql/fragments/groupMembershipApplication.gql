@@ -1,0 +1,10 @@
+fragment groupMembershipApplicationFields on GroupMembershipApplication {
+  id
+  message
+  user {
+    ...userFields
+  }
+  group {
+    ...groupFields
+  }
+}

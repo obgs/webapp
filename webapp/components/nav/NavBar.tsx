@@ -23,6 +23,8 @@ const NavBar = () => {
           <NavLink href="/players/outgoing_requests">Outgoing requests</NavLink>
         </>
       )}
+      <ListSubheader>Groups</ListSubheader>
+      <NavLink href="/groups">Browse</NavLink>
     </List>
   );
 };

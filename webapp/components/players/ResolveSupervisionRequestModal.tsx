@@ -5,8 +5,8 @@ import React, { useCallback } from "react";
 import {
   PlayerSupervisionRequestFieldsFragment,
   useResolvePlayerSupervisionRequestMutation,
-} from "../../../graphql/generated";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
+} from "../../graphql/generated";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 
 interface Props {
   open: boolean;

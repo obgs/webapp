@@ -1,0 +1,30 @@
+query GroupMembers(
+  $groupId: ID!
+  $before: Cursor
+  $after: Cursor
+  $first: Int
+  $last: Int
+  $where: GroupMembershipWhereInput
+) {
+  node(id: $groupId) {
+    ... on Group {
+      members(
+        before: $before
+        after: $after
+        first: $first
+        last: $last
+        where: $where
+      ) {
+        totalCount
+        pageInfo {
+          ...pageInfoFields
+        }
+        edges {
+          node {
+            ...groupMembershipFields
+          }
+        }
+      }
+    }
+  }
+}
