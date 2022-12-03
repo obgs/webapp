@@ -14,7 +14,7 @@ import {
   GroupMembershipFieldsFragment,
   useKickUserFromGroupMutation,
 } from "../../../graphql/generated";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
+import { useSnackbarError } from "utils/apollo";
 
 interface Props {
   open: boolean;

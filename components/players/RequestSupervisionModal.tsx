@@ -14,7 +14,7 @@ import {
   PlayerFieldsFragment,
   useRequestPlayerSupervisionMutation,
 } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import { useSnackbarError } from "utils/apollo";
 
 interface Props {
   open: boolean;

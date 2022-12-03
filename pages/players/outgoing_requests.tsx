@@ -11,7 +11,7 @@ import {
 import React, { useMemo } from "react";
 
 import { usePendingSupervisionRequestsQuery } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import { useSnackbarError } from "utils/apollo";
 
 const OutgoingSupervisionRequests = () => {
   const { data, error, loading } = usePendingSupervisionRequestsQuery();

@@ -4,9 +4,8 @@ import React, { useMemo } from "react";
 
 import GroupList from "../../components/groups/List";
 import { useSearchGroupsLazyQuery } from "../../graphql/generated";
-import usePagination from "../../utils/apollo/usePagination";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import { useAuth } from "modules/auth";
+import { usePagination, useSnackbarError } from "utils/apollo";
 
 const Groups = () => {
   const [search, { data, error, loading }] = useSearchGroupsLazyQuery();

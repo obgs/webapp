@@ -7,8 +7,8 @@ import {
   GroupFieldsFragment,
   useApplyToGroupMutation,
 } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import onChangeText from "../../utils/onChangeText";
+import { useSnackbarError } from "utils/apollo";
 
 interface Props {
   open: boolean;

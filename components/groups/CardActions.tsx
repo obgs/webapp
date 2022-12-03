@@ -11,9 +11,9 @@ import {
   GroupSettingsJoinPolicy,
   useJoinGroupMutation,
 } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import GroupMembershipApplicationModal from "./ApplicationModal";
 import { useAuth } from "modules/auth";
+import { useSnackbarError } from "utils/apollo";
 
 interface Props {
   group: GroupFieldsFragment;

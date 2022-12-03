@@ -10,7 +10,7 @@ import {
   MyPlayersQuery,
   MyPlayersDocument,
 } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import { useSnackbarError } from "utils/apollo";
 
 const Supervised = () => {
   const { data, loading, error } = useMyPlayersQuery();

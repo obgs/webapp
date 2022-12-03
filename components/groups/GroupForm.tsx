@@ -25,7 +25,7 @@ import {
   SearchGroupsDocument,
   useCreateOrUpdateGroupMutation,
 } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import { useSnackbarError } from "utils/apollo";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),

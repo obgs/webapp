@@ -15,7 +15,7 @@ import {
   PlayerSupervisionRequestFieldsFragment,
   useIncomingSupervisionRequestsQuery,
 } from "../../graphql/generated";
-import useSnackbarError from "../../utils/apollo/useSnackbarError";
+import { useSnackbarError } from "utils/apollo";
 
 const IncomingSupervisionRequests = () => {
   const { data, loading, error } = useIncomingSupervisionRequestsQuery();
