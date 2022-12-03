@@ -27,11 +27,11 @@ import {
   useChangeUserGroupMembershipRoleMutation,
   useGroupMembersLazyQuery,
 } from "../../graphql/generated";
-import groupRoles from "../../utils/groupRoles";
 import useUser from "../../utils/user/useUser";
 import KickMemberModal from "./manage/KickMemberModal";
 import useGroupMembersPagination from "./useGroupMembersPagination";
 import { useSnackbarError } from "utils/apollo";
+import groupRoles from "utils/groupRoles";
 
 interface Props {
   groupId: string;

@@ -2,7 +2,7 @@ import { Chip, Tooltip } from "@mui/material";
 import React from "react";
 
 import { GroupFieldsFragment } from "../../graphql/generated";
-import groupRoles from "../../utils/groupRoles";
+import groupRoles from "utils/groupRoles";
 
 interface Props {
   group: GroupFieldsFragment;
