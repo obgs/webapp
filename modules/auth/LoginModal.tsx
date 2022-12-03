@@ -12,7 +12,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import NextLink from "next/link";
 import React, { useState } from "react";
 
-import useAuth from "../../utils/auth/useAuth";
+import useAuth from "./useAuth";
 
 interface Props {
   open: boolean;

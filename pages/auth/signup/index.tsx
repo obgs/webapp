@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 
-import useAuth from "../../../utils/auth/useAuth";
 import onChangeText from "../../../utils/onChangeText";
+import { useAuth } from "modules/auth";
 
 const Input = styled(TextField)`
   margin: 10px 0;

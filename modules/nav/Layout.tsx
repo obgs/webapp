@@ -12,10 +12,9 @@ import {
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import useAuth from "../../utils/auth/useAuth";
-import useUser from "../../utils/user/useUser";
-import LoginModal from "../auth/LoginModal";
 import NavBar from "./NavBar";
+import { LoginModal, useAuth } from "modules/auth";
+import useUser from "utils/user/useUser";
 
 const drawerWidth = 240;
 

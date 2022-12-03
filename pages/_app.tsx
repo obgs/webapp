@@ -8,10 +8,10 @@ import "@fontsource/roboto/700.css";
 import { SnackbarProvider } from "notistack";
 import { useMemo } from "react";
 
-import Layout from "../components/nav/Layout";
 import ApolloProvider from "../utils/apollo/provider";
-import AuthProvider from "../utils/auth/provider";
 import UserProvider from "../utils/user/provider";
+import { AuthProvider } from "modules/auth";
+import { Layout } from "modules/nav";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");

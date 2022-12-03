@@ -6,7 +6,7 @@ import GroupList from "../../components/groups/List";
 import { useSearchGroupsLazyQuery } from "../../graphql/generated";
 import usePagination from "../../utils/apollo/usePagination";
 import useSnackbarError from "../../utils/apollo/useSnackbarError";
-import useAuth from "../../utils/auth/useAuth";
+import { useAuth } from "modules/auth";
 
 const Groups = () => {
   const [search, { data, error, loading }] = useSearchGroupsLazyQuery();

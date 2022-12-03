@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react";
 
 import { useMeQuery } from "../../graphql/generated";
-import useAuth from "../auth/useAuth";
 import { UserContext } from "./context";
+import { useAuth } from "modules/auth";
 
 const UserProvider = ({ children }: PropsWithChildren) => {
   const { authenticated } = useAuth();
