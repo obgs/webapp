@@ -14,7 +14,7 @@ import React, { useState } from "react";
 
 import NavBar from "./NavBar";
 import { LoginModal, useAuth } from "modules/auth";
-import useUser from "utils/user/useUser";
+import { useUser } from "utils/user";
 
 const drawerWidth = 240;
 

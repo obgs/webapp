@@ -7,7 +7,7 @@ import {
   PlayerFieldsFragment,
   PlayerWhereInput,
 } from "../../graphql/generated";
-import useUser from "../../utils/user/useUser";
+import { useUser } from "utils/user";
 
 const RequestSupervision = () => {
   const { user } = useUser();

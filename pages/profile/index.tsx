@@ -10,7 +10,7 @@ import {
   MeQuery,
   MeDocument,
 } from "../../graphql/generated";
-import useUser from "../../utils/user/useUser";
+import { useUser } from "utils/user";
 
 const Input = styled(TextField)`
   margin: 10px 0;
