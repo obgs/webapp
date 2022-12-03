@@ -10,14 +10,15 @@ import {
   Toolbar,
   Tooltip,
 } from "@mui/material";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import {
   PlayerFieldsFragment,
   PlayerWhereInput,
   useSearchPlayersLazyQuery,
-} from "../../../graphql/generated";
-import useSnackbarError from "../../../utils/apollo/useSnackbarError";
+} from "../../graphql/generated";
+import usePagination from "../../utils/apollo/usePagination";
+import useSnackbarError from "../../utils/apollo/useSnackbarError";
 import PlayersList from "./List";
 
 interface Props {
@@ -25,26 +26,12 @@ interface Props {
   filter?: PlayerWhereInput;
 }
 
-const rowsPerPageOptions = [10, 20, 50];
-
 const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
   const [name, setName] = useState("");
   const [strictSearch, setStrictSearch] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-  const [page, setPage] = useState(0);
 
   const [search, { data, loading, error }] = useSearchPlayersLazyQuery();
   useSnackbarError(error);
-
-  // do the initial search
-  useEffect(() => {
-    search({
-      variables: {
-        first: rowsPerPageOptions[0],
-        where: filter ?? {},
-      },
-    });
-  }, [filter, search]);
 
   const players = useMemo(
     () => data?.players.edges?.map((e) => e?.node),
@@ -66,44 +53,11 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
     return clause;
   }, [filter, name, strictSearch]);
 
-  const searchWithCriteria = useCallback(
-    (first = rowsPerPage) => {
-      setPage(0);
-      search({
-        variables: {
-          first,
-          where,
-        },
-      });
-    },
-    [search, rowsPerPage, where]
-  );
-
-  // when the amount of rows per page changes, go back to page 0
-  const handleRowsPerPageChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newRowsPerPage = parseInt(event.target.value, 10);
-      setRowsPerPage(newRowsPerPage);
-      setPage(0);
-      searchWithCriteria(newRowsPerPage);
-    },
-    [searchWithCriteria]
-  );
-
-  const handlePageChange = useCallback(
-    (_: unknown, p: number) => {
-      search({
-        variables: {
-          ...(p < page
-            ? { before: data?.players.pageInfo.startCursor, last: rowsPerPage }
-            : { after: data?.players.pageInfo.endCursor, first: rowsPerPage }),
-          where,
-        },
-      });
-      setPage(p);
-    },
-    [data?.players.pageInfo, page, rowsPerPage, search, where]
-  );
+  const { searchWithCriteria, ...pagination } = usePagination({
+    query: search,
+    where,
+    pageInfo: data?.players.pageInfo,
+  });
 
   return (
     <>
@@ -145,12 +99,8 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
           </Toolbar>
         }
         paginationProps={{
-          rowsPerPage: rowsPerPage,
-          rowsPerPageOptions,
-          onRowsPerPageChange: handleRowsPerPageChange,
           count: !players ? -1 : totalPlayers,
-          page,
-          onPageChange: handlePageChange,
+          ...pagination,
         }}
         onSelect={onSelect}
       />

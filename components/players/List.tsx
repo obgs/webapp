@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-import { PlayerFieldsFragment } from "../../../graphql/generated";
+import { PlayerFieldsFragment } from "../../graphql/generated";
 
 interface Props {
   players?: Array<PlayerFieldsFragment | null | undefined> | null;

@@ -1,0 +1,25 @@
+mutation CreateOrUpdateGroup(
+  $id: ID
+  $name: String!
+  $description: String
+  $logoUrl: String!
+  $visibility: GroupSettingsVisibility!
+  $joinPolicy: GroupSettingsJoinPolicy!
+  $minimumRoleToInvite: GroupMembershipRole
+) {
+  createOrUpdateGroup(
+    input: {
+      id: $id
+      name: $name
+      description: $description
+      logoUrl: $logoUrl
+      settings: {
+        visibility: $visibility
+        joinPolicy: $joinPolicy
+        minimumRoleToInvite: $minimumRoleToInvite
+      }
+    }
+  ) {
+    ...groupFields
+  }
+}

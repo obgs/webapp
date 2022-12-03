@@ -1,0 +1,17 @@
+fragment groupFields on Group {
+  id
+  name
+  description
+  logoURL
+  settings {
+    id
+    visibility
+    joinPolicy
+    minimumRoleToInvite
+  }
+  members {
+    totalCount
+  }
+  role
+  applied
+}
