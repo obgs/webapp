@@ -19,6 +19,8 @@ import {
 import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo, useState } from "react";
 
+import KickMemberModal from "./KickMemberModal";
+import useGroupMembersPagination from "./useGroupMembersPagination";
 import {
   GroupMembershipFieldsFragment,
   GroupMembershipFieldsFragmentDoc,
@@ -26,9 +28,7 @@ import {
   PageInfoFieldsFragment,
   useChangeUserGroupMembershipRoleMutation,
   useGroupMembersLazyQuery,
-} from "../../graphql/generated";
-import KickMemberModal from "./manage/KickMemberModal";
-import useGroupMembersPagination from "./useGroupMembersPagination";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 import groupRoles from "utils/groupRoles";
 import { useUser } from "utils/user";

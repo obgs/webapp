@@ -1,7 +1,7 @@
 import SettingsIcon from "@mui/icons-material/Settings";
 import {
   Avatar,
-  Card,
+  Card as MUICard,
   CardContent,
   CardHeader,
   IconButton,
@@ -12,22 +12,19 @@ import Link from "next/link";
 import pluralize from "pluralize";
 import React from "react";
 
-import {
-  GroupFieldsFragment,
-  GroupMembershipRole,
-} from "../../graphql/generated";
-import GroupCardActions from "./CardActions";
+import CardActions from "./CardActions";
 import GroupJoinPolicyChip from "./JoinPolicyChip";
 import GroupRoleChip from "./RoleChip";
+import { GroupFieldsFragment, GroupMembershipRole } from "graphql/generated";
 
 interface Props {
   group: GroupFieldsFragment;
   showSettings?: boolean;
 }
 
-const GroupCard: React.FC<Props> = ({ group, showSettings }) => {
+const Card: React.FC<Props> = ({ group, showSettings }) => {
   return (
-    <Card key={group.id} sx={{ mb: 2 }} variant="outlined">
+    <MUICard key={group.id} sx={{ mb: 2 }} variant="outlined">
       <CardHeader
         avatar={<Avatar src={group.logoURL} />}
         title={
@@ -66,9 +63,9 @@ const GroupCard: React.FC<Props> = ({ group, showSettings }) => {
           <Typography variant="body1">{group.description}</Typography>
         </CardContent>
       )}
-      <GroupCardActions group={group} />
-    </Card>
+      <CardActions group={group} />
+    </MUICard>
   );
 };
 
-export default GroupCard;
+export default Card;

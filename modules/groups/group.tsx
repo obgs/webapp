@@ -11,9 +11,9 @@ import {
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
-import GroupCard from "../../components/groups/Card";
-import Members from "../../components/groups/Members";
 import { useGroupQuery } from "../../graphql/generated";
+import Card from "./components/Card";
+import Members from "./components/Members";
 import { useSnackbarError } from "utils/apollo";
 
 const Group: React.FC = () => {
@@ -54,7 +54,7 @@ const Group: React.FC = () => {
 
   return (
     <Box>
-      <GroupCard showSettings group={group} />
+      <Card showSettings group={group} />
 
       <TabContext value={tab}>
         <TabList onChange={(_, t) => setTab(t)}>

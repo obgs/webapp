@@ -6,7 +6,7 @@ import {
   GroupMembersQuery,
   GroupMembersQueryVariables,
   PageInfoFieldsFragment,
-} from "../../graphql/generated";
+} from "graphql/generated";
 
 const rowsPerPageOptions = [10, 20, 50];
 

@@ -3,13 +3,13 @@ import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo } from "react";
 
 import { useGroupSettingsQuery } from "../../../graphql/generated";
-import GroupForm, { SubmitCallback } from "../GroupForm";
+import Form, { SubmitCallback } from "./Form";
 
 interface Props {
   groupId: string;
 }
 
-const GroupSettings: React.FC<Props> = ({ groupId }) => {
+const Settings: React.FC<Props> = ({ groupId }) => {
   const { data, error, loading } = useGroupSettingsQuery({
     variables: {
       id: groupId,
@@ -42,7 +42,7 @@ const GroupSettings: React.FC<Props> = ({ groupId }) => {
   }
 
   return (
-    <GroupForm
+    <Form
       onSubmit={onSubmit}
       buttonLabel="Update"
       id={group.id}
@@ -58,4 +58,4 @@ const GroupSettings: React.FC<Props> = ({ groupId }) => {
   );
 };
 
-export default GroupSettings;
+export default Settings;

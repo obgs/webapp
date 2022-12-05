@@ -23,7 +23,7 @@ interface Props {
   groupId: string;
 }
 
-const GroupApplications: React.FC<Props> = ({ groupId }) => {
+const Applications: React.FC<Props> = ({ groupId }) => {
   const { data, error, loading } = useGroupApplicationsQuery({
     variables: {
       id: groupId,
@@ -139,4 +139,4 @@ const GroupApplications: React.FC<Props> = ({ groupId }) => {
   );
 };
 
-export default GroupApplications;
+export default Applications;

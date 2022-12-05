@@ -6,7 +6,7 @@ import React, { useCallback, useState } from "react";
 import {
   GroupFieldsFragment,
   useApplyToGroupMutation,
-} from "../../graphql/generated";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 import onChangeText from "utils/onChangeText";
 
@@ -16,11 +16,7 @@ interface Props {
   group: GroupFieldsFragment;
 }
 
-const GroupMembershipApplicationModal: React.FC<Props> = ({
-  open,
-  onClose,
-  group,
-}) => {
+const ApplicationModal: React.FC<Props> = ({ open, onClose, group }) => {
   const [message, setMessage] = useState("");
   const [apply, { error, loading }] = useApplyToGroupMutation();
   useSnackbarError(error);
@@ -93,4 +89,4 @@ const GroupMembershipApplicationModal: React.FC<Props> = ({
   );
 };
 
-export default GroupMembershipApplicationModal;
+export default ApplicationModal;

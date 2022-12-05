@@ -1,17 +1,17 @@
 import CheckIcon from "@mui/icons-material/Check";
 import { LoadingButton } from "@mui/lab";
-import { Button, CardActions, Tooltip } from "@mui/material";
+import { Button, CardActions as MUICardActions, Tooltip } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 
+import GroupMembershipApplicationModal from "./ApplicationModal";
 import {
   GroupFieldsFragment,
   GroupFieldsFragmentDoc,
   GroupMembershipRole,
   GroupSettingsJoinPolicy,
   useJoinGroupMutation,
-} from "../../graphql/generated";
-import GroupMembershipApplicationModal from "./ApplicationModal";
+} from "graphql/generated";
 import { useAuth } from "modules/auth";
 import { useSnackbarError } from "utils/apollo";
 
@@ -19,7 +19,7 @@ interface Props {
   group: GroupFieldsFragment;
 }
 
-const GroupCardActions: React.FC<Props> = ({ group }) => {
+const CardActions: React.FC<Props> = ({ group }) => {
   const { authenticated } = useAuth();
 
   const [joinGroup, { error, loading }] = useJoinGroupMutation();
@@ -97,7 +97,7 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
 
   return (
     <>
-      <CardActions>{joinButton}</CardActions>
+      <MUICardActions>{joinButton}</MUICardActions>
       <GroupMembershipApplicationModal
         group={group}
         open={applyModalOpen}
@@ -107,4 +107,4 @@ const GroupCardActions: React.FC<Props> = ({ group }) => {
   );
 };
 
-export default GroupCardActions;
+export default CardActions;

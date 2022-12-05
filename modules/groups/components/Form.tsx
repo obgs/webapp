@@ -17,14 +17,14 @@ import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import * as yup from "yup";
 
-import { ImageInput, useImageInput } from "../../components/ImageInput";
+import { ImageInput, useImageInput } from "components/ImageInput";
 import {
   GroupMembershipRole,
   GroupSettingsJoinPolicy,
   GroupSettingsVisibility,
   SearchGroupsDocument,
   useCreateOrUpdateGroupMutation,
-} from "../../graphql/generated";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 const validationSchema = yup.object({
@@ -56,7 +56,7 @@ interface Props {
   initialValues?: FormValues;
 }
 
-const GroupForm: React.FC<Props> = ({
+const Form: React.FC<Props> = ({
   buttonLabel,
   onSubmit,
   id,
@@ -220,4 +220,4 @@ const GroupForm: React.FC<Props> = ({
   );
 };
 
-export default GroupForm;
+export default Form;
