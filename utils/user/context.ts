@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { UserFieldsFragment } from "../../graphql/generated";
+import { UserFieldsFragment } from "graphql/generated";
 
 interface UserContext {
   user: UserFieldsFragment | null;
