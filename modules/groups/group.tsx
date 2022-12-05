@@ -11,9 +11,9 @@ import {
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
-import { useGroupQuery } from "../../graphql/generated";
 import Card from "./components/Card";
 import Members from "./components/Members";
+import { useGroupQuery } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 const Group: React.FC = () => {

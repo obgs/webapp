@@ -4,12 +4,8 @@ import { Box, CircularProgress, Container, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect, useMemo } from "react";
 
-import {
-  useUpdateUserMutation,
-  MeQuery,
-  MeDocument,
-} from "../../graphql/generated";
 import { ImageInput, useImageInput } from "components/ImageInput";
+import { useUpdateUserMutation, MeQuery, MeDocument } from "graphql/generated";
 import { useUser } from "utils/user";
 
 const Input = styled(TextField)`

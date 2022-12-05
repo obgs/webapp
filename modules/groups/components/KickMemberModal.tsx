@@ -13,7 +13,7 @@ import React, { useCallback } from "react";
 import {
   GroupMembershipFieldsFragment,
   useKickUserFromGroupMutation,
-} from "../../../graphql/generated";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {

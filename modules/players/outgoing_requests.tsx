@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React, { useMemo } from "react";
 
-import { usePendingSupervisionRequestsQuery } from "../../graphql/generated";
+import { usePendingSupervisionRequestsQuery } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 const OutgoingSupervisionRequests = () => {

@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 
+import PlayersList from "./List";
 import {
   PlayerFieldsFragment,
   PlayerWhereInput,
   useSearchPlayersLazyQuery,
-} from "../../../graphql/generated";
-import PlayersList from "./List";
+} from "graphql/generated";
 import { usePagination, useSnackbarError } from "utils/apollo";
 
 interface Props {

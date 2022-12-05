@@ -1,7 +1,7 @@
 import { LazyQueryExecFunction } from "@apollo/client";
 import { useCallback, useEffect, useState } from "react";
 
-import { PageInfoFieldsFragment } from "../../graphql/generated";
+import { PageInfoFieldsFragment } from "graphql/generated";
 
 const rowsPerPageOptions = [10, 20, 50];
 

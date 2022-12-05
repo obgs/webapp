@@ -2,8 +2,8 @@ import { Alert } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo } from "react";
 
-import { useGroupSettingsQuery } from "../../../graphql/generated";
 import Form, { SubmitCallback } from "./Form";
+import { useGroupSettingsQuery } from "graphql/generated";
 
 interface Props {
   groupId: string;

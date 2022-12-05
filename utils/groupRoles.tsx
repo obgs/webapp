@@ -1,4 +1,4 @@
-import { GroupMembershipRole } from "../graphql/generated";
+import { GroupMembershipRole } from "graphql/generated";
 
 const groupRoles: Record<GroupMembershipRole, string> = {
   [GroupMembershipRole.Admin]: "Admin",

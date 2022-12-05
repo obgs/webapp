@@ -3,13 +3,13 @@ import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo, useState } from "react";
 
+import List from "./components/List";
 import {
   useMyPlayersQuery,
   useCreatePlayerMutation,
   MyPlayersQuery,
   MyPlayersDocument,
-} from "../../graphql/generated";
-import List from "./components/List";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 const Supervised = () => {

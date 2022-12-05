@@ -13,7 +13,7 @@ import React, { useCallback, useState } from "react";
 import {
   PlayerFieldsFragment,
   useRequestPlayerSupervisionMutation,
-} from "../../../graphql/generated";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {

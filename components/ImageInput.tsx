@@ -3,7 +3,7 @@ import { Avatar } from "@mui/material";
 import Image from "next/image";
 import React, { useCallback, useState } from "react";
 
-import { useGetFileUploadUrlLazyQuery } from "../graphql/generated";
+import { useGetFileUploadUrlLazyQuery } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {

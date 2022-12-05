@@ -2,8 +2,8 @@ import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 
-import { useSearchGroupsLazyQuery } from "../../graphql/generated";
 import List from "./components/List";
+import { useSearchGroupsLazyQuery } from "graphql/generated";
 import { useAuth } from "modules/auth";
 import { usePagination, useSnackbarError } from "utils/apollo";
 

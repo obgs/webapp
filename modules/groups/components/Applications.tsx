@@ -16,7 +16,7 @@ import {
   useGroupApplicationsQuery,
   useResolveGroupMembershipApplicationMutation,
   UserFieldsFragment,
-} from "../../../graphql/generated";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {

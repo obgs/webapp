@@ -1,12 +1,9 @@
 import { Typography } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
 
-import {
-  PlayerFieldsFragment,
-  PlayerWhereInput,
-} from "../../graphql/generated";
 import RequestSupervisionModal from "./components/RequestSupervisionModal";
 import Search from "./components/Search";
+import { PlayerFieldsFragment, PlayerWhereInput } from "graphql/generated";
 import { useUser } from "utils/user";
 
 const RequestSupervision = () => {

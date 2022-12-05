@@ -10,11 +10,11 @@ import {
 } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
 
+import ResolveSupervisionRequestModal from "./components/ResolveSupervisionRequestModal";
 import {
   PlayerSupervisionRequestFieldsFragment,
   useIncomingSupervisionRequestsQuery,
-} from "../../graphql/generated";
-import ResolveSupervisionRequestModal from "./components/ResolveSupervisionRequestModal";
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 const IncomingSupervisionRequests = () => {
