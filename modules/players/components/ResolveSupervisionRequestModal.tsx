@@ -5,7 +5,7 @@ import React, { useCallback } from "react";
 import {
   PlayerSupervisionRequestFieldsFragment,
   useResolvePlayerSupervisionRequestMutation,
-} from "../../graphql/generated";
+} from "../../../graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   request: PlayerSupervisionRequestFieldsFragment;
 }
 
-const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
+const ResolveSupervisionRequestModal: React.FC<Props> = ({
   open,
   onClose,
   request,
@@ -87,4 +87,4 @@ const ResolvePlayerSupervisionRequestModal: React.FC<Props> = ({
   );
 };
 
-export default ResolvePlayerSupervisionRequestModal;
+export default ResolveSupervisionRequestModal;

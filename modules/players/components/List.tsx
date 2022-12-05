@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-import { PlayerFieldsFragment } from "../../graphql/generated";
+import { PlayerFieldsFragment } from "../../../graphql/generated";
 
 interface Props {
   players?: Array<PlayerFieldsFragment | null | undefined> | null;
@@ -21,7 +21,7 @@ interface Props {
   onSelect?: (player: PlayerFieldsFragment) => void;
 }
 
-const PlayersList: React.FC<Props> = ({
+const List: React.FC<Props> = ({
   players,
   loading,
   toolbar,
@@ -83,4 +83,4 @@ const PlayersList: React.FC<Props> = ({
   );
 };
 
-export default PlayersList;
+export default List;

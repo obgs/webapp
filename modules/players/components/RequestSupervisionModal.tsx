@@ -13,7 +13,7 @@ import React, { useCallback, useState } from "react";
 import {
   PlayerFieldsFragment,
   useRequestPlayerSupervisionMutation,
-} from "../../graphql/generated";
+} from "../../../graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
   player: PlayerFieldsFragment;
 }
 
-const RequestPlayerSupervisionModal: React.FC<Props> = ({
+const RequestSupervisionModal: React.FC<Props> = ({
   open,
   onClose,
   player,
@@ -103,4 +103,4 @@ const RequestPlayerSupervisionModal: React.FC<Props> = ({
   );
 };
 
-export default RequestPlayerSupervisionModal;
+export default RequestSupervisionModal;

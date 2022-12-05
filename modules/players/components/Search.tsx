@@ -16,7 +16,7 @@ import {
   PlayerFieldsFragment,
   PlayerWhereInput,
   useSearchPlayersLazyQuery,
-} from "../../graphql/generated";
+} from "../../../graphql/generated";
 import PlayersList from "./List";
 import { usePagination, useSnackbarError } from "utils/apollo";
 
@@ -25,7 +25,7 @@ interface Props {
   filter?: PlayerWhereInput;
 }
 
-const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
+const Search: React.FC<Props> = ({ onSelect, filter }) => {
   const [name, setName] = useState("");
   const [strictSearch, setStrictSearch] = useState(false);
 
@@ -107,4 +107,4 @@ const PlayerSearch: React.FC<Props> = ({ onSelect, filter }) => {
   );
 };
 
-export default PlayerSearch;
+export default Search;
