@@ -9,8 +9,8 @@ import { onError } from "@apollo/client/link/error";
 import React, { PropsWithChildren, useMemo } from "react";
 
 import result from "../../graphql/introspection-result";
-import useAuth from "../auth/useAuth";
 import typePolicies from "./typePolicies";
+import { useAuth } from "modules/auth";
 
 const ApolloProvider = ({ children }: PropsWithChildren) => {
   const { authenticated, accessToken } = useAuth();

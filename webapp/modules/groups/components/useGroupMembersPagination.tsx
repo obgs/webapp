@@ -1,32 +1,28 @@
 import { LazyQueryExecFunction } from "@apollo/client";
 import { useCallback, useEffect, useState } from "react";
 
-import { PageInfoFieldsFragment } from "graphql/generated";
+import {
+  GroupMembershipWhereInput,
+  GroupMembersQuery,
+  GroupMembersQueryVariables,
+  PageInfoFieldsFragment,
+} from "graphql/generated";
 
 const rowsPerPageOptions = [10, 20, 50];
 
-type Search<Query, Input> = LazyQueryExecFunction<
-  Query,
-  {
-    before?: unknown;
-    after?: unknown;
-    where: Input;
-    first?: number | null;
-    last?: number | null;
-  }
->;
-
-interface Props<Query, Input> {
-  query: Search<Query, Input>;
-  where: Input;
+interface Props {
+  query: LazyQueryExecFunction<GroupMembersQuery, GroupMembersQueryVariables>;
+  where: GroupMembershipWhereInput;
+  groupId: string;
   pageInfo?: PageInfoFieldsFragment;
 }
 
-const usePagination = <Query, Input>({
+const useGroupMembersPagination = ({
   query,
   where,
   pageInfo,
-}: Props<Query, Input>) => {
+  groupId,
+}: Props) => {
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
   const [page, setPage] = useState(0);
 
@@ -34,23 +30,25 @@ const usePagination = <Query, Input>({
   useEffect(() => {
     query({
       variables: {
+        groupId,
         where,
         first: rowsPerPage,
       },
     });
-  }, [query, where, rowsPerPage]);
+  }, [query, where, rowsPerPage, groupId]);
 
   const searchWithCriteria = useCallback(
     (first = rowsPerPage) => {
       setPage(0);
       query({
         variables: {
+          groupId,
           first,
           where,
         },
       });
     },
-    [rowsPerPage, query, where]
+    [rowsPerPage, query, groupId, where]
   );
 
   // when the amount of rows per page changes, go back to page 0
@@ -68,6 +66,7 @@ const usePagination = <Query, Input>({
     (_: unknown, p: number) => {
       query({
         variables: {
+          groupId,
           ...(p < page
             ? { before: pageInfo?.startCursor, last: rowsPerPage }
             : { after: pageInfo?.endCursor, first: rowsPerPage }),
@@ -76,11 +75,10 @@ const usePagination = <Query, Input>({
       });
       setPage(p);
     },
-    [query, page, pageInfo, rowsPerPage, where]
+    [query, groupId, page, pageInfo, rowsPerPage, where]
   );
 
   return {
-    searchWithCriteria,
     onRowsPerPageChange,
     onPageChange,
     page,
@@ -89,4 +87,4 @@ const usePagination = <Query, Input>({
   };
 };
 
-export default usePagination;
+export default useGroupMembersPagination;

@@ -16,11 +16,29 @@
     "import/order": [
       "error",
       {
-        "groups": ["builtin", "external", "internal"],
+        "groups": ["builtin", "external", ["internal", "parent", "sibling"]],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc"
-        }
+        },
+        "pathGroups": [
+          {
+            "pattern": "modules/**/*",
+            "group": "internal"
+          },
+          {
+            "pattern": "components/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "graphql/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "utils/**",
+            "group": "internal"
+          }
+        ]
       }
     ]
   },
