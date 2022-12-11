@@ -1,0 +1,5 @@
+mutation CreateGame($input: CreateGameInput!) {
+  createGame(input: $input) {
+    ...gameFields
+  }
+}

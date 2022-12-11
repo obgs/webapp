@@ -1,0 +1,25 @@
+query SearchGames(
+  $before: Cursor
+  $after: Cursor
+  $where: GameWhereInput!
+  $first: Int
+  $last: Int
+) {
+  games(
+    before: $before
+    after: $after
+    where: $where
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...pageInfoFields
+    }
+    totalCount
+    edges {
+      node {
+        ...gameFields
+      }
+    }
+  }
+}
