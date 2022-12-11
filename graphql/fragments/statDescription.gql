@@ -1,0 +1,6 @@
+fragment statDescriptionFields on StatDescription {
+  id
+  type
+  name
+  description
+}
