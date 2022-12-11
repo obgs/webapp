@@ -64,6 +64,8 @@ export type Game = Node & {
   description?: Maybe<Scalars["String"]>;
   favorites: Favorites;
   id: Scalars["ID"];
+  /** Whether the current user has favorited this game */
+  isFavorite: Scalars["Boolean"];
   maxPlayers: Scalars["Int"];
   minPlayers: Scalars["Int"];
   name: Scalars["String"];
@@ -815,6 +817,7 @@ export type GameFieldsFragment = {
   minPlayers: number;
   maxPlayers: number;
   boardgamegeekURL?: string | null;
+  isFavorite: boolean;
   author: {
     __typename?: "User";
     id: string;
@@ -963,6 +966,16 @@ export type UserFieldsFragment = {
   avatarURL: string;
 };
 
+export type AddOrRemoveGameFromFavoritesMutationVariables = Exact<{
+  id: Scalars["ID"];
+  favorite: Scalars["Boolean"];
+}>;
+
+export type AddOrRemoveGameFromFavoritesMutation = {
+  __typename?: "Mutation";
+  addOrRemoveGameFromFavorites: boolean;
+};
+
 export type ApplyToGroupMutationVariables = Exact<{
   input: GroupApplicationInput;
 }>;
@@ -1025,6 +1038,7 @@ export type CreateGameMutation = {
     minPlayers: number;
     maxPlayers: number;
     boardgamegeekURL?: string | null;
+    isFavorite: boolean;
     author: {
       __typename?: "User";
       id: string;
@@ -1465,6 +1479,7 @@ export type SearchGamesQuery = {
         minPlayers: number;
         maxPlayers: number;
         boardgamegeekURL?: string | null;
+        isFavorite: boolean;
         author: {
           __typename?: "User";
           id: string;
@@ -1606,6 +1621,7 @@ export const GameFieldsFragmentDoc = gql`
     author {
       ...userFields
     }
+    isFavorite
     favorites {
       total
       users {
@@ -1707,6 +1723,56 @@ export const PlayerSupervisionRequestFieldsFragmentDoc = gql`
   }
   ${PlayerFieldsFragmentDoc}
 `;
+export const AddOrRemoveGameFromFavoritesDocument = gql`
+  mutation AddOrRemoveGameFromFavorites($id: ID!, $favorite: Boolean!) {
+    addOrRemoveGameFromFavorites(gameId: $id, favorite: $favorite)
+  }
+`;
+export type AddOrRemoveGameFromFavoritesMutationFn = Apollo.MutationFunction<
+  AddOrRemoveGameFromFavoritesMutation,
+  AddOrRemoveGameFromFavoritesMutationVariables
+>;
+
+/**
+ * __useAddOrRemoveGameFromFavoritesMutation__
+ *
+ * To run a mutation, you first call `useAddOrRemoveGameFromFavoritesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddOrRemoveGameFromFavoritesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addOrRemoveGameFromFavoritesMutation, { data, loading, error }] = useAddOrRemoveGameFromFavoritesMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      favorite: // value for 'favorite'
+ *   },
+ * });
+ */
+export function useAddOrRemoveGameFromFavoritesMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddOrRemoveGameFromFavoritesMutation,
+    AddOrRemoveGameFromFavoritesMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddOrRemoveGameFromFavoritesMutation,
+    AddOrRemoveGameFromFavoritesMutationVariables
+  >(AddOrRemoveGameFromFavoritesDocument, options);
+}
+export type AddOrRemoveGameFromFavoritesMutationHookResult = ReturnType<
+  typeof useAddOrRemoveGameFromFavoritesMutation
+>;
+export type AddOrRemoveGameFromFavoritesMutationResult =
+  Apollo.MutationResult<AddOrRemoveGameFromFavoritesMutation>;
+export type AddOrRemoveGameFromFavoritesMutationOptions =
+  Apollo.BaseMutationOptions<
+    AddOrRemoveGameFromFavoritesMutation,
+    AddOrRemoveGameFromFavoritesMutationVariables
+  >;
 export const ApplyToGroupDocument = gql`
   mutation ApplyToGroup($input: GroupApplicationInput!) {
     applyToGroup(input: $input) {
@@ -3398,6 +3464,7 @@ export type GameResolvers<
   >;
   favorites?: Resolver<ResolversTypes["Favorites"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  isFavorite?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   maxPlayers?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   minPlayers?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;

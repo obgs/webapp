@@ -8,6 +8,7 @@ fragment gameFields on Game {
   author {
     ...userFields
   }
+  isFavorite
   favorites {
     total
     users {

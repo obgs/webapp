@@ -1,0 +1,3 @@
+mutation AddOrRemoveGameFromFavorites($id: ID!, $favorite: Boolean!) {
+  addOrRemoveGameFromFavorites(gameId: $id, favorite: $favorite)
+}
