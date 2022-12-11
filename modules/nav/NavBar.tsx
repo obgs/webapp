@@ -25,6 +25,8 @@ const NavBar = () => {
       )}
       <ListSubheader>Groups</ListSubheader>
       <NavLink href="/groups">Browse</NavLink>
+      <ListSubheader>Games</ListSubheader>
+      <NavLink href="/games">Browse</NavLink>
     </List>
   );
 };

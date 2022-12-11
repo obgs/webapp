@@ -1,0 +1,21 @@
+fragment gameFields on Game {
+  id
+  name
+  description
+  minPlayers
+  maxPlayers
+  boardgamegeekURL
+  author {
+    ...userFields
+  }
+  isFavorite
+  favorites {
+    total
+    users {
+      ...userFields
+    }
+  }
+  statDescriptions {
+    ...statDescriptionFields
+  }
+}

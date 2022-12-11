@@ -6,6 +6,7 @@ export interface PossibleTypesResultData {
 const result: PossibleTypesResultData = {
   possibleTypes: {
     Node: [
+      "Game",
       "Group",
       "GroupMembership",
       "GroupMembershipApplication",
@@ -13,6 +14,7 @@ const result: PossibleTypesResultData = {
       "Player",
       "PlayerSupervisionRequest",
       "PlayerSupervisionRequestApproval",
+      "StatDescription",
       "User",
     ],
   },
