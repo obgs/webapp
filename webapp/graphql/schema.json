@@ -229,6 +229,40 @@
           "possibleTypes": []
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "EnumStatInput",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [
+            {
+              "name": "possibleValues",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
           "kind": "OBJECT",
           "name": "Favorites",
           "description": null,
@@ -5234,6 +5268,26 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "possibleValues",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": [],
@@ -5291,6 +5345,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "enumStatInput",
+              "description": "Possible values for this stat. Provide this only for enum type, otherwise an error will be thrown",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "EnumStatInput",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": [],
@@ -5308,6 +5372,12 @@
           "enumValues": [
             {
               "name": "numeric",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "enum",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
