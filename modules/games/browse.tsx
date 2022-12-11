@@ -1,18 +1,8 @@
-import PeopleIcon from "@mui/icons-material/People";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
+import Card from "./components/Card";
 import { GameWhereInput, useSearchGamesLazyQuery } from "graphql/generated";
 import { useAuth } from "modules/auth";
 import { usePagination, useSnackbarError } from "utils/apollo";
@@ -68,39 +58,7 @@ const Browse = () => {
       {loading && <Typography>Loading...</Typography>}
       {!games?.length && <Typography>No games found</Typography>}
       <Stack spacing={2}>
-        {games?.map(
-          (game) =>
-            game && (
-              <Card key={game.id}>
-                <CardHeader
-                  title={<Typography variant="h5">{game.name}</Typography>}
-                  subheader={
-                    <Typography variant="body2">
-                      by {game.author.name}
-                    </Typography>
-                  }
-                />
-                <CardContent>
-                  <Typography>
-                    {game.description || "No description"}
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Stack direction="row" spacing={1}>
-                    <PeopleIcon />
-                    <Typography>
-                      {game.minPlayers} - {game.maxPlayers}
-                    </Typography>
-                  </Stack>
-                </CardActions>
-              </Card>
-            )
-        )}
+        {games?.map((game) => game && <Card key={game.id} game={game} />)}
       </Stack>
     </Container>
   );
