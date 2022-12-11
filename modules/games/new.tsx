@@ -1,3 +1,4 @@
+import AddIcon from "@mui/icons-material/Add";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadingButton } from "@mui/lab";
@@ -5,6 +6,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
   Container,
   IconButton,
   MenuItem,
@@ -34,6 +36,8 @@ const statsValidation = yup.object({
   name: yup.string().required("Name is required"),
   type: yup.mixed().oneOf(Object.values(StatDescriptionStatType)),
   description: yup.string(),
+  possibleValuesInput: yup.string(),
+  possibleValues: yup.array().of(yup.string()).optional(),
 });
 
 const validationSchema = yup.object({
@@ -65,6 +69,8 @@ const defaultValues: FormValues = {
       name: "",
       type: StatDescriptionStatType.Numeric,
       description: "",
+      possibleValuesInput: "",
+      possibleValues: [],
     },
   ],
 };
@@ -88,7 +94,16 @@ const CreateGame = () => {
               minPlayers: values.minPlayers,
               maxPlayers: values.maxPlayers,
               boardgamegeekURL: values.boardgamegeekURL,
-              statDescriptions: values.statDescriptions,
+              statDescriptions: values.statDescriptions.map((stat) => ({
+                name: stat.name,
+                type: stat.type,
+                description: stat.description,
+                enumStatInput: stat.possibleValues.length
+                  ? {
+                      possibleValues: stat.possibleValues,
+                    }
+                  : undefined,
+              })),
             },
           },
           refetchQueries: [
@@ -113,6 +128,8 @@ const CreateGame = () => {
           name: "",
           type: StatDescriptionStatType.Numeric,
           description: "",
+          possibleValuesInput: "",
+          possibleValues: [],
         },
       ],
     });
@@ -123,6 +140,46 @@ const CreateGame = () => {
       setValues({
         ...values,
         statDescriptions: values.statDescriptions.filter((_, i) => i !== index),
+      });
+    },
+    [setValues, values]
+  );
+
+  const addPossibleValue = useCallback(
+    (index: number) => () => {
+      setValues({
+        ...values,
+        statDescriptions: values.statDescriptions.map((stat, i) =>
+          i === index
+            ? {
+                ...stat,
+                possibleValues: [
+                  ...stat.possibleValues,
+                  values.statDescriptions[i].possibleValuesInput,
+                ],
+                possibleValuesInput: "",
+              }
+            : stat
+        ),
+      });
+    },
+    [setValues, values]
+  );
+
+  const removePossibleValue = useCallback(
+    (statIndex: number, valueIndex: number) => () => {
+      setValues({
+        ...values,
+        statDescriptions: values.statDescriptions.map((stat, i) =>
+          i === statIndex
+            ? {
+                ...stat,
+                possibleValues: stat.possibleValues.filter(
+                  (_: unknown, j: number) => j !== valueIndex
+                ),
+              }
+            : stat
+        ),
       });
     },
     [setValues, values]
@@ -184,9 +241,9 @@ const CreateGame = () => {
           </Typography>
           <Stack direction="row" flexWrap="wrap">
             {values.statDescriptions.map((stat, index) => (
-              <Card sx={{ m: 1 }} key={index}>
+              <Card sx={{ m: 1, maxWidth: 375 }} key={index}>
                 <CardContent>
-                  <Stack spacing={2} alignItems="flex-start">
+                  <Stack spacing={2} alignItems="flex-start" flex={1}>
                     <Stack direction="row" spacing={2} alignItems="flex-start">
                       <TextField
                         label="Name"
@@ -214,6 +271,9 @@ const CreateGame = () => {
                         <MenuItem value={StatDescriptionStatType.Numeric}>
                           Numeric
                         </MenuItem>
+                        <MenuItem value={StatDescriptionStatType.Enum}>
+                          Enumerable
+                        </MenuItem>
                       </Select>
                     </Stack>
                     <TextField
@@ -224,6 +284,39 @@ const CreateGame = () => {
                       fullWidth
                       multiline
                     />
+                    {stat.type === StatDescriptionStatType.Enum && (
+                      <>
+                        <TextField
+                          label="Possible values"
+                          value={stat.possibleValuesInput}
+                          name={`statDescriptions[${index}].possibleValuesInput`}
+                          fullWidth
+                          InputProps={{
+                            endAdornment: (
+                              <IconButton onClick={addPossibleValue(index)}>
+                                <AddIcon />
+                              </IconButton>
+                            ),
+                          }}
+                          onChange={handleChange}
+                        />
+                        <Stack
+                          direction="row"
+                          spacing={0}
+                          sx={{ flexWrap: "wrap", gap: 1 }}
+                        >
+                          {stat.possibleValues.map(
+                            (value: string, chipIndex: number) => (
+                              <Chip
+                                key={chipIndex}
+                                label={value}
+                                onDelete={removePossibleValue(index, chipIndex)}
+                              />
+                            )
+                          )}
+                        </Stack>
+                      </>
+                    )}
                   </Stack>
                 </CardContent>
                 <CardActions>

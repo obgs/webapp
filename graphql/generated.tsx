@@ -51,6 +51,10 @@ export type CreatePlayerInput = {
   name: Scalars["String"];
 };
 
+export type EnumStatInput = {
+  possibleValues: Array<Scalars["String"]>;
+};
+
 export type Favorites = {
   __typename?: "Favorites";
   total: Scalars["Int"];
@@ -687,17 +691,21 @@ export type StatDescription = Node & {
   description?: Maybe<Scalars["String"]>;
   id: Scalars["ID"];
   name: Scalars["String"];
+  possibleValues?: Maybe<Array<Scalars["String"]>>;
   type: StatDescriptionStatType;
 };
 
 export type StatDescriptionInput = {
   description?: InputMaybe<Scalars["String"]>;
+  /** Possible values for this stat. Provide this only for enum type, otherwise an error will be thrown */
+  enumStatInput?: InputMaybe<EnumStatInput>;
   name: Scalars["String"];
   type: StatDescriptionStatType;
 };
 
 /** StatDescriptionStatType is enum for the field type */
 export enum StatDescriptionStatType {
+  Enum = "enum",
   Numeric = "numeric",
 }
 
@@ -3278,6 +3286,7 @@ export type ResolversTypes = ResolversObject<{
   CreateOrUpdateGroupInput: CreateOrUpdateGroupInput;
   CreatePlayerInput: CreatePlayerInput;
   Cursor: ResolverTypeWrapper<Scalars["Cursor"]>;
+  EnumStatInput: EnumStatInput;
   Favorites: ResolverTypeWrapper<Favorites>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
   Game: ResolverTypeWrapper<Game>;
@@ -3345,6 +3354,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateOrUpdateGroupInput: CreateOrUpdateGroupInput;
   CreatePlayerInput: CreatePlayerInput;
   Cursor: Scalars["Cursor"];
+  EnumStatInput: EnumStatInput;
   Favorites: Favorites;
   Float: Scalars["Float"];
   Game: Game;
@@ -3895,6 +3905,11 @@ export type StatDescriptionResolvers<
   >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  possibleValues?: Resolver<
+    Maybe<Array<ResolversTypes["String"]>>,
+    ParentType,
+    ContextType
+  >;
   type?: Resolver<
     ResolversTypes["StatDescriptionStatType"],
     ParentType,
