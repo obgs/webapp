@@ -102,7 +102,9 @@ const Browse = () => {
                 </TableRow>
               )
           )}
-          <TablePagination count={totalCount} {...pagination} />
+          <TableRow>
+            <TablePagination count={totalCount} {...pagination} />
+          </TableRow>
         </TableBody>
       </Table>
     </Container>
