@@ -97,7 +97,12 @@ const Browse = () => {
                 <TableRow key={match.id}>
                   <TableCell>{match.game.name}</TableCell>
                   <TableCell>
-                    {match.players.map((player) => player.name).join(", ")}
+                    {match.players
+                      .map(
+                        (player) =>
+                          player.name || player.owner?.name || player.owner?.id
+                      )
+                      .join(", ")}
                   </TableCell>
                 </TableRow>
               )
