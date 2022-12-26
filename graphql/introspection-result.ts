@@ -1,11 +1,12 @@
-export interface PossibleTypesResultData {
-  possibleTypes: {
-    [key: string]: string[];
-  };
-}
-const result: PossibleTypesResultData = {
-  possibleTypes: {
-    Node: [
+
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
+      }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "Node": [
       "Game",
       "Group",
       "GroupMembership",
@@ -17,8 +18,9 @@ const result: PossibleTypesResultData = {
       "PlayerSupervisionRequestApproval",
       "StatDescription",
       "Statistic",
-      "User",
-    ],
-  },
+      "User"
+    ]
+  }
 };
-export default result;
+      export default result;
+    

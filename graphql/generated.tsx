@@ -463,7 +463,7 @@ export type MutationCreateGameArgs = {
 };
 
 export type MutationCreateMatchArgs = {
-  match: CreateMatchInput;
+  input: CreateMatchInput;
 };
 
 export type MutationCreateOrUpdateGroupArgs = {
@@ -922,6 +922,17 @@ export type GameFieldsFragment = {
     name: string;
     email: string;
     avatarURL: string;
+    mainPlayer?: {
+      __typename?: "Player";
+      id: string;
+      name: string;
+      owner?: { __typename?: "User"; id: string; name: string } | null;
+      supervisors?: Array<{
+        __typename?: "User";
+        id: string;
+        name: string;
+      }> | null;
+    } | null;
   };
   favorites: {
     __typename?: "Favorites";
@@ -932,6 +943,17 @@ export type GameFieldsFragment = {
       name: string;
       email: string;
       avatarURL: string;
+      mainPlayer?: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      } | null;
     }>;
   };
   statDescriptions: Array<{
@@ -940,6 +962,7 @@ export type GameFieldsFragment = {
     type: StatDescriptionStatType;
     name: string;
     description?: string | null;
+    possibleValues?: Array<string> | null;
   }>;
 };
 
@@ -971,6 +994,17 @@ export type GroupMembershipFieldsFragment = {
     name: string;
     email: string;
     avatarURL: string;
+    mainPlayer?: {
+      __typename?: "Player";
+      id: string;
+      name: string;
+      owner?: { __typename?: "User"; id: string; name: string } | null;
+      supervisors?: Array<{
+        __typename?: "User";
+        id: string;
+        name: string;
+      }> | null;
+    } | null;
   };
 };
 
@@ -984,6 +1018,17 @@ export type GroupMembershipApplicationFieldsFragment = {
     name: string;
     email: string;
     avatarURL: string;
+    mainPlayer?: {
+      __typename?: "Player";
+      id: string;
+      name: string;
+      owner?: { __typename?: "User"; id: string; name: string } | null;
+      supervisors?: Array<{
+        __typename?: "User";
+        id: string;
+        name: string;
+      }> | null;
+    } | null;
   };
   group: {
     __typename?: "Group";
@@ -1022,6 +1067,17 @@ export type MatchFieldsFragment = {
       name: string;
       email: string;
       avatarURL: string;
+      mainPlayer?: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      } | null;
     };
     favorites: {
       __typename?: "Favorites";
@@ -1032,6 +1088,17 @@ export type MatchFieldsFragment = {
         name: string;
         email: string;
         avatarURL: string;
+        mainPlayer?: {
+          __typename?: "Player";
+          id: string;
+          name: string;
+          owner?: { __typename?: "User"; id: string; name: string } | null;
+          supervisors?: Array<{
+            __typename?: "User";
+            id: string;
+            name: string;
+          }> | null;
+        } | null;
       }>;
     };
     statDescriptions: Array<{
@@ -1040,6 +1107,7 @@ export type MatchFieldsFragment = {
       type: StatDescriptionStatType;
       name: string;
       description?: string | null;
+      possibleValues?: Array<string> | null;
     }>;
   };
   players: Array<{
@@ -1062,6 +1130,7 @@ export type MatchFieldsFragment = {
       type: StatDescriptionStatType;
       name: string;
       description?: string | null;
+      possibleValues?: Array<string> | null;
     };
     player: {
       __typename?: "Player";
@@ -1127,6 +1196,7 @@ export type StatDescriptionFieldsFragment = {
   type: StatDescriptionStatType;
   name: string;
   description?: string | null;
+  possibleValues?: Array<string> | null;
 };
 
 export type UserFieldsFragment = {
@@ -1135,6 +1205,17 @@ export type UserFieldsFragment = {
   name: string;
   email: string;
   avatarURL: string;
+  mainPlayer?: {
+    __typename?: "Player";
+    id: string;
+    name: string;
+    owner?: { __typename?: "User"; id: string; name: string } | null;
+    supervisors?: Array<{
+      __typename?: "User";
+      id: string;
+      name: string;
+    }> | null;
+  } | null;
 };
 
 export type AddOrRemoveGameFromFavoritesMutationVariables = Exact<{
@@ -1163,6 +1244,17 @@ export type ApplyToGroupMutation = {
       name: string;
       email: string;
       avatarURL: string;
+      mainPlayer?: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      } | null;
     };
     group: {
       __typename?: "Group";
@@ -1216,6 +1308,17 @@ export type CreateGameMutation = {
       name: string;
       email: string;
       avatarURL: string;
+      mainPlayer?: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      } | null;
     };
     favorites: {
       __typename?: "Favorites";
@@ -1226,6 +1329,17 @@ export type CreateGameMutation = {
         name: string;
         email: string;
         avatarURL: string;
+        mainPlayer?: {
+          __typename?: "Player";
+          id: string;
+          name: string;
+          owner?: { __typename?: "User"; id: string; name: string } | null;
+          supervisors?: Array<{
+            __typename?: "User";
+            id: string;
+            name: string;
+          }> | null;
+        } | null;
       }>;
     };
     statDescriptions: Array<{
@@ -1234,7 +1348,112 @@ export type CreateGameMutation = {
       type: StatDescriptionStatType;
       name: string;
       description?: string | null;
+      possibleValues?: Array<string> | null;
     }>;
+  };
+};
+
+export type CreateMatchMutationVariables = Exact<{
+  input: CreateMatchInput;
+}>;
+
+export type CreateMatchMutation = {
+  __typename?: "Mutation";
+  createMatch: {
+    __typename?: "Match";
+    id: string;
+    game: {
+      __typename?: "Game";
+      id: string;
+      name: string;
+      description?: string | null;
+      minPlayers: number;
+      maxPlayers: number;
+      boardgamegeekURL?: string | null;
+      isFavorite: boolean;
+      author: {
+        __typename?: "User";
+        id: string;
+        name: string;
+        email: string;
+        avatarURL: string;
+        mainPlayer?: {
+          __typename?: "Player";
+          id: string;
+          name: string;
+          owner?: { __typename?: "User"; id: string; name: string } | null;
+          supervisors?: Array<{
+            __typename?: "User";
+            id: string;
+            name: string;
+          }> | null;
+        } | null;
+      };
+      favorites: {
+        __typename?: "Favorites";
+        total: number;
+        users: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+          email: string;
+          avatarURL: string;
+          mainPlayer?: {
+            __typename?: "Player";
+            id: string;
+            name: string;
+            owner?: { __typename?: "User"; id: string; name: string } | null;
+            supervisors?: Array<{
+              __typename?: "User";
+              id: string;
+              name: string;
+            }> | null;
+          } | null;
+        }>;
+      };
+      statDescriptions: Array<{
+        __typename?: "StatDescription";
+        id: string;
+        type: StatDescriptionStatType;
+        name: string;
+        description?: string | null;
+        possibleValues?: Array<string> | null;
+      }>;
+    };
+    players: Array<{
+      __typename?: "Player";
+      id: string;
+      name: string;
+      owner?: { __typename?: "User"; id: string; name: string } | null;
+      supervisors?: Array<{
+        __typename?: "User";
+        id: string;
+        name: string;
+      }> | null;
+    }>;
+    stats?: Array<{
+      __typename?: "Statistic";
+      value: string;
+      statDescription: {
+        __typename?: "StatDescription";
+        id: string;
+        type: StatDescriptionStatType;
+        name: string;
+        description?: string | null;
+        possibleValues?: Array<string> | null;
+      };
+      player: {
+        __typename?: "Player";
+        id: string;
+        name: string;
+        owner?: { __typename?: "User"; id: string; name: string } | null;
+        supervisors?: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }> | null;
+      };
+    }> | null;
   };
 };
 
@@ -1403,6 +1622,17 @@ export type GroupApplicationsQuery = {
             name: string;
             email: string;
             avatarURL: string;
+            mainPlayer?: {
+              __typename?: "Player";
+              id: string;
+              name: string;
+              owner?: { __typename?: "User"; id: string; name: string } | null;
+              supervisors?: Array<{
+                __typename?: "User";
+                id: string;
+                name: string;
+              }> | null;
+            } | null;
           };
         }> | null;
       }
@@ -1456,6 +1686,21 @@ export type GroupMembersQuery = {
                 name: string;
                 email: string;
                 avatarURL: string;
+                mainPlayer?: {
+                  __typename?: "Player";
+                  id: string;
+                  name: string;
+                  owner?: {
+                    __typename?: "User";
+                    id: string;
+                    name: string;
+                  } | null;
+                  supervisors?: Array<{
+                    __typename?: "User";
+                    id: string;
+                    name: string;
+                  }> | null;
+                } | null;
               };
             } | null;
           } | null> | null;
@@ -1562,6 +1807,17 @@ export type MeQuery = {
     name: string;
     email: string;
     avatarURL: string;
+    mainPlayer?: {
+      __typename?: "Player";
+      id: string;
+      name: string;
+      owner?: { __typename?: "User"; id: string; name: string } | null;
+      supervisors?: Array<{
+        __typename?: "User";
+        id: string;
+        name: string;
+      }> | null;
+    } | null;
   };
 };
 
@@ -1665,6 +1921,17 @@ export type SearchGamesQuery = {
           name: string;
           email: string;
           avatarURL: string;
+          mainPlayer?: {
+            __typename?: "Player";
+            id: string;
+            name: string;
+            owner?: { __typename?: "User"; id: string; name: string } | null;
+            supervisors?: Array<{
+              __typename?: "User";
+              id: string;
+              name: string;
+            }> | null;
+          } | null;
         };
         favorites: {
           __typename?: "Favorites";
@@ -1675,6 +1942,17 @@ export type SearchGamesQuery = {
             name: string;
             email: string;
             avatarURL: string;
+            mainPlayer?: {
+              __typename?: "Player";
+              id: string;
+              name: string;
+              owner?: { __typename?: "User"; id: string; name: string } | null;
+              supervisors?: Array<{
+                __typename?: "User";
+                id: string;
+                name: string;
+              }> | null;
+            } | null;
           }>;
         };
         statDescriptions: Array<{
@@ -1683,6 +1961,7 @@ export type SearchGamesQuery = {
           type: StatDescriptionStatType;
           name: string;
           description?: string | null;
+          possibleValues?: Array<string> | null;
         }>;
       } | null;
     } | null> | null;
@@ -1775,6 +2054,17 @@ export type SearchMatchesQuery = {
             name: string;
             email: string;
             avatarURL: string;
+            mainPlayer?: {
+              __typename?: "Player";
+              id: string;
+              name: string;
+              owner?: { __typename?: "User"; id: string; name: string } | null;
+              supervisors?: Array<{
+                __typename?: "User";
+                id: string;
+                name: string;
+              }> | null;
+            } | null;
           };
           favorites: {
             __typename?: "Favorites";
@@ -1785,6 +2075,21 @@ export type SearchMatchesQuery = {
               name: string;
               email: string;
               avatarURL: string;
+              mainPlayer?: {
+                __typename?: "Player";
+                id: string;
+                name: string;
+                owner?: {
+                  __typename?: "User";
+                  id: string;
+                  name: string;
+                } | null;
+                supervisors?: Array<{
+                  __typename?: "User";
+                  id: string;
+                  name: string;
+                }> | null;
+              } | null;
             }>;
           };
           statDescriptions: Array<{
@@ -1793,6 +2098,7 @@ export type SearchMatchesQuery = {
             type: StatDescriptionStatType;
             name: string;
             description?: string | null;
+            possibleValues?: Array<string> | null;
           }>;
         };
         players: Array<{
@@ -1815,6 +2121,7 @@ export type SearchMatchesQuery = {
             type: StatDescriptionStatType;
             name: string;
             description?: string | null;
+            possibleValues?: Array<string> | null;
           };
           player: {
             __typename?: "Player";
@@ -1871,13 +2178,31 @@ export type SearchPlayersQuery = {
   };
 };
 
+export const PlayerFieldsFragmentDoc = gql`
+  fragment playerFields on Player {
+    id
+    name
+    owner {
+      id
+      name
+    }
+    supervisors {
+      id
+      name
+    }
+  }
+`;
 export const UserFieldsFragmentDoc = gql`
   fragment userFields on User {
     id
     name
     email
     avatarURL
+    mainPlayer {
+      ...playerFields
+    }
   }
+  ${PlayerFieldsFragmentDoc}
 `;
 export const GroupMembershipFieldsFragmentDoc = gql`
   fragment groupMembershipFields on GroupMembership {
@@ -1928,6 +2253,7 @@ export const StatDescriptionFieldsFragmentDoc = gql`
     type
     name
     description
+    possibleValues
   }
 `;
 export const GameFieldsFragmentDoc = gql`
@@ -1954,20 +2280,6 @@ export const GameFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
   ${StatDescriptionFieldsFragmentDoc}
-`;
-export const PlayerFieldsFragmentDoc = gql`
-  fragment playerFields on Player {
-    id
-    name
-    owner {
-      id
-      name
-    }
-    supervisors {
-      id
-      name
-    }
-  }
 `;
 export const MatchFieldsFragmentDoc = gql`
   fragment matchFields on Match {
@@ -2233,6 +2545,57 @@ export type CreateGameMutationResult =
 export type CreateGameMutationOptions = Apollo.BaseMutationOptions<
   CreateGameMutation,
   CreateGameMutationVariables
+>;
+export const CreateMatchDocument = gql`
+  mutation CreateMatch($input: CreateMatchInput!) {
+    createMatch(input: $input) {
+      ...matchFields
+    }
+  }
+  ${MatchFieldsFragmentDoc}
+`;
+export type CreateMatchMutationFn = Apollo.MutationFunction<
+  CreateMatchMutation,
+  CreateMatchMutationVariables
+>;
+
+/**
+ * __useCreateMatchMutation__
+ *
+ * To run a mutation, you first call `useCreateMatchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMatchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMatchMutation, { data, loading, error }] = useCreateMatchMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMatchMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateMatchMutation,
+    CreateMatchMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateMatchMutation, CreateMatchMutationVariables>(
+    CreateMatchDocument,
+    options
+  );
+}
+export type CreateMatchMutationHookResult = ReturnType<
+  typeof useCreateMatchMutation
+>;
+export type CreateMatchMutationResult =
+  Apollo.MutationResult<CreateMatchMutation>;
+export type CreateMatchMutationOptions = Apollo.BaseMutationOptions<
+  CreateMatchMutation,
+  CreateMatchMutationVariables
 >;
 export const CreateOrUpdateGroupDocument = gql`
   mutation CreateOrUpdateGroup(
@@ -4107,7 +4470,7 @@ export type MutationResolvers<
     ResolversTypes["Match"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateMatchArgs, "match">
+    RequireFields<MutationCreateMatchArgs, "input">
   >;
   createOrUpdateGroup?: Resolver<
     ResolversTypes["Group"],

@@ -1,0 +1,5 @@
+mutation CreateMatch($input: CreateMatchInput!) {
+  createMatch(input: $input) {
+    ...matchFields
+  }
+}
