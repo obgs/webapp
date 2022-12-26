@@ -1,0 +1,18 @@
+fragment matchFields on Match {
+  id
+  game {
+    ...gameFields
+  }
+  players {
+    ...playerFields
+  }
+  stats {
+    value
+    statDescription {
+      ...statDescriptionFields
+    }
+    player {
+      ...playerFields
+    }
+  }
+}
