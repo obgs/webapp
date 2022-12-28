@@ -4,6 +4,7 @@ import {
   Container,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Stack,
   Step,
   StepLabel,
@@ -47,7 +48,12 @@ const CreateMatch = () => {
     return game?.statDescriptions.reduce(
       (acc, d) => ({
         ...acc,
-        [d.id]: d.type === StatDescriptionStatType.Numeric ? "0" : "",
+        [d.id]:
+          d.type === StatDescriptionStatType.Numeric
+            ? "0"
+            : StatDescriptionStatType.Enum
+            ? d.possibleValues?.[0] ?? ""
+            : "",
       }),
       {}
     ) as Record<string, string>;
@@ -171,9 +177,22 @@ const CreateMatch = () => {
                       )}
                       {d.type === StatDescriptionStatType.Enum &&
                         d.possibleValues && (
-                          <Select>
+                          <Select
+                            value={stats[player.id][d.id]}
+                            onChange={(e: SelectChangeEvent<string>) =>
+                              setStats({
+                                ...stats,
+                                [player.id]: {
+                                  ...stats[player.id],
+                                  [d.id]: e.target.value,
+                                },
+                              })
+                            }
+                          >
                             {d.possibleValues.map((v) => (
-                              <MenuItem key={v}>{v}</MenuItem>
+                              <MenuItem key={v} value={v}>
+                                {v}
+                              </MenuItem>
                             ))}
                           </Select>
                         )}
