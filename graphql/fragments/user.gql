@@ -3,4 +3,7 @@ fragment userFields on User {
   name
   email
   avatarURL
+  mainPlayer {
+    ...playerFields
+  }
 }
