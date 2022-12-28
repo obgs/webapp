@@ -15,6 +15,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
 import {
@@ -88,6 +89,8 @@ const Browse = () => {
     setFilterAnchor(null);
   };
 
+  const router = useRouter();
+
   return (
     <Container>
       <Toolbar
@@ -145,7 +148,11 @@ const Browse = () => {
           {matches?.map(
             (match) =>
               match && (
-                <TableRow key={match.id}>
+                <TableRow
+                  hover
+                  key={match.id}
+                  onClick={() => router.push(`/matches/${match.id}`)}
+                >
                   <TableCell>{match.game.name}</TableCell>
                   <TableCell>
                     {match.players

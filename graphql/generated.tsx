@@ -1797,6 +1797,127 @@ export type IncomingSupervisionRequestsQuery = {
   };
 };
 
+export type MatchQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type MatchQuery = {
+  __typename?: "Query";
+  node?:
+    | { __typename?: "Game" }
+    | { __typename?: "Group" }
+    | { __typename?: "GroupMembership" }
+    | { __typename?: "GroupMembershipApplication" }
+    | { __typename?: "GroupSettings" }
+    | {
+        __typename?: "Match";
+        id: string;
+        game: {
+          __typename?: "Game";
+          id: string;
+          name: string;
+          description?: string | null;
+          minPlayers: number;
+          maxPlayers: number;
+          boardgamegeekURL?: string | null;
+          isFavorite: boolean;
+          author: {
+            __typename?: "User";
+            id: string;
+            name: string;
+            email: string;
+            avatarURL: string;
+            mainPlayer?: {
+              __typename?: "Player";
+              id: string;
+              name: string;
+              owner?: { __typename?: "User"; id: string; name: string } | null;
+              supervisors?: Array<{
+                __typename?: "User";
+                id: string;
+                name: string;
+              }> | null;
+            } | null;
+          };
+          favorites: {
+            __typename?: "Favorites";
+            total: number;
+            users: Array<{
+              __typename?: "User";
+              id: string;
+              name: string;
+              email: string;
+              avatarURL: string;
+              mainPlayer?: {
+                __typename?: "Player";
+                id: string;
+                name: string;
+                owner?: {
+                  __typename?: "User";
+                  id: string;
+                  name: string;
+                } | null;
+                supervisors?: Array<{
+                  __typename?: "User";
+                  id: string;
+                  name: string;
+                }> | null;
+              } | null;
+            }>;
+          };
+          statDescriptions: Array<{
+            __typename?: "StatDescription";
+            id: string;
+            type: StatDescriptionStatType;
+            name: string;
+            description?: string | null;
+            possibleValues?: Array<string> | null;
+          }>;
+        };
+        players: Array<{
+          __typename?: "Player";
+          id: string;
+          name: string;
+          owner?: { __typename?: "User"; id: string; name: string } | null;
+          supervisors?: Array<{
+            __typename?: "User";
+            id: string;
+            name: string;
+          }> | null;
+        }>;
+        stats?: Array<{
+          __typename?: "Statistic";
+          value: string;
+          statDescription: {
+            __typename?: "StatDescription";
+            id: string;
+            type: StatDescriptionStatType;
+            name: string;
+            description?: string | null;
+            possibleValues?: Array<string> | null;
+          };
+          player: {
+            __typename?: "Player";
+            id: string;
+            name: string;
+            owner?: { __typename?: "User"; id: string; name: string } | null;
+            supervisors?: Array<{
+              __typename?: "User";
+              id: string;
+              name: string;
+            }> | null;
+          };
+        }> | null;
+      }
+    | { __typename?: "Player" }
+    | { __typename?: "PlayerSupervisionRequest" }
+    | { __typename?: "PlayerSupervisionRequestApproval" }
+    | { __typename?: "StatDescription" }
+    | { __typename?: "Statistic" }
+    | { __typename?: "User" }
+    | null;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -3420,6 +3541,55 @@ export type IncomingSupervisionRequestsLazyQueryHookResult = ReturnType<
 export type IncomingSupervisionRequestsQueryResult = Apollo.QueryResult<
   IncomingSupervisionRequestsQuery,
   IncomingSupervisionRequestsQueryVariables
+>;
+export const MatchDocument = gql`
+  query Match($id: ID!) {
+    node(id: $id) {
+      ...matchFields
+    }
+  }
+  ${MatchFieldsFragmentDoc}
+`;
+
+/**
+ * __useMatchQuery__
+ *
+ * To run a query within a React component, call `useMatchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMatchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMatchQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMatchQuery(
+  baseOptions: Apollo.QueryHookOptions<MatchQuery, MatchQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MatchQuery, MatchQueryVariables>(
+    MatchDocument,
+    options
+  );
+}
+export function useMatchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MatchQuery, MatchQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MatchQuery, MatchQueryVariables>(
+    MatchDocument,
+    options
+  );
+}
+export type MatchQueryHookResult = ReturnType<typeof useMatchQuery>;
+export type MatchLazyQueryHookResult = ReturnType<typeof useMatchLazyQuery>;
+export type MatchQueryResult = Apollo.QueryResult<
+  MatchQuery,
+  MatchQueryVariables
 >;
 export const MeDocument = gql`
   query Me {

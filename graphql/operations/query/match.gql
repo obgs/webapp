@@ -1,0 +1,5 @@
+query Match($id: ID!) {
+  node(id: $id) {
+    ...matchFields
+  }
+}
