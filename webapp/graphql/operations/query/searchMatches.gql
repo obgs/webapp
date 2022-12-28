@@ -1,0 +1,25 @@
+query SearchMatches(
+  $before: Cursor
+  $after: Cursor
+  $where: MatchWhereInput!
+  $first: Int
+  $last: Int
+) {
+  matches(
+    before: $before
+    after: $after
+    where: $where
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...pageInfoFields
+    }
+    totalCount
+    edges {
+      node {
+        ...matchFields
+      }
+    }
+  }
+}
