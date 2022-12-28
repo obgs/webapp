@@ -1,12 +1,18 @@
+import FilterListIcon from "@mui/icons-material/FilterList";
 import {
   Button,
+  Checkbox,
   Container,
+  IconButton,
+  Menu,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
+  Toolbar,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
@@ -48,7 +54,11 @@ const Browse = () => {
     }
 
     if (players.length) {
-      res.hasPlayersWith = players;
+      res.hasPlayersWith = [
+        {
+          or: players,
+        },
+      ];
     }
 
     return res;
@@ -67,12 +77,53 @@ const Browse = () => {
   );
 
   const totalCount = useMemo(() => data?.matches.totalCount ?? -1, [data]);
+  const [filterAnchor, setFilterAnchor] = React.useState<null | HTMLElement>(
+    null
+  );
+  const filterMenuOpen = Boolean(filterAnchor);
+  const openFilters = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setFilterAnchor(event.currentTarget);
+  };
+  const closeFilters = () => {
+    setFilterAnchor(null);
+  };
 
   return (
     <Container>
-      <Link href={"/matches/new"}>
-        <Button variant="contained">Create match</Button>
-      </Link>
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Link href={"/matches/new"}>
+          <Button variant="contained">Create match</Button>
+        </Link>
+        <IconButton onClick={openFilters}>
+          <FilterListIcon />
+        </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={filterAnchor}
+          open={filterMenuOpen}
+          onClose={closeFilters}
+        >
+          <MenuItem onClick={() => setShowMyMatches(!showMyMatches)}>
+            <Checkbox checked={showMyMatches} />
+            Matches including me
+          </MenuItem>
+          <MenuItem
+            onClick={() =>
+              setShowSupervisedPlayersMatches(!showSupervisedPlayersMatches)
+            }
+          >
+            <Checkbox checked={showSupervisedPlayersMatches} />
+            Matches including supervised players
+          </MenuItem>
+        </Menu>
+      </Toolbar>
       <Table>
         <TableHead>
           <TableRow>
