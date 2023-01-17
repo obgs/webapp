@@ -51,7 +51,7 @@ const CreateMatch = () => {
           [d.id]:
             d.type === StatDescriptionStatType.Numeric
               ? "0"
-              : StatDescriptionStatType.Enum
+              : d.type === StatDescriptionStatType.Enum && d.metadata
               ? parseEnumMetadata(d.metadata).possibleValues[0]
               : "",
         }),

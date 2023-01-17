@@ -20,6 +20,9 @@ jobs:
 
           - name: Check generate
             command: .github/scripts/check-generate.sh
+
+          - name: Jest
+            command: pnpm test
       fail-fast: false
     name: ${{ matrix.mode.name }}
     runs-on: ubuntu-latest

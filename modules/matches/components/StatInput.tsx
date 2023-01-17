@@ -24,6 +24,7 @@ const StatInput: React.FC<Props> = ({ statDescription, value, onChange }) => {
         />
       );
     case StatDescriptionStatType.Enum:
+      if (!statDescription.metadata) return null;
       const metadata = parseEnumMetadata(statDescription.metadata);
       return (
         <EnumStatInput

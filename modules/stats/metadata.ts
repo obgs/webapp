@@ -1,8 +1,9 @@
 import { EnumMetadata } from "graphql/generated";
 
-export const parseEnumMetadata = (metadata?: string | null) => {
-  if (!metadata) {
-    throw new Error("Metadata is required");
+export const parseEnumMetadata = (metadata: string) => {
+  const parsedMetadata = JSON.parse(metadata) as EnumMetadata;
+  if (!parsedMetadata.possibleValues) {
+    throw new Error("Invalid metadata");
   }
-  return JSON.parse(metadata) as EnumMetadata;
+  return parsedMetadata;
 };
