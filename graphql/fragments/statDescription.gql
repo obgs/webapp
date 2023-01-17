@@ -3,5 +3,5 @@ fragment statDescriptionFields on StatDescription {
   type
   name
   description
-  possibleValues
+  metadata
 }

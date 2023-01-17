@@ -299,8 +299,44 @@
           "possibleTypes": []
         },
         {
+          "kind": "OBJECT",
+          "name": "EnumMetadata",
+          "description": "This type is exposed for type safety on client side",
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "possibleValues",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
           "kind": "INPUT_OBJECT",
-          "name": "EnumStatInput",
+          "name": "EnumMetadataInput",
           "description": null,
           "specifiedByURL": null,
           "fields": [],
@@ -5872,21 +5908,13 @@
               "deprecationReason": null
             },
             {
-              "name": "possibleValues",
+              "name": "metadata",
               "description": null,
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -5949,11 +5977,11 @@
               "defaultValue": null
             },
             {
-              "name": "enumStatInput",
-              "description": "Possible values for this stat. Provide this only for enum type, otherwise an error will be thrown",
+              "name": "metadata",
+              "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "EnumStatInput",
+                "name": "StatMetadataInput",
                 "ofType": null
               },
               "defaultValue": null
@@ -6033,6 +6061,28 @@
                   "name": "ID",
                   "ofType": null
                 }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "StatMetadataInput",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [
+            {
+              "name": "enumMetadata",
+              "description": "Once input unions are in graphql, this will be one",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "EnumMetadataInput",
+                "ofType": null
               },
               "defaultValue": null
             }

@@ -57,7 +57,13 @@ export type CreatePlayerInput = {
   name: Scalars["String"];
 };
 
-export type EnumStatInput = {
+/** This type is exposed for type safety on client side */
+export type EnumMetadata = {
+  __typename?: "EnumMetadata";
+  possibleValues: Array<Scalars["String"]>;
+};
+
+export type EnumMetadataInput = {
   possibleValues: Array<Scalars["String"]>;
 };
 
@@ -764,15 +770,14 @@ export type StatDescription = Node & {
   __typename?: "StatDescription";
   description?: Maybe<Scalars["String"]>;
   id: Scalars["ID"];
+  metadata?: Maybe<Scalars["String"]>;
   name: Scalars["String"];
-  possibleValues?: Maybe<Array<Scalars["String"]>>;
   type: StatDescriptionStatType;
 };
 
 export type StatDescriptionInput = {
   description?: InputMaybe<Scalars["String"]>;
-  /** Possible values for this stat. Provide this only for enum type, otherwise an error will be thrown */
-  enumStatInput?: InputMaybe<EnumStatInput>;
+  metadata?: InputMaybe<StatMetadataInput>;
   name: Scalars["String"];
   type: StatDescriptionStatType;
 };
@@ -788,6 +793,11 @@ export type StatInput = {
   /** The StatDescription ID of the stat to be created */
   statId: Scalars["ID"];
   value: Scalars["String"];
+};
+
+export type StatMetadataInput = {
+  /** Once input unions are in graphql, this will be one */
+  enumMetadata?: InputMaybe<EnumMetadataInput>;
 };
 
 export type Statistic = Node & {
@@ -962,7 +972,7 @@ export type GameFieldsFragment = {
     type: StatDescriptionStatType;
     name: string;
     description?: string | null;
-    possibleValues?: Array<string> | null;
+    metadata?: string | null;
   }>;
 };
 
@@ -1107,7 +1117,7 @@ export type MatchFieldsFragment = {
       type: StatDescriptionStatType;
       name: string;
       description?: string | null;
-      possibleValues?: Array<string> | null;
+      metadata?: string | null;
     }>;
   };
   players: Array<{
@@ -1130,7 +1140,7 @@ export type MatchFieldsFragment = {
       type: StatDescriptionStatType;
       name: string;
       description?: string | null;
-      possibleValues?: Array<string> | null;
+      metadata?: string | null;
     };
     player: {
       __typename?: "Player";
@@ -1196,7 +1206,7 @@ export type StatDescriptionFieldsFragment = {
   type: StatDescriptionStatType;
   name: string;
   description?: string | null;
-  possibleValues?: Array<string> | null;
+  metadata?: string | null;
 };
 
 export type UserFieldsFragment = {
@@ -1348,7 +1358,7 @@ export type CreateGameMutation = {
       type: StatDescriptionStatType;
       name: string;
       description?: string | null;
-      possibleValues?: Array<string> | null;
+      metadata?: string | null;
     }>;
   };
 };
@@ -1417,7 +1427,7 @@ export type CreateMatchMutation = {
         type: StatDescriptionStatType;
         name: string;
         description?: string | null;
-        possibleValues?: Array<string> | null;
+        metadata?: string | null;
       }>;
     };
     players: Array<{
@@ -1440,7 +1450,7 @@ export type CreateMatchMutation = {
         type: StatDescriptionStatType;
         name: string;
         description?: string | null;
-        possibleValues?: Array<string> | null;
+        metadata?: string | null;
       };
       player: {
         __typename?: "Player";
@@ -1871,7 +1881,7 @@ export type MatchQuery = {
             type: StatDescriptionStatType;
             name: string;
             description?: string | null;
-            possibleValues?: Array<string> | null;
+            metadata?: string | null;
           }>;
         };
         players: Array<{
@@ -1894,7 +1904,7 @@ export type MatchQuery = {
             type: StatDescriptionStatType;
             name: string;
             description?: string | null;
-            possibleValues?: Array<string> | null;
+            metadata?: string | null;
           };
           player: {
             __typename?: "Player";
@@ -2082,7 +2092,7 @@ export type SearchGamesQuery = {
           type: StatDescriptionStatType;
           name: string;
           description?: string | null;
-          possibleValues?: Array<string> | null;
+          metadata?: string | null;
         }>;
       } | null;
     } | null> | null;
@@ -2219,7 +2229,7 @@ export type SearchMatchesQuery = {
             type: StatDescriptionStatType;
             name: string;
             description?: string | null;
-            possibleValues?: Array<string> | null;
+            metadata?: string | null;
           }>;
         };
         players: Array<{
@@ -2242,7 +2252,7 @@ export type SearchMatchesQuery = {
             type: StatDescriptionStatType;
             name: string;
             description?: string | null;
-            possibleValues?: Array<string> | null;
+            metadata?: string | null;
           };
           player: {
             __typename?: "Player";
@@ -2374,7 +2384,7 @@ export const StatDescriptionFieldsFragmentDoc = gql`
     type
     name
     description
-    possibleValues
+    metadata
   }
 `;
 export const GameFieldsFragmentDoc = gql`
@@ -4196,7 +4206,8 @@ export type ResolversTypes = ResolversObject<{
   CreateOrUpdateGroupInput: CreateOrUpdateGroupInput;
   CreatePlayerInput: CreatePlayerInput;
   Cursor: ResolverTypeWrapper<Scalars["Cursor"]>;
-  EnumStatInput: EnumStatInput;
+  EnumMetadata: ResolverTypeWrapper<EnumMetadata>;
+  EnumMetadataInput: EnumMetadataInput;
   Favorites: ResolverTypeWrapper<Favorites>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
   Game: ResolverTypeWrapper<Game>;
@@ -4256,6 +4267,7 @@ export type ResolversTypes = ResolversObject<{
   StatDescriptionInput: StatDescriptionInput;
   StatDescriptionStatType: StatDescriptionStatType;
   StatInput: StatInput;
+  StatMetadataInput: StatMetadataInput;
   Statistic: ResolverTypeWrapper<Statistic>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   UpdateUserInput: UpdateUserInput;
@@ -4273,7 +4285,8 @@ export type ResolversParentTypes = ResolversObject<{
   CreateOrUpdateGroupInput: CreateOrUpdateGroupInput;
   CreatePlayerInput: CreatePlayerInput;
   Cursor: Scalars["Cursor"];
-  EnumStatInput: EnumStatInput;
+  EnumMetadata: EnumMetadata;
+  EnumMetadataInput: EnumMetadataInput;
   Favorites: Favorites;
   Float: Scalars["Float"];
   Game: Game;
@@ -4328,6 +4341,7 @@ export type ResolversParentTypes = ResolversObject<{
   StatDescription: StatDescription;
   StatDescriptionInput: StatDescriptionInput;
   StatInput: StatInput;
+  StatMetadataInput: StatMetadataInput;
   Statistic: Statistic;
   String: Scalars["String"];
   UpdateUserInput: UpdateUserInput;
@@ -4374,6 +4388,18 @@ export interface CursorScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Cursor"], any> {
   name: "Cursor";
 }
+
+export type EnumMetadataResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["EnumMetadata"] = ResolversParentTypes["EnumMetadata"]
+> = ResolversObject<{
+  possibleValues?: Resolver<
+    Array<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type FavoritesResolvers<
   ContextType = any,
@@ -4888,12 +4914,8 @@ export type StatDescriptionResolvers<
     ContextType
   >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  possibleValues?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
-    ParentType,
-    ContextType
-  >;
   type?: Resolver<
     ResolversTypes["StatDescriptionStatType"],
     ParentType,
@@ -4989,6 +5011,7 @@ export type UserEdgeResolvers<
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Cursor?: GraphQLScalarType;
+  EnumMetadata?: EnumMetadataResolvers<ContextType>;
   Favorites?: FavoritesResolvers<ContextType>;
   Game?: GameResolvers<ContextType>;
   GameConnection?: GameConnectionResolvers<ContextType>;
