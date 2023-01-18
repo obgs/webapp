@@ -2,9 +2,6 @@ import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Container,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   Stack,
   Step,
   StepLabel,
@@ -14,20 +11,22 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useState } from "react";
 
 import FindPlayerModal from "./components/FindPlayerModal";
+import StatInput from "./components/StatInput";
 import GameAutocomplete from "components/GameAutocomplete";
 import {
   GameFieldsFragment,
   PlayerFieldsFragment,
   StatDescriptionStatType,
   useCreateMatchMutation,
+  StatInput as StatInputType,
 } from "graphql/generated";
+import { parseEnumMetadata } from "modules/stats";
 import { useSnackbarError } from "utils/apollo";
 import { useUser } from "utils/user";
 
@@ -44,20 +43,22 @@ const CreateMatch = () => {
     };
   }>({});
 
-  const createPlayerStats = useCallback(() => {
-    return game?.statDescriptions.reduce(
-      (acc, d) => ({
-        ...acc,
-        [d.id]:
-          d.type === StatDescriptionStatType.Numeric
-            ? "0"
-            : StatDescriptionStatType.Enum
-            ? d.possibleValues?.[0] ?? ""
-            : "",
-      }),
-      {}
-    ) as Record<string, string>;
-  }, [game]);
+  const createPlayerStats: () => Record<string, string> = useCallback(
+    () =>
+      game?.statDescriptions.reduce(
+        (acc, d) => ({
+          ...acc,
+          [d.id]:
+            d.type === StatDescriptionStatType.Numeric
+              ? "0"
+              : d.type === StatDescriptionStatType.Enum && d.metadata
+              ? parseEnumMetadata(d.metadata).possibleValues[0]
+              : "",
+        }),
+        {}
+      ) ?? {},
+    [game]
+  );
 
   // add user's main player to the list of players
   useEffect(() => {
@@ -103,13 +104,17 @@ const CreateMatch = () => {
         input: {
           gameId: game.id,
           playerIds: players.map((p) => p.id),
-          stats: Object.entries(stats).flatMap(([playerId, playerStats]) => {
-            return Object.entries(playerStats).map(([statId, value]) => ({
-              playerId,
-              statId,
-              value,
-            }));
-          }),
+          stats: Object.entries(stats).flatMap(
+            ([playerId, playerStats]): StatInputType[] => {
+              return Object.entries(playerStats).map(
+                ([statId, value]): StatInputType => ({
+                  playerId,
+                  statId,
+                  value,
+                })
+              );
+            }
+          ),
         },
       },
     });
@@ -159,43 +164,19 @@ const CreateMatch = () => {
                   </TableCell>
                   {game?.statDescriptions.map((d) => (
                     <TableCell key={d.id}>
-                      {d.type === StatDescriptionStatType.Numeric && (
-                        <TextField
-                          value={stats[player.id][d.id]}
-                          onChange={(e) =>
-                            setStats({
-                              ...stats,
-                              [player.id]: {
-                                ...stats[player.id],
-                                [d.id]: e.target.value,
-                              },
-                            })
-                          }
-                          size="small"
-                          type="number"
-                        />
-                      )}
-                      {d.type === StatDescriptionStatType.Enum &&
-                        d.possibleValues && (
-                          <Select
-                            value={stats[player.id][d.id]}
-                            onChange={(e: SelectChangeEvent<string>) =>
-                              setStats({
-                                ...stats,
-                                [player.id]: {
-                                  ...stats[player.id],
-                                  [d.id]: e.target.value,
-                                },
-                              })
-                            }
-                          >
-                            {d.possibleValues.map((v) => (
-                              <MenuItem key={v} value={v}>
-                                {v}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
+                      <StatInput
+                        statDescription={d}
+                        value={stats[player.id][d.id]}
+                        onChange={(value) =>
+                          setStats({
+                            ...stats,
+                            [player.id]: {
+                              ...stats[player.id],
+                              [d.id]: value,
+                            },
+                          })
+                        }
+                      />
                     </TableCell>
                   ))}
                 </TableRow>

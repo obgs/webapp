@@ -26,6 +26,7 @@ import {
   StatDescriptionStatType,
   useCreateGameMutation,
   SearchGamesDocument,
+  StatDescriptionInput,
 } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
@@ -94,16 +95,21 @@ const CreateGame = () => {
               minPlayers: values.minPlayers,
               maxPlayers: values.maxPlayers,
               boardgamegeekURL: values.boardgamegeekURL,
-              statDescriptions: values.statDescriptions.map((stat) => ({
-                name: stat.name,
-                type: stat.type,
-                description: stat.description,
-                enumStatInput: stat.possibleValues.length
-                  ? {
-                      possibleValues: stat.possibleValues,
-                    }
-                  : undefined,
-              })),
+              statDescriptions: values.statDescriptions.map(
+                (stat): StatDescriptionInput => ({
+                  name: stat.name,
+                  type: stat.type,
+                  description: stat.description,
+                  metadata:
+                    stat.type === StatDescriptionStatType.Enum
+                      ? {
+                          enumMetadata: {
+                            possibleValues: stat.possibleValues,
+                          },
+                        }
+                      : undefined,
+                })
+              ),
             },
           },
           refetchQueries: [
