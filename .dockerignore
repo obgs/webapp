@@ -1,0 +1,13 @@
+**
+!components
+!graphql
+!modules
+!pages
+!public
+!styles
+!utils
+!next.config.js
+!package.json
+!pnpm-lock.yaml
+!tsconfig.json
+!.eslintrc.json
