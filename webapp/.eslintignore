@@ -1,0 +1,4 @@
+.next
+out
+node_modules
+cypress/automation/cypress.config.js
