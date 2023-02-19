@@ -14,6 +14,11 @@ const logIn = (email: string, password: string) => {
     .click();
 };
 
+const logOff = () => {
+  cy.contains("test-user-1").click();
+  cy.contains("Logout").click();
+};
+
 describe("Log in", () => {
   it("login in the user", () => {
     goToLogIn();
@@ -34,5 +39,13 @@ describe("Log in", () => {
     logIn("admin@admin.com", "12345");
     // On success you get message
     cy.contains("User not found");
+  });
+
+  it("loging off", () => {
+    goToLogIn();
+    logIn("test-user-1@obgs.app", "12345");
+    logOff();
+    //On success you got the message
+    cy.contains("Log in");
   });
 });
