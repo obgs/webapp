@@ -1,0 +1,31 @@
+name: e2e
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  tests:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+        timeout-minutes: 5
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up docker caching
+        uses: satackey/action-docker-layer-caching@v0.0.11
+
+      - name: Run tests
+        run: cypress/automation/run.sh
