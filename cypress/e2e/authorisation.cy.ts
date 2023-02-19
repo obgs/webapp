@@ -1,23 +1,4 @@
-const goToLogIn = () => {
-  cy.visit("/");
-  cy.contains("Log in").click();
-};
-
-const logIn = (email: string, password: string) => {
-  cy.get("input[type=email]").type(email);
-  cy.get("input[type=password]").type(password);
-  cy.get(".MuiBox-root")
-    .contains("Not registered?")
-    .parent()
-    .find("button")
-    .contains("Log in")
-    .click();
-};
-
-const logOff = () => {
-  cy.contains("test-user-1").click();
-  cy.contains("Logout").click();
-};
+import { goToLogIn, logIn, logOff } from "./utils";
 
 describe("Log in", () => {
   it("login in the user", () => {
@@ -45,7 +26,7 @@ describe("Log in", () => {
     goToLogIn();
     logIn("test-user-1@obgs.app", "12345");
     logOff();
-    //On success you got the message
+    //On success you got the button "Log in"
     cy.contains("Log in");
   });
 });
