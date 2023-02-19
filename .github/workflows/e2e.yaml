@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,6 +23,6 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-      
+
       - name: Run tests
         run: cypress/automation/run.sh
