@@ -14,7 +14,8 @@
     "generate": "graphql-codegen",
     "test": "jest",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "e2e": "./cypress/automation/run.sh"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",
