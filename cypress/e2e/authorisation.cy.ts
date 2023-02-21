@@ -1,28 +1,28 @@
 import { goToLogIn, logIn, logOff } from "./utils";
 
 describe("Log in", () => {
-  it("login in the user", () => {
+  it("logs in", () => {
     goToLogIn();
     logIn("test-user-1@obgs.app", "12345");
     // On success you are redirected to the home page
-    cy.contains("My players");
+    cy.contains("test-user-1");
   });
 
-  it("login pass fail", () => {
+  it("login failed", () => {
     goToLogIn();
     logIn("test-user-1@obgs.app", "1234");
     // On success you get the message
     cy.contains("Invalid email or password");
   });
 
-  it("login user fail", () => {
+  it("user not found", () => {
     goToLogIn();
     logIn("admin@admin.com", "12345");
     // On success you get message
     cy.contains("User not found");
   });
 
-  it("loging off", () => {
+  it("logs off", () => {
     goToLogIn();
     logIn("test-user-1@obgs.app", "12345");
     logOff();

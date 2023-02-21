@@ -21,14 +21,14 @@ const signUp = (email: string, password: string) => {
 describe("Signup", () => {
   it("signs up the user", () => {
     goToSignUp();
-    signUp("rifat@gmail.com", "123456");
+    signUp("test-user-signup@obgs.app", "12345");
     // On success you are redirected to the home page
     cy.contains("Welcome to the new OBGS webapp");
   });
 
   it("throws an error if the email is already taken", () => {
     goToSignUp();
-    signUp("test-user-1@obgs.app", "123456");
+    signUp("test-user-signup@obgs.app", "12345");
     // The error message here is not great
     cy.contains("Something went wrong");
   });
