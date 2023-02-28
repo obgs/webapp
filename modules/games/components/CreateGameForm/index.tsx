@@ -10,11 +10,12 @@ const statsValidation = yup.object({
   description: yup.string(),
   possibleValuesInput: yup.string(),
   possibleValues: yup.array().of(yup.string()).optional(),
+  aggregateOrderNumbers: yup.array().of(yup.number()).optional(),
 });
 
 export const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
-  description: yup.string().optional(),
+  description: yup.string(),
   minPlayers: yup
     .number()
     .min(minPlayers)
@@ -23,7 +24,7 @@ export const validationSchema = yup.object({
     .number()
     .max(maxPlayers)
     .required("Maximum players is required"),
-  boardgamegeekURL: yup.string().url("Must be a valid URL").optional(),
+  boardgamegeekURL: yup.string().url("Must be a valid URL"),
   statDescriptions: yup.array().of(statsValidation).required(),
 });
 
@@ -42,6 +43,7 @@ export const defaultValues: FormValues = {
       description: "",
       possibleValuesInput: "",
       possibleValues: [],
+      aggregateOrderNumbers: [],
     },
   ],
 };

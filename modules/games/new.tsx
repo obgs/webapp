@@ -17,6 +17,7 @@ import {
   StatDescriptionInput,
   StatDescriptionStatType,
   useCreateGameMutation,
+  AggregateMetadataType,
 } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
@@ -48,6 +49,13 @@ const CreateGame = () => {
                     ? {
                         enumMetadata: {
                           possibleValues: stat.possibleValues,
+                        },
+                      }
+                    : stat.type === StatDescriptionStatType.Aggregate
+                    ? {
+                        aggregateMetadata: {
+                          type: AggregateMetadataType.Sum,
+                          statOrderNumbers: stat.aggregateOrderNumbers,
                         },
                       }
                     : undefined,

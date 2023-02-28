@@ -21,6 +21,7 @@ const AddStat = () => {
           description: "",
           possibleValuesInput: "",
           possibleValues: [],
+          aggregateOrderNumbers: [],
         },
       ],
     });

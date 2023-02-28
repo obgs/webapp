@@ -4,10 +4,14 @@ import {
   Card,
   CardActions,
   CardContent,
+  Checkbox,
   Chip,
   IconButton,
+  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
+  SelectChangeEvent,
   Stack,
   TextField,
 } from "@mui/material";
@@ -60,7 +64,18 @@ const StatDescription: React.FC<Props> = ({ index, stat }) => {
     (i: number) => () => {
       setValues({
         ...values,
-        statDescriptions: values.statDescriptions.filter((_, j) => i !== j),
+        statDescriptions: values.statDescriptions
+          .filter((_, j) => i !== j)
+          .map((s) =>
+            s.type === StatDescriptionStatType.Aggregate
+              ? {
+                  ...s,
+                  aggregateOrderNumbers: s.aggregateOrderNumbers.filter(
+                    (n: number) => n !== i
+                  ),
+                }
+              : s
+          ),
       });
     },
     [setValues, values]
@@ -77,6 +92,24 @@ const StatDescription: React.FC<Props> = ({ index, stat }) => {
                 possibleValues: s.possibleValues.filter(
                   (_: unknown, j: number) => j !== valueIndex
                 ),
+              }
+            : s
+        ),
+      });
+    },
+    [setValues, values]
+  );
+
+  const handleAggregateStatsChange = useCallback(
+    (i: number) => (e: SelectChangeEvent<number[]>) => {
+      if (typeof e.target.value === "string") return;
+      setValues({
+        ...values,
+        statDescriptions: values.statDescriptions.map((s, j) =>
+          i === j
+            ? {
+                ...s,
+                aggregateOrderNumbers: e.target.value,
               }
             : s
         ),
@@ -174,6 +207,9 @@ const StatDescription: React.FC<Props> = ({ index, stat }) => {
               <MenuItem value={StatDescriptionStatType.Enum}>
                 Enumerable
               </MenuItem>
+              <MenuItem value={StatDescriptionStatType.Aggregate}>
+                Aggregate
+              </MenuItem>
             </Select>
           </Stack>
           <TextField
@@ -205,15 +241,51 @@ const StatDescription: React.FC<Props> = ({ index, stat }) => {
                 spacing={0}
                 sx={{ flexWrap: "wrap", gap: 1 }}
               >
-                {stat.possibleValues.map((value: string, chipIndex: number) => (
-                  <Chip
-                    key={chipIndex}
-                    label={value}
-                    onDelete={removePossibleValue(index, chipIndex)}
-                  />
-                ))}
+                {stat.possibleValues?.map(
+                  (value: string | undefined, chipIndex: number) => (
+                    <Chip
+                      key={chipIndex}
+                      label={value}
+                      onDelete={removePossibleValue(index, chipIndex)}
+                    />
+                  )
+                )}
               </Stack>
             </>
+          )}
+          {stat.type === StatDescriptionStatType.Aggregate && (
+            <Select
+              value={stat.aggregateOrderNumbers}
+              renderValue={(selected) =>
+                selected
+                  .map((i) => values.statDescriptions[i - 1].name)
+                  .join(",")
+              }
+              onChange={handleAggregateStatsChange(index)}
+              input={<OutlinedInput />}
+              multiple
+              fullWidth
+            >
+              {values.statDescriptions.map((s, i) => (
+                <MenuItem
+                  key={i}
+                  value={i + 1}
+                  sx={{
+                    display:
+                      s.type !== StatDescriptionStatType.Numeric
+                        ? "none"
+                        : undefined,
+                  }}
+                >
+                  <Checkbox
+                    checked={values.statDescriptions[
+                      index
+                    ].aggregateOrderNumbers.includes(i + 1)}
+                  />
+                  <ListItemText primary={s.name} />
+                </MenuItem>
+              ))}
+            </Select>
           )}
         </Stack>
       </CardContent>

@@ -30,6 +30,23 @@ export type Scalars = {
   Cursor: any;
 };
 
+/** This type is exposed for type safety on client side */
+export type AggregateMetadata = {
+  __typename?: "AggregateMetadata";
+  statIds: Array<Scalars["ID"]>;
+  type: AggregateMetadataType;
+};
+
+export type AggregateMetadataInput = {
+  statOrderNumbers: Array<Scalars["Int"]>;
+  type: AggregateMetadataType;
+};
+
+export enum AggregateMetadataType {
+  /** Sum of all values */
+  Sum = "sum",
+}
+
 export type CreateGameInput = {
   boardgamegeekURL?: InputMaybe<Scalars["String"]>;
   description?: InputMaybe<Scalars["String"]>;
@@ -786,6 +803,7 @@ export type StatDescriptionInput = {
 
 /** StatDescriptionStatType is enum for the field type */
 export enum StatDescriptionStatType {
+  Aggregate = "aggregate",
   Enum = "enum",
   Numeric = "numeric",
 }
@@ -798,6 +816,7 @@ export type StatInput = {
 };
 
 export type StatMetadataInput = {
+  aggregateMetadata?: InputMaybe<AggregateMetadataInput>;
   /** Once input unions are in graphql, this will be one */
   enumMetadata?: InputMaybe<EnumMetadataInput>;
 };
@@ -4202,6 +4221,9 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  AggregateMetadata: ResolverTypeWrapper<AggregateMetadata>;
+  AggregateMetadataInput: AggregateMetadataInput;
+  AggregateMetadataType: AggregateMetadataType;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   CreateGameInput: CreateGameInput;
   CreateMatchInput: CreateMatchInput;
@@ -4281,6 +4303,8 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  AggregateMetadata: AggregateMetadata;
+  AggregateMetadataInput: AggregateMetadataInput;
   Boolean: Scalars["Boolean"];
   CreateGameInput: CreateGameInput;
   CreateMatchInput: CreateMatchInput;
@@ -4385,6 +4409,19 @@ export type GoModelDirectiveResolver<
   ContextType = any,
   Args = GoModelDirectiveArgs
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type AggregateMetadataResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["AggregateMetadata"] = ResolversParentTypes["AggregateMetadata"]
+> = ResolversObject<{
+  statIds?: Resolver<Array<ResolversTypes["ID"]>, ParentType, ContextType>;
+  type?: Resolver<
+    ResolversTypes["AggregateMetadataType"],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export interface CursorScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Cursor"], any> {
@@ -5013,6 +5050,7 @@ export type UserEdgeResolvers<
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  AggregateMetadata?: AggregateMetadataResolvers<ContextType>;
   Cursor?: GraphQLScalarType;
   EnumMetadata?: EnumMetadataResolvers<ContextType>;
   Favorites?: FavoritesResolvers<ContextType>;
