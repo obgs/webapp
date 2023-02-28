@@ -772,6 +772,7 @@ export type StatDescription = Node & {
   id: Scalars["ID"];
   metadata?: Maybe<Scalars["String"]>;
   name: Scalars["String"];
+  orderNumber: Scalars["Int"];
   type: StatDescriptionStatType;
 };
 
@@ -779,6 +780,7 @@ export type StatDescriptionInput = {
   description?: InputMaybe<Scalars["String"]>;
   metadata?: InputMaybe<StatMetadataInput>;
   name: Scalars["String"];
+  orderNumber: Scalars["Int"];
   type: StatDescriptionStatType;
 };
 
@@ -4916,6 +4918,7 @@ export type StatDescriptionResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  orderNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   type?: Resolver<
     ResolversTypes["StatDescriptionStatType"],
     ParentType,
