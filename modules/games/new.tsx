@@ -38,10 +38,11 @@ const CreateGame = () => {
             maxPlayers: values.maxPlayers,
             boardgamegeekURL: values.boardgamegeekURL,
             statDescriptions: values.statDescriptions.map(
-              (stat): StatDescriptionInput => ({
+              (stat, index): StatDescriptionInput => ({
                 name: stat.name,
                 type: stat.type,
                 description: stat.description,
+                orderNumber: index + 1,
                 metadata:
                   stat.type === StatDescriptionStatType.Enum
                     ? {

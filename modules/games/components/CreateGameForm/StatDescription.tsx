@@ -11,8 +11,10 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { Identifier } from "dnd-core";
 import { useFormikContext } from "formik";
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
 
 import { StatDescription, StatDescriptionStatType } from "graphql/generated";
 
@@ -21,6 +23,12 @@ import { FormValues } from ".";
 interface Props {
   index: number;
   stat: FormValues["statDescriptions"][number];
+}
+
+interface DragItem {
+  index: number;
+  id: string;
+  type: string;
 }
 
 const StatDescription: React.FC<Props> = ({ index, stat }) => {
@@ -77,8 +85,67 @@ const StatDescription: React.FC<Props> = ({ index, stat }) => {
     [setValues, values]
   );
 
+  const moveCard = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const newStats = [...values.statDescriptions];
+      [newStats[dragIndex], newStats[hoverIndex]] = [
+        newStats[hoverIndex],
+        newStats[dragIndex],
+      ];
+
+      setValues({
+        ...values,
+        statDescriptions: newStats,
+      });
+    },
+    [setValues, values]
+  );
+
+  const ref = useRef<HTMLDivElement>(null);
+  const [, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
+    accept: "stat",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item: DragItem) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+
+      // Time to actually perform the action
+      moveCard(dragIndex, hoverIndex);
+
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "stat",
+    item: () => {
+      return { id: stat.name, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
+
   return (
-    <Card sx={{ m: 1, maxWidth: 375 }}>
+    <Card sx={{ m: 1, maxWidth: 375, opacity: isDragging ? 0.5 : 1 }} ref={ref}>
       <CardContent>
         <Stack spacing={2} alignItems="flex-start" flex={1}>
           <Stack direction="row" spacing={2} alignItems="flex-start">
