@@ -26,7 +26,7 @@ describe("Games control", () => {
     logInTestUser1();
     cy.visit("games");
     cy.get("button").contains("Create new game").click();
-    cy.visit("games/new");
+    cy.contains("Create Game");
     addGameInfo(
       "test-game-01",
       "Test name info",
