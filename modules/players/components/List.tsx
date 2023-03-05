@@ -62,6 +62,7 @@ const List: React.FC<Props> = ({
                   hover
                   onClick={() => onSelect?.(player)}
                   key={player.id}
+                  data-cy="playerReqTest"
                 >
                   <TableCell>{player.id}</TableCell>
                   <TableCell>{player.name}</TableCell>
