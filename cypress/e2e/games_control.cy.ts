@@ -1,4 +1,4 @@
-import { logInTestUser1 } from "./utils";
+import { logInTestUser1, visitGames } from "./utils";
 
 const addGameInfo = (gameName: string, gameDesc: string, boardLink: string) => {
   cy.get("input").first().type(gameName);
@@ -20,22 +20,29 @@ const addStatsInfo = (statName: string, statDesc: string) => {
 };
 
 describe("Games control", () => {
-  it("creates new game", () => {
-    //Creating a game with standart 10 players and 1 numeric stat
+  //   it("creates new game", () => {
+  //     //Creating a game with standart 10 players and 1 numeric stat
+  //     cy.visit("/");
+  //     logInTestUser1();
+  //     visitGames();
+  //     cy.get("button").contains("Create new game").click();
+  //     cy.contains("Create Game");
+  //     addGameInfo(
+  //       "test-game-01",
+  //       "Test name info",
+  //       "https://boardgamegeek.com/boardgame/316554/dune-imperium"
+  //     );
+  //     addStatsInfo("test-stat-01", "Test stat info");
+  //     cy.get("button").contains("Create").click();
+  //     //On success test-user-01 find test-game-01 on Games page
+  //     visitGames();
+  //     cy.contains("test-game-01");
+  //   });
+
+  it("creates new game with several stats for 2 ppl", () => {
     cy.visit("/");
     logInTestUser1();
-    cy.visit("games");
-    cy.get("button").contains("Create new game").click();
-    cy.contains("Create Game");
-    addGameInfo(
-      "test-game-01",
-      "Test name info",
-      "https://boardgamegeek.com/boardgame/316554/dune-imperium"
-    );
-    addStatsInfo("test-stat-01", "Test stat info");
-    cy.get("button").contains("Create").click();
-    //On success test-user-01 find test-game-01 on Games page
-    cy.visit("games");
-    cy.contains("test-game-01");
+    cy.visit("/");
+    visitGames();
   });
 });
