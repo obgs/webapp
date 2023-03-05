@@ -46,37 +46,37 @@ const checkNoReq = () => {
 };
 
 describe("Players control", () => {
-  // it("accepts supervision request", () => {
-  //   addNewPlayer("test-player-01");
-  //   logOff();
-  //   logInTestUser2();
-  //   requestPlayer("test-player-01");
-  //   logOff();
-  //   logInTestUser1();
-  //   visitIncReq();
-  //   cy.contains("test-player-01").click();
-  //   cy.get("button").contains("Allow").click();
-  //   //On success test-user-2 will see test-player-01 on page "My players"
-  //   logOff();
-  //   logInTestUser2();
-  //   cy.visit("players/supervised");
-  //   cy.contains("test-player-01");
-  // });
-  //
-  // it("declines supervision request", () => {
-  //   addNewPlayer("test-player-02");
-  //   logOff();
-  //   logInTestUser2();
-  //   requestPlayer("test-player-02");
-  //   logOff();
-  //   logInTestUser1();
-  //   visitIncReq();
-  //   cy.contains("test-player-02").click();
-  //   cy.get("button").contains("Reject").click();
-  //   //On success test-user-1 will not see this request anymore,
-  //   //test-user-2 will not see this request on page "Outgoing reqests" too
-  //   checkNoReq();
-  // });
+  it("accepts supervision request", () => {
+    addNewPlayer("test-player-01");
+    logOff();
+    logInTestUser2();
+    requestPlayer("test-player-01");
+    logOff();
+    logInTestUser1();
+    visitIncReq();
+    cy.contains("test-player-01").click();
+    cy.get("button").contains("Allow").click();
+    //On success test-user-2 will see test-player-01 on page "My players"
+    logOff();
+    logInTestUser2();
+    cy.visit("players/supervised");
+    cy.contains("test-player-01");
+  });
+
+  it("declines supervision request", () => {
+    addNewPlayer("test-player-02");
+    logOff();
+    logInTestUser2();
+    requestPlayer("test-player-02");
+    logOff();
+    logInTestUser1();
+    visitIncReq();
+    cy.contains("test-player-02").click();
+    cy.get("button").contains("Reject").click();
+    //On success test-user-1 will not see this request anymore,
+    //test-user-2 will not see this request on page "Outgoing reqests" too
+    checkNoReq();
+  });
 
   it("adds a message while requesting supervision", () => {
     addNewPlayer("test-player-03");
@@ -87,11 +87,8 @@ describe("Players control", () => {
     logOff();
     logInTestUser1();
     visitIncReq();
-    cy.get(".MuiTable-root")
-      .children()
-      .should("contain", "test-player-03")
-      .and("contain", "test message")
-      .click();
+    cy.get("[data-cy='playerIncTest']").contains("test-player-03").click();
+    cy.get(".MuiBox-root").contains("test message");
     cy.get("button").contains("Allow").click();
     //On success both users will see no requests
     checkNoReq();

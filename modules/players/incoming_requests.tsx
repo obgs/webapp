@@ -63,6 +63,7 @@ const IncomingSupervisionRequests = () => {
                   key={request.id}
                   hover
                   onClick={resolveRequest(request)}
+                  data-cy="playerIncTest"
                 >
                   <TableCell>{request.player.name}</TableCell>
                   <TableCell>{request.player.id}</TableCell>
