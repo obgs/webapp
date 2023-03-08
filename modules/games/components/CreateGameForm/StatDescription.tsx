@@ -272,7 +272,7 @@ const StatDescription: React.FC<Props> = ({ index, stat }) => {
                   value={i + 1}
                   sx={{
                     display:
-                      s.type !== StatDescriptionStatType.Numeric
+                      s.type === StatDescriptionStatType.Enum || i === index
                         ? "none"
                         : undefined,
                   }}
