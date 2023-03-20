@@ -24,7 +24,8 @@ const AggregateStatValue: React.FC<Props> = ({ playerId, metadata }) => {
   });
 
   const value = useMemo(
-    () => values.reduce((acc, v) => acc + Number(v), 0),
+    () =>
+      values.reduce((acc, v) => acc + (isNaN(Number(v)) ? 0 : Number(v)), 0),
     [values]
   );
 
