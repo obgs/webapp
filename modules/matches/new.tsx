@@ -49,8 +49,10 @@ const CreateMatch = () => {
 
   const createPlayerStats: () => Record<string, string> = useCallback(
     () =>
-      game?.statDescriptions.reduce(
-        (acc, d) => ({
+      game?.statDescriptions.reduce((acc, d) => {
+        // aggregate stats are not editable and are calculated automatically on the server
+        if (d.type === StatDescriptionStatType.Aggregate) return acc;
+        return {
           ...acc,
           [d.id]:
             d.type === StatDescriptionStatType.Numeric
@@ -58,9 +60,8 @@ const CreateMatch = () => {
               : d.type === StatDescriptionStatType.Enum && d.metadata
               ? parseEnumMetadata(d.metadata).possibleValues[0]
               : "",
-        }),
-        {}
-      ) ?? {},
+        };
+      }, {}) ?? {},
     [game]
   );
 
