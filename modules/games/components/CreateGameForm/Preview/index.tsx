@@ -1,8 +1,18 @@
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { LoadingButton } from "@mui/lab";
-import { Button, Card, CardActions, CardContent } from "@mui/material";
-import React from "react";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Typography,
+} from "@mui/material";
+import React, { useCallback, useState } from "react";
 
 import { FormValues } from "..";
+import generateMatchPreview from "./generateMatchPreview";
+import { MatchView } from "modules/matches";
 
 interface Props {
   values: FormValues;
@@ -12,11 +22,30 @@ interface Props {
 }
 
 const Preview: React.FC<Props> = ({ values, loading, goBack, onSubmit }) => {
+  const [match, setMatch] = useState(generateMatchPreview(values));
+  const reGenerateMatch = useCallback(
+    () => setMatch(generateMatchPreview(values)),
+    [values]
+  );
+
   return (
     <Card>
       <CardContent>
-        The preview will be here. Take the values for now:{" "}
-        {JSON.stringify(values)}
+        <Typography variant="h5">Preview</Typography>
+        <Typography variant="body2" sx={{ mb: 2 }}>
+          This is how a typical match for the game you are creating will look
+          like.
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <MatchView match={match} />
+        <Divider sx={{ mb: 2, mt: 2 }} />
+        <Button
+          variant="contained"
+          endIcon={<RefreshIcon />}
+          onClick={reGenerateMatch}
+        >
+          Re-generate
+        </Button>
       </CardContent>
       <CardActions>
         <Button onClick={goBack}>Back</Button>
