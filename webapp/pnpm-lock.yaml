@@ -5,6 +5,7 @@ specifiers:
   '@babel/core': ^7.18.10
   '@emotion/react': ^11.10.0
   '@emotion/styled': ^11.10.0
+  '@faker-js/faker': ^7.6.0
   '@fontsource/roboto': ^4.5.8
   '@graphql-codegen/cli': ^2.12.0
   '@graphql-codegen/fragment-matcher': ^3.3.1
@@ -12,6 +13,7 @@ specifiers:
   '@graphql-codegen/typescript-operations': ^2.5.3
   '@graphql-codegen/typescript-react-apollo': ^3.3.3
   '@graphql-codegen/typescript-resolvers': ^2.7.3
+  '@hookform/resolvers': ^2.9.11
   '@mui/icons-material': ^5.8.4
   '@mui/lab': 5.0.0-alpha.102
   '@mui/material': ^5.10.1
@@ -35,6 +37,7 @@ specifiers:
   graphql-tag: ^2.12.6
   jest: ^29.3.1
   jest-environment-jsdom: ^29.3.1
+  nanoid: ^4.0.1
   next: 13.1.3
   notistack: ^2.0.8
   pluralize: ^8.0.0
@@ -43,15 +46,19 @@ specifiers:
   react-dnd: ^16.0.1
   react-dnd-html5-backend: ^16.0.1
   react-dom: 18.2.0
+  react-hook-form: ^7.43.5
   ts-node: ^10.9.1
   typescript: 4.7.4
   yup: ^0.32.11
+  zod: ^3.21.4
 
 dependencies:
   '@apollo/client': 3.6.9_onqnqwb3ubg5opvemcqf7c2qhy
   '@emotion/react': 11.10.0_msmmgljd7hl2w2irtggflhmema
   '@emotion/styled': 11.10.0_5sec57kzpgkzooe4crua5kfcly
+  '@faker-js/faker': 7.6.0
   '@fontsource/roboto': 4.5.8
+  '@hookform/resolvers': 2.9.11_react-hook-form@7.43.5
   '@mui/icons-material': 5.8.4_uxiimzjvigalxf5okfzuivgjva
   '@mui/lab': 5.0.0-alpha.102_rxrgbjxmbxa6cxvmfcmtfba2ii
   '@mui/material': 5.10.1_sqzxty2p7kxc2tmue4tecplwku
@@ -60,6 +67,7 @@ dependencies:
   formik: 2.2.9_react@18.2.0
   graphql: 16.6.0
   graphql-tag: 2.12.6_graphql@16.6.0
+  nanoid: 4.0.1
   next: 13.1.3_twoewwu6sg7cdf3ao6njtbftne
   notistack: 2.0.8_cc56alapomqwos3hjuzlsdnlam
   pluralize: 8.0.0
@@ -67,7 +75,9 @@ dependencies:
   react-dnd: 16.0.1_f3rvwp66hmmmn6iofbu3e5be7y
   react-dnd-html5-backend: 16.0.1
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.43.5_react@18.2.0
   yup: 0.32.11
+  zod: 3.21.4
 
 devDependencies:
   '@babel/core': 7.18.10
@@ -1134,6 +1144,11 @@ packages:
       - supports-color
     dev: true
 
+  /@faker-js/faker/7.6.0:
+    resolution: {integrity: sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==}
+    engines: {node: '>=14.0.0', npm: '>=6.0.0'}
+    dev: false
+
   /@fontsource/roboto/4.5.8:
     resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
     dev: false
@@ -1608,6 +1623,14 @@ packages:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       graphql: 16.6.0
+
+  /@hookform/resolvers/2.9.11_react-hook-form@7.43.5:
+    resolution: {integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.43.5_react@18.2.0
+    dev: false
 
   /@humanwhocodes/config-array/0.10.4:
     resolution: {integrity: sha512-mXAIHxZT3Vcpg83opl1wGlVZ9xydbfZO3r5YfRSH6Gpp2J/PfdBP0wbDa2sO6/qRbcalpoevVyW6A/fI6LfeMw==}
@@ -6630,6 +6653,12 @@ packages:
     hasBin: true
     dev: false
 
+  /nanoid/4.0.1:
+    resolution: {integrity: sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
+
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
@@ -7234,6 +7263,15 @@ packages:
 
   /react-fast-compare/2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
+    dev: false
+
+  /react-hook-form/7.43.5_react@18.2.0:
+    resolution: {integrity: sha512-YcaXhuFHoOPipu5pC7ckxrLrialiOcU91pKu8P+isAcXZyMgByUK9PkI9j5fENO4+6XU5PwWXRGMIFlk9u9UBQ==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
@@ -8438,4 +8476,8 @@ packages:
 
   /zen-observable/0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
+    dev: false
+
+  /zod/3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false

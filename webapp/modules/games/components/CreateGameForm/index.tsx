@@ -1,47 +1,90 @@
-import * as yup from "yup";
+import { nanoid } from "nanoid";
+import { z } from "zod";
 
-import { StatDescriptionStatType } from "graphql/generated";
-const minPlayers = 1;
-const maxPlayers = 10;
+import { aggregateStatSchema } from "./AggregateStats/schema";
+import { generalInformationSchema } from "./GeneralInformation";
+import { genericStatSchema } from "./GenericStats/schema";
+import {
+  AggregateMetadataType,
+  StatDescriptionInput,
+  StatDescriptionStatType,
+} from "graphql/generated";
 
-const statsValidation = yup.object({
-  name: yup.string().required("Name is required"),
-  type: yup.mixed().oneOf(Object.values(StatDescriptionStatType)),
-  description: yup.string(),
-  possibleValuesInput: yup.string(),
-  possibleValues: yup.array().of(yup.string()).optional(),
-});
+export const validationSchema = generalInformationSchema
+  .merge(genericStatSchema)
+  .merge(aggregateStatSchema);
 
-export const validationSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  description: yup.string().optional(),
-  minPlayers: yup
-    .number()
-    .min(minPlayers)
-    .required("Minimum players is required"),
-  maxPlayers: yup
-    .number()
-    .max(maxPlayers)
-    .required("Maximum players is required"),
-  boardgamegeekURL: yup.string().url("Must be a valid URL").optional(),
-  statDescriptions: yup.array().of(statsValidation).required(),
-});
-
-export type FormValues = yup.InferType<typeof validationSchema>;
+export type FormValues = z.infer<typeof validationSchema>;
 
 export const defaultValues: FormValues = {
   name: "",
   description: "",
-  minPlayers,
-  maxPlayers,
+  minPlayers: 1,
+  maxPlayers: 10,
   boardgamegeekURL: "",
-  statDescriptions: [
+  genericStats: [
     {
+      id: nanoid(),
       name: "",
       type: StatDescriptionStatType.Numeric,
       description: "",
       possibleValuesInput: "",
       possibleValues: [],
+      orderNumber: 0,
     },
   ],
+  aggregateStats: [],
+};
+
+type AggregateStat = z.infer<
+  typeof aggregateStatSchema
+>["aggregateStats"][number];
+type GenericStat = z.infer<typeof genericStatSchema>["genericStats"][number];
+
+const isAggregateStat = (
+  stat: AggregateStat | GenericStat
+): stat is AggregateStat => {
+  return (stat as unknown as AggregateStat)?.references !== undefined;
+};
+
+export const collectStatDescriptions = (
+  values: FormValues
+): StatDescriptionInput[] => {
+  const stats = [...values.genericStats, ...values.aggregateStats].sort(
+    (a, b) => a.orderNumber - b.orderNumber
+  );
+
+  return stats.map((stat, index) => {
+    if (isAggregateStat(stat)) {
+      return {
+        name: stat.name,
+        type: StatDescriptionStatType.Aggregate,
+        description: stat.description,
+        orderNumber: index + 1,
+        metadata: {
+          aggregateMetadata: {
+            type: AggregateMetadataType.Sum,
+            statOrderNumbers: stat.references.map(
+              (reference) => stats.findIndex((s) => s.id === reference) + 1
+            ),
+          },
+        },
+      };
+    }
+
+    return {
+      name: stat.name,
+      type: stat.type,
+      description: stat.description,
+      orderNumber: index + 1,
+      metadata:
+        stat.type === StatDescriptionStatType.Enum && stat.possibleValues
+          ? {
+              enumMetadata: {
+                possibleValues: stat.possibleValues,
+              },
+            }
+          : undefined,
+    };
+  });
 };
