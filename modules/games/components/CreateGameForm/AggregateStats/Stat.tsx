@@ -15,6 +15,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { GenericStatsValues } from "../GenericStats/schema";
 import Label from "../Label";
 import { AggregateStatsValues } from "./schema";
+import { StatDescriptionStatType } from "graphql/generated";
 
 interface Props {
   index: number;
@@ -74,11 +75,13 @@ const Stat: React.FC<Props> = ({ index, genericStats, remove }) => {
               defaultValue={[]}
               render={({ field }) => (
                 <Select multiple {...field} fullWidth>
-                  {genericStats.genericStats.map((stat) => (
-                    <MenuItem value={stat.id} key={stat.id}>
-                      {stat.name}
-                    </MenuItem>
-                  ))}
+                  {genericStats.genericStats
+                    .filter((s) => s.type === StatDescriptionStatType.Numeric)
+                    .map((stat) => (
+                      <MenuItem value={stat.id} key={stat.id}>
+                        {stat.name}
+                      </MenuItem>
+                    ))}
                 </Select>
               )}
             />
