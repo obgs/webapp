@@ -1,9 +1,11 @@
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
   Avatar,
   Box,
   Button,
   Drawer,
+  IconButton,
   Menu,
   MenuItem,
   Toolbar,
@@ -20,6 +22,9 @@ const drawerWidth = 240;
 
 const Layout = ({ children }: React.PropsWithChildren) => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const drawerToggle = () => setDrawerOpen(!drawerOpen);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const router = useRouter();
@@ -46,6 +51,15 @@ const Layout = ({ children }: React.PropsWithChildren) => {
 
   const { authenticated, signout } = useAuth();
 
+  const drawer = (
+    <>
+      <Toolbar />
+      <Box sx={{ overflow: "auto" }}>
+        <NavBar />
+      </Box>
+    </>
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -53,6 +67,15 @@ const Layout = ({ children }: React.PropsWithChildren) => {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={drawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           {authenticated ? (
             <Box>
@@ -92,6 +115,7 @@ const Layout = ({ children }: React.PropsWithChildren) => {
         variant="permanent"
         anchor="left"
         sx={{
+          display: { xs: "none", sm: "block" },
           width: drawerWidth,
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
@@ -100,10 +124,27 @@ const Layout = ({ children }: React.PropsWithChildren) => {
           },
         }}
       >
-        <Toolbar />
-        <Box sx={{ overflow: "auto" }}>
-          <NavBar />
-        </Box>
+        {drawer}
+      </Drawer>
+      <Drawer
+        variant="temporary"
+        anchor="left"
+        open={drawerOpen}
+        onClose={drawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: "block", sm: "none" },
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        {drawer}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
