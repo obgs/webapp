@@ -1,0 +1,9 @@
+query PresignUploadURL {
+  preSignUploadURL {
+    url
+    headers {
+      key
+      value
+    }
+  }
+}
