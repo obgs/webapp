@@ -6,6 +6,13 @@ const nextConfig = {
     domains: ["localhost"],
     unoptimized: true,
   },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [{ loader: "@svgr/webpack", options: { typescript: true } }],
+    });
+    return config;
+  },
 };
 
 module.exports = nextConfig;

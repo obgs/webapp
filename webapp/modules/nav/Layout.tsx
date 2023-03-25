@@ -10,12 +10,14 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import NavBar from "./NavBar";
 import { LoginModal, useAuth } from "modules/auth";
+import D20 from "public/d20.svg";
 import { useUser } from "utils/user";
 
 const drawerWidth = 240;
@@ -50,6 +52,7 @@ const Layout = ({ children }: React.PropsWithChildren) => {
   const { user } = useUser();
 
   const { authenticated, signout } = useAuth();
+  const theme = useTheme();
 
   const drawer = (
     <>
@@ -64,17 +67,28 @@ const Layout = ({ children }: React.PropsWithChildren) => {
     <Box sx={{ display: "flex" }}>
       <AppBar
         position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          pl: 1,
+          pr: 1,
+        }}
       >
-        <Toolbar>
+        <Toolbar disableGutters>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={drawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ display: { sm: "none" } }}
           >
             <MenuIcon />
+          </IconButton>
+          <IconButton onClick={() => router.push("/")}>
+            <D20
+              stroke={theme.palette.primary.contrastText}
+              width={40}
+              height={40}
+            />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           {authenticated ? (
