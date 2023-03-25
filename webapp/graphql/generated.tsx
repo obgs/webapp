@@ -396,6 +396,12 @@ export type GroupWhereInput = {
   or?: InputMaybe<Array<GroupWhereInput>>;
 };
 
+export type Header = {
+  __typename?: "Header";
+  key: Scalars["String"];
+  value: Scalars["String"];
+};
+
 export type Match = Node & {
   __typename?: "Match";
   game: Game;
@@ -713,7 +719,6 @@ export type PlayerWhereInput = {
 export type Query = {
   __typename?: "Query";
   games: GameConnection;
-  getFileUploadURL: Scalars["String"];
   groups: GroupConnection;
   matches: MatchConnection;
   me: User;
@@ -722,6 +727,7 @@ export type Query = {
   /** Lookup nodes by a list of IDs. */
   nodes: Array<Maybe<Node>>;
   players: PlayerConnection;
+  preSignUploadURL: UploadUrl;
   users: UserConnection;
 };
 
@@ -842,6 +848,12 @@ export type UpdateUserInput = {
   mainPlayerID?: InputMaybe<Scalars["ID"]>;
   name?: InputMaybe<Scalars["String"]>;
   removePlayerIDs?: InputMaybe<Array<Scalars["ID"]>>;
+};
+
+export type UploadUrl = {
+  __typename?: "UploadURL";
+  headers: Array<Header>;
+  url: Scalars["String"];
 };
 
 export type User = Node & {
@@ -1585,13 +1597,6 @@ export type UpdateUserMutation = {
   updateUser: { __typename?: "User"; id: string };
 };
 
-export type GetFileUploadUrlQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetFileUploadUrlQuery = {
-  __typename?: "Query";
-  getFileUploadURL: string;
-};
-
 export type GroupQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -2033,6 +2038,17 @@ export type PendingSupervisionRequestsQuery = {
         };
       }> | null;
     }>;
+  };
+};
+
+export type PresignUploadUrlQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PresignUploadUrlQuery = {
+  __typename?: "Query";
+  preSignUploadURL: {
+    __typename?: "UploadURL";
+    url: string;
+    headers: Array<{ __typename?: "Header"; key: string; value: string }>;
   };
 };
 
@@ -3183,61 +3199,6 @@ export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserMutation,
   UpdateUserMutationVariables
 >;
-export const GetFileUploadUrlDocument = gql`
-  query GetFileUploadURL {
-    getFileUploadURL
-  }
-`;
-
-/**
- * __useGetFileUploadUrlQuery__
- *
- * To run a query within a React component, call `useGetFileUploadUrlQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFileUploadUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetFileUploadUrlQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetFileUploadUrlQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetFileUploadUrlQuery,
-    GetFileUploadUrlQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetFileUploadUrlQuery, GetFileUploadUrlQueryVariables>(
-    GetFileUploadUrlDocument,
-    options
-  );
-}
-export function useGetFileUploadUrlLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFileUploadUrlQuery,
-    GetFileUploadUrlQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetFileUploadUrlQuery,
-    GetFileUploadUrlQueryVariables
-  >(GetFileUploadUrlDocument, options);
-}
-export type GetFileUploadUrlQueryHookResult = ReturnType<
-  typeof useGetFileUploadUrlQuery
->;
-export type GetFileUploadUrlLazyQueryHookResult = ReturnType<
-  typeof useGetFileUploadUrlLazyQuery
->;
-export type GetFileUploadUrlQueryResult = Apollo.QueryResult<
-  GetFileUploadUrlQuery,
-  GetFileUploadUrlQueryVariables
->;
 export const GroupDocument = gql`
   query Group($id: ID!) {
     node(id: $id) {
@@ -3776,6 +3737,67 @@ export type PendingSupervisionRequestsQueryResult = Apollo.QueryResult<
   PendingSupervisionRequestsQuery,
   PendingSupervisionRequestsQueryVariables
 >;
+export const PresignUploadUrlDocument = gql`
+  query PresignUploadURL {
+    preSignUploadURL {
+      url
+      headers {
+        key
+        value
+      }
+    }
+  }
+`;
+
+/**
+ * __usePresignUploadUrlQuery__
+ *
+ * To run a query within a React component, call `usePresignUploadUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePresignUploadUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePresignUploadUrlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePresignUploadUrlQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PresignUploadUrlQuery,
+    PresignUploadUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PresignUploadUrlQuery, PresignUploadUrlQueryVariables>(
+    PresignUploadUrlDocument,
+    options
+  );
+}
+export function usePresignUploadUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PresignUploadUrlQuery,
+    PresignUploadUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    PresignUploadUrlQuery,
+    PresignUploadUrlQueryVariables
+  >(PresignUploadUrlDocument, options);
+}
+export type PresignUploadUrlQueryHookResult = ReturnType<
+  typeof usePresignUploadUrlQuery
+>;
+export type PresignUploadUrlLazyQueryHookResult = ReturnType<
+  typeof usePresignUploadUrlLazyQuery
+>;
+export type PresignUploadUrlQueryResult = Apollo.QueryResult<
+  PresignUploadUrlQuery,
+  PresignUploadUrlQueryVariables
+>;
 export const SearchGamesDocument = gql`
   query SearchGames(
     $before: Cursor
@@ -4254,6 +4276,7 @@ export type ResolversTypes = ResolversObject<{
   GroupSettingsVisibility: GroupSettingsVisibility;
   GroupSettingsWhereInput: GroupSettingsWhereInput;
   GroupWhereInput: GroupWhereInput;
+  Header: ResolverTypeWrapper<Header>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Match: ResolverTypeWrapper<Match>;
@@ -4295,6 +4318,7 @@ export type ResolversTypes = ResolversObject<{
   Statistic: ResolverTypeWrapper<Statistic>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   UpdateUserInput: UpdateUserInput;
+  UploadURL: ResolverTypeWrapper<UploadUrl>;
   User: ResolverTypeWrapper<User>;
   UserConnection: ResolverTypeWrapper<UserConnection>;
   UserEdge: ResolverTypeWrapper<UserEdge>;
@@ -4332,6 +4356,7 @@ export type ResolversParentTypes = ResolversObject<{
   GroupSettingsInput: GroupSettingsInput;
   GroupSettingsWhereInput: GroupSettingsWhereInput;
   GroupWhereInput: GroupWhereInput;
+  Header: Header;
   ID: Scalars["ID"];
   Int: Scalars["Int"];
   Match: Match;
@@ -4371,6 +4396,7 @@ export type ResolversParentTypes = ResolversObject<{
   Statistic: Statistic;
   String: Scalars["String"];
   UpdateUserInput: UpdateUserInput;
+  UploadURL: UploadUrl;
   User: User;
   UserConnection: UserConnection;
   UserEdge: UserEdge;
@@ -4626,6 +4652,15 @@ export type GroupSettingsResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type HeaderResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Header"] = ResolversParentTypes["Header"]
+> = ResolversObject<{
+  key?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4899,11 +4934,6 @@ export type QueryResolvers<
     ContextType,
     Partial<QueryGamesArgs>
   >;
-  getFileUploadURL?: Resolver<
-    ResolversTypes["String"],
-    ParentType,
-    ContextType
-  >;
   groups?: Resolver<
     ResolversTypes["GroupConnection"],
     ParentType,
@@ -4934,6 +4964,11 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     Partial<QueryPlayersArgs>
+  >;
+  preSignUploadURL?: Resolver<
+    ResolversTypes["UploadURL"],
+    ParentType,
+    ContextType
   >;
   users?: Resolver<
     ResolversTypes["UserConnection"],
@@ -4977,6 +5012,15 @@ export type StatisticResolvers<
     ContextType
   >;
   value?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UploadUrlResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["UploadURL"] = ResolversParentTypes["UploadURL"]
+> = ResolversObject<{
+  headers?: Resolver<Array<ResolversTypes["Header"]>, ParentType, ContextType>;
+  url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -5065,6 +5109,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   GroupMembershipConnection?: GroupMembershipConnectionResolvers<ContextType>;
   GroupMembershipEdge?: GroupMembershipEdgeResolvers<ContextType>;
   GroupSettings?: GroupSettingsResolvers<ContextType>;
+  Header?: HeaderResolvers<ContextType>;
   Match?: MatchResolvers<ContextType>;
   MatchConnection?: MatchConnectionResolvers<ContextType>;
   MatchEdge?: MatchEdgeResolvers<ContextType>;
@@ -5079,6 +5124,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   StatDescription?: StatDescriptionResolvers<ContextType>;
   Statistic?: StatisticResolvers<ContextType>;
+  UploadURL?: UploadUrlResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserConnection?: UserConnectionResolvers<ContextType>;
   UserEdge?: UserEdgeResolvers<ContextType>;

@@ -3,7 +3,7 @@ import { Avatar } from "@mui/material";
 import Image from "next/image";
 import React, { useCallback, useState } from "react";
 
-import { useGetFileUploadUrlLazyQuery } from "graphql/generated";
+import { usePresignUploadUrlLazyQuery } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 interface Props {
@@ -16,18 +16,23 @@ export const useImageInput = (
 ) => {
   const [url, setUrl] = useState(value || "");
   const [file, setFile] = useState<File | null>(null);
-  const [getUploadURL, { loading, error }] = useGetFileUploadUrlLazyQuery({
+  const [getUploadURL, { loading, error }] = usePresignUploadUrlLazyQuery({
     onCompleted: async (data) => {
       if (!data || !file) return;
-      const response = await fetch(data.getFileUploadURL, {
+      const u = data.preSignUploadURL.url;
+      const response = await fetch(u, {
         method: "PUT",
         body: file,
         headers: {
           "Content-Type": file.type,
+          ...data.preSignUploadURL.headers.reduce((acc, { key, value: v }) => {
+            acc[key] = v;
+            return acc;
+          }, {} as Record<string, string>),
         },
       });
       if (response.ok) {
-        setUrl(data.getFileUploadURL.split("?")[0]);
+        setUrl(u.split("?")[0]);
       }
     },
   });
