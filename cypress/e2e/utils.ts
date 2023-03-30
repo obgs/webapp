@@ -32,7 +32,7 @@ const logOff = () => {
 };
 
 const visitGames = () => {
-  cy.get("[data-cy='gamesNavTest']").click();
+  cy.get("[data-cy='gamesNavTest']").first().click();
   cy.contains("Games are the templates for your statistics.");
 };
 
