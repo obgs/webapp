@@ -74,7 +74,7 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
                   errors.genericStats?.[index]?.name?.message
                 }
                 fullWidth
-                data-cy='nameStat'
+                data-cy="nameStat"
               />
             </Grid>
             <Grid item xs={4}>
@@ -83,7 +83,12 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
                 name={`genericStats.${index}.type`}
                 defaultValue={StatDescriptionStatType.Numeric}
                 render={({ field: { onChange, value } }) => (
-                  <Select value={value} onChange={onChange} fullWidth data-cy='typeStat'>
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    fullWidth
+                    data-cy="typeStat"
+                  >
                     <MenuItem value={StatDescriptionStatType.Numeric}>
                       Numeric
                     </MenuItem>
@@ -100,7 +105,7 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
             {...register(`genericStats.${index}.description`)}
             fullWidth
             multiline
-            data-cy='descStat'
+            data-cy="descStat"
           />
           {type === StatDescriptionStatType.Enum && (
             <>
@@ -110,12 +115,12 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
                 fullWidth
                 InputProps={{
                   endAdornment: (
-                    <IconButton onClick={addPossibleValue} data-cy='plusStat'>
+                    <IconButton onClick={addPossibleValue} data-cy="plusStat">
                       <AddIcon />
                     </IconButton>
                   ),
                 }}
-                data-cy='valuesStat'
+                data-cy="valuesStat"
               />
               <Stack
                 direction="row"

@@ -65,13 +65,17 @@ const GeneralInformation: React.FC<Props> = ({ values, onSubmit }) => {
               helperText={touchedFields.name && errors.name?.message}
               fullWidth
               required
-              data-cy='nameInputGenInfo'
+              data-cy="nameInputGenInfo"
             />
           </Grid>
           <Label>Description</Label>
           <Grid item xs={8}>
-            <TextField {...register("description")} multiline fullWidth 
-              data-cy='descInputGenInfo' />
+            <TextField
+              {...register("description")}
+              multiline
+              fullWidth
+              data-cy="descInputGenInfo"
+            />
           </Grid>
           <Label>BoardGameGeek URL</Label>
           <Grid item xs={8}>
@@ -87,7 +91,7 @@ const GeneralInformation: React.FC<Props> = ({ values, onSubmit }) => {
                 errors.boardgamegeekURL?.message
               }
               fullWidth
-              data-cy='linkInputGenInfo'
+              data-cy="linkInputGenInfo"
             />
           </Grid>
           <Label>Number of players</Label>
@@ -103,7 +107,7 @@ const GeneralInformation: React.FC<Props> = ({ values, onSubmit }) => {
                   touchedFields.minPlayers && errors.minPlayers?.message
                 }
                 sx={{ flex: 1 }}
-                data-cy='minPlInputGenInfo'
+                data-cy="minPlInputGenInfo"
               />
               <TextField
                 label="Maximum"
@@ -115,14 +119,14 @@ const GeneralInformation: React.FC<Props> = ({ values, onSubmit }) => {
                   touchedFields.maxPlayers && errors.maxPlayers?.message
                 }
                 sx={{ flex: 1 }}
-                data-cy='maxPlInputGenInfo'
+                data-cy="maxPlInputGenInfo"
               />
             </Stack>
           </Grid>
         </Grid>
       </CardContent>
       <CardActions>
-        <Button variant="contained" type="submit" data-cy='buttonGenInfo'>
+        <Button variant="contained" type="submit" data-cy="buttonGenInfo">
           Continue
         </Button>
       </CardActions>
