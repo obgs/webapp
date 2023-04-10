@@ -63,7 +63,7 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
           <Grid container direction="row" spacing={2}>
             <Grid item xs={8}>
               <TextField
-                label="Name"
+                label="Name *"
                 {...register(`genericStats.${index}.name`)}
                 error={
                   touchedFields.genericStats &&
@@ -110,7 +110,7 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
           {type === StatDescriptionStatType.Enum && (
             <>
               <TextField
-                label="Possible values"
+                label="Possible values *"
                 {...register(`genericStats.${index}.possibleValuesInput`)}
                 fullWidth
                 InputProps={{

@@ -57,14 +57,13 @@ const GeneralInformation: React.FC<Props> = ({ values, onSubmit }) => {
         <Typography variant="h5">General information</Typography>
         <Divider sx={{ mb: 2 }} />
         <Grid container spacing={2}>
-          <Label>Name</Label>
+          <Label>Name *</Label>
           <Grid item xs={8}>
             <TextField
               {...register("name")}
               error={touchedFields.name && !!errors.name}
               helperText={touchedFields.name && errors.name?.message}
               fullWidth
-              required
               data-cy="nameInputGenInfo"
             />
           </Grid>
@@ -94,7 +93,7 @@ const GeneralInformation: React.FC<Props> = ({ values, onSubmit }) => {
               data-cy="linkInputGenInfo"
             />
           </Grid>
-          <Label>Number of players</Label>
+          <Label>Number of players *</Label>
           <Grid item xs={8}>
             <Stack direction="row" spacing={2}>
               <TextField
