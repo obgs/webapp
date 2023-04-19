@@ -1,4 +1,4 @@
-import { logInTestUser1, visitGames } from "./utils";
+import { logInTestUser1, visitGames, visitHome } from "./utils";
 
 const addGameInfo = (
   gameName: string,
@@ -64,7 +64,7 @@ const checkNameErrMes = () => {
 describe("Games control", () => {
   it("creates new game with additional settings", () => {
     //Creating a game for 2-4 players and with all kind of stats
-    cy.visit("/");
+    visitHome();
     logInTestUser1();
     visitGames();
     createNewGame();
@@ -140,7 +140,7 @@ describe("Games control", () => {
   });
 
   it("failed when creates game without name", () => {
-    cy.visit("/");
+    visitHome();
     logInTestUser1();
     visitGames();
     createNewGame();
@@ -150,7 +150,7 @@ describe("Games control", () => {
   });
 
   it("failed when min players more then max players", () => {
-    cy.visit("/");
+    visitHome();
     logInTestUser1();
     visitGames();
     createNewGame();
@@ -160,7 +160,7 @@ describe("Games control", () => {
   });
 
   it("failed when creates stat without name", () => {
-    cy.visit("/");
+    visitHome();
     logInTestUser1();
     visitGames();
     createNewGame();

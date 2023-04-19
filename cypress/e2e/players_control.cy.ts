@@ -2,13 +2,14 @@ import {
   logInTestUser1,
   logInTestUser2,
   logOff,
+  visitHome,
   visitIncReq,
   visitOutSup,
   visitReqSup,
 } from "./utils";
 
 const addNewPlayer = (playerName: string) => {
-  cy.visit("/");
+  visitHome();
   logInTestUser1();
   cy.contains("My players").click();
   cy.get("button").contains("Add new player").click();

@@ -1,5 +1,9 @@
-const goToLogIn = () => {
+const visitHome = () => {
   cy.visit("/");
+};
+
+const goToLogIn = () => {
+  visitHome();
   cy.contains("Log in").click();
 };
 
@@ -61,4 +65,5 @@ export {
   visitIncReq,
   visitReqSup,
   visitOutSup,
+  visitHome,
 };
