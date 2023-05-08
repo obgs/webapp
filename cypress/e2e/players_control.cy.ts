@@ -74,11 +74,8 @@ describe("Players control", () => {
     logOff();
     logInTestUser1();
     cy.visit("players/incoming_requests");
-    cy.get(".MuiTable-root")
-      .children()
-      .should("contain", "test-player-03")
-      .and("contain", "test message")
-      .click();
+    cy.get(".MuiTable-root").children().contains("test-player-03").click();
+    cy.contains("test message");
     cy.get("button").contains("Allow").click();
     //On success both users will see no requests
     checkNoReq();
