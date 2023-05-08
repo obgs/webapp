@@ -7,6 +7,8 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { SnackbarProvider } from "notistack";
 import { useMemo } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { AuthProvider } from "modules/auth";
 import { Layout } from "modules/nav";
@@ -28,17 +30,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>
-        <AuthProvider>
-          <ApolloProvider>
-            <UserProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </UserProvider>
-          </ApolloProvider>
-        </AuthProvider>
-      </SnackbarProvider>
+      <DndProvider backend={HTML5Backend}>
+        <SnackbarProvider>
+          <AuthProvider>
+            <ApolloProvider>
+              <UserProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </UserProvider>
+            </ApolloProvider>
+          </AuthProvider>
+        </SnackbarProvider>
+      </DndProvider>
     </ThemeProvider>
   );
 }

@@ -66,6 +66,16 @@ const ResolveSupervisionRequestModal: React.FC<Props> = ({
           Allow {request.sender.name || request.sender.id} supervision of{" "}
           {playerName}?
         </Typography>
+        {request.message && (
+          <>
+            <Typography variant="body1" mt={2}>
+              Additional message:
+            </Typography>
+            <Typography variant="body2" mt={2}>
+              {request.message}
+            </Typography>
+          </>
+        )}
         <Stack mt={2} direction="row" flex={1} justifyContent="space-between">
           <Button
             color="error"

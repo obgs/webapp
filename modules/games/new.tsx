@@ -1,347 +1,144 @@
-import AddIcon from "@mui/icons-material/Add";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadingButton } from "@mui/lab";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  Chip,
-  Container,
-  IconButton,
-  MenuItem,
-  Select,
-  Slider,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useFormik } from "formik";
+import { Card, Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import React, { useCallback } from "react";
-import * as yup from "yup";
+import React, { useCallback, useState } from "react";
 
 import {
-  StatDescriptionStatType,
-  useCreateGameMutation,
-  SearchGamesDocument,
-  StatDescriptionInput,
-} from "graphql/generated";
+  collectStatDescriptions,
+  defaultValues,
+  FormValues,
+} from "./components/CreateGameForm";
+import AggregateStats from "./components/CreateGameForm/AggregateStats";
+import { AggregateStatsValues } from "./components/CreateGameForm/AggregateStats/schema";
+import GeneralInformation, {
+  GeneralInformationValues,
+} from "./components/CreateGameForm/GeneralInformation";
+import GenericStats from "./components/CreateGameForm/GenericStats";
+import { GenericStatsValues } from "./components/CreateGameForm/GenericStats/schema";
+import Order from "./components/CreateGameForm/Order";
+import Preview from "./components/CreateGameForm/Preview";
+import { SearchGamesDocument, useCreateGameMutation } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
-const minPlayers = 1;
-const maxPlayers = 10;
-
-const statsValidation = yup.object({
-  name: yup.string().required("Name is required"),
-  type: yup.mixed().oneOf(Object.values(StatDescriptionStatType)),
-  description: yup.string(),
-  possibleValuesInput: yup.string(),
-  possibleValues: yup.array().of(yup.string()).optional(),
-});
-
-const validationSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  description: yup.string().optional(),
-  minPlayers: yup
-    .number()
-    .min(minPlayers)
-    .required("Minimum players is required"),
-  maxPlayers: yup
-    .number()
-    .max(maxPlayers)
-    .required("Maximum players is required"),
-  boardgamegeekURL: yup.string().url("Must be a valid URL").optional(),
-  statDescriptions: yup.array().of(statsValidation).required(),
-});
-
-type FormValues = yup.InferType<typeof validationSchema>;
-type StatDescription = yup.InferType<typeof statsValidation>;
-
-const defaultValues: FormValues = {
-  name: "",
-  description: "",
-  minPlayers,
-  maxPlayers,
-  boardgamegeekURL: "",
-  statDescriptions: [
-    {
-      name: "",
-      type: StatDescriptionStatType.Numeric,
-      description: "",
-      possibleValuesInput: "",
-      possibleValues: [],
-    },
-  ],
-};
-
 const CreateGame = () => {
+  const [activeStep, setActiveStep] = useState(0);
   const [create, { loading, error }] = useCreateGameMutation();
   useSnackbarError(error);
 
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
 
-  const { handleSubmit, handleChange, setValues, values, errors, touched } =
-    useFormik({
-      initialValues: defaultValues,
-      onSubmit: async () => {
-        await create({
-          variables: {
-            input: {
-              name: values.name,
-              description: values.description,
-              minPlayers: values.minPlayers,
-              maxPlayers: values.maxPlayers,
-              boardgamegeekURL: values.boardgamegeekURL,
-              statDescriptions: values.statDescriptions.map(
-                (stat): StatDescriptionInput => ({
-                  name: stat.name,
-                  type: stat.type,
-                  description: stat.description,
-                  metadata:
-                    stat.type === StatDescriptionStatType.Enum
-                      ? {
-                          enumMetadata: {
-                            possibleValues: stat.possibleValues,
-                          },
-                        }
-                      : undefined,
-                })
-              ),
-            },
-          },
-          refetchQueries: [
-            {
-              query: SearchGamesDocument,
-              variables: { where: { nameContains: "" }, first: 10 },
-            },
-          ],
-        });
-        enqueueSnackbar(`Game ${values.name} created`, { variant: "success" });
-        router.push("/games");
+  const [values, setValues] = useState<FormValues>(defaultValues);
+  const onSubmit = useCallback(async () => {
+    await create({
+      variables: {
+        input: {
+          name: values.name,
+          description: values.description,
+          minPlayers: values.minPlayers,
+          maxPlayers: values.maxPlayers,
+          boardgamegeekURL: values.boardgamegeekURL,
+          statDescriptions: collectStatDescriptions(values),
+        },
       },
-      validationSchema,
-    });
-
-  const addStat = useCallback(() => {
-    setValues({
-      ...values,
-      statDescriptions: [
-        ...values.statDescriptions,
+      refetchQueries: [
         {
-          name: "",
-          type: StatDescriptionStatType.Numeric,
-          description: "",
-          possibleValuesInput: "",
-          possibleValues: [],
+          query: SearchGamesDocument,
+          variables: { where: { nameContains: "" }, first: 10 },
         },
       ],
     });
-  }, [setValues, values]);
+    enqueueSnackbar(`Game ${values.name} created`, { variant: "success" });
+    router.push("/games");
+  }, [create, enqueueSnackbar, router, values]);
 
-  const removeStat = useCallback(
-    (index: number) => () => {
-      setValues({
-        ...values,
-        statDescriptions: values.statDescriptions.filter((_, i) => i !== index),
-      });
+  const onGeneralInformationSubmit = useCallback(
+    (generalInformationValues: GeneralInformationValues) => {
+      setValues((v) => ({
+        ...v,
+        ...generalInformationValues,
+      }));
+      setActiveStep((s) => s + 1);
     },
-    [setValues, values]
+    []
   );
 
-  const addPossibleValue = useCallback(
-    (index: number) => () => {
-      setValues({
-        ...values,
-        statDescriptions: values.statDescriptions.map((stat, i) =>
-          i === index
-            ? {
-                ...stat,
-                possibleValues: [
-                  ...stat.possibleValues,
-                  values.statDescriptions[i].possibleValuesInput,
-                ],
-                possibleValuesInput: "",
-              }
-            : stat
-        ),
-      });
+  const onGenericStatsSubmit = useCallback(
+    (genericStatsValues: GenericStatsValues) => {
+      setValues((v) => ({
+        ...v,
+        ...genericStatsValues,
+      }));
+      setActiveStep((s) => s + 1);
     },
-    [setValues, values]
+    []
   );
 
-  const removePossibleValue = useCallback(
-    (statIndex: number, valueIndex: number) => () => {
-      setValues({
-        ...values,
-        statDescriptions: values.statDescriptions.map((stat, i) =>
-          i === statIndex
-            ? {
-                ...stat,
-                possibleValues: stat.possibleValues.filter(
-                  (_: unknown, j: number) => j !== valueIndex
-                ),
-              }
-            : stat
-        ),
-      });
+  const onAggregateStatsSubmit = useCallback(
+    (aggregateStatsValues: AggregateStatsValues) => {
+      setValues((v) => ({
+        ...v,
+        ...aggregateStatsValues,
+      }));
+      setActiveStep((s) => s + 1);
     },
-    [setValues, values]
+    []
   );
+
+  const onOrderSubmit = useCallback((orderValues: Record<string, number>) => {
+    setValues((prev) => ({
+      ...prev,
+      genericStats: prev.genericStats.map((stat) => ({
+        ...stat,
+        orderNumber: orderValues[stat.id],
+      })),
+      aggregateStats: prev.aggregateStats.map((stat) => ({
+        ...stat,
+        orderNumber: orderValues[stat.id],
+      })),
+    }));
+    setActiveStep((s) => s + 1);
+  }, []);
+
+  const goBack = useCallback(() => {
+    setActiveStep((s) => s - 1);
+  }, []);
 
   return (
     <Container>
-      <Typography variant="h4">Create Game</Typography>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={2} alignItems="flex-start">
-          <TextField
-            label="Name"
-            value={values.name}
-            name="name"
-            onChange={handleChange}
-            error={touched.name && !!errors.name}
-            helperText={touched.name && errors.name}
+      <Card sx={{ maxWidth: 600 }}>
+        {activeStep === 0 && (
+          <GeneralInformation
+            values={values}
+            onSubmit={onGeneralInformationSubmit}
           />
-          <TextField
-            label="Description"
-            value={values.description}
-            name="description"
-            onChange={handleChange}
-            multiline
-            sx={{ width: 400 }}
+        )}
+        {activeStep === 1 && (
+          <GenericStats
+            values={values}
+            goBack={goBack}
+            onSubmit={onGenericStatsSubmit}
           />
-          <TextField
-            label="Boardgamegeek URL"
-            value={values.boardgamegeekURL}
-            name="boardgamegeekURL"
-            onChange={handleChange}
-            error={touched.boardgamegeekURL && !!errors.boardgamegeekURL}
-            helperText={touched.boardgamegeekURL && errors.boardgamegeekURL}
+        )}
+        {activeStep === 2 && (
+          <AggregateStats
+            values={values}
+            goBack={goBack}
+            onSubmit={onAggregateStatsSubmit}
           />
-          <Typography>Amount of players</Typography>
-          <Slider
-            size="small"
-            marks
-            valueLabelDisplay="auto"
-            min={1}
-            max={10}
-            value={[values.minPlayers, values.maxPlayers]}
-            onChange={(_, value) => {
-              if (typeof value === "number") return;
-              setValues({
-                ...values,
-                minPlayers: value[0],
-                maxPlayers: value[1],
-              });
-            }}
+        )}
+        {activeStep === 3 && (
+          <Order values={values} goBack={goBack} onConfirm={onOrderSubmit} />
+        )}
+        {activeStep === 4 && (
+          <Preview
+            values={values}
+            loading={loading}
+            goBack={goBack}
+            onSubmit={onSubmit}
           />
-          <Typography variant="body1">Stats</Typography>
-          <Typography variant="body2">
-            Stats are the values you want to track. Right now there are only two
-            types of stats: numeric and enumerated. Numeric stats are just
-            numbers, like the score in a certain category of the game.
-            Enumerated stats are values that can be selected from a list, like
-            the faction the player played as.
-          </Typography>
-          <Stack direction="row" flexWrap="wrap">
-            {values.statDescriptions.map((stat, index) => (
-              <Card sx={{ m: 1, maxWidth: 375 }} key={index}>
-                <CardContent>
-                  <Stack spacing={2} alignItems="flex-start" flex={1}>
-                    <Stack direction="row" spacing={2} alignItems="flex-start">
-                      <TextField
-                        label="Name"
-                        value={stat.name}
-                        name={`statDescriptions[${index}].name`}
-                        onChange={handleChange}
-                        error={
-                          touched.statDescriptions &&
-                          !!(errors.statDescriptions as StatDescription[])?.[
-                            index
-                          ]?.name
-                        }
-                        helperText={
-                          touched.statDescriptions &&
-                          (errors.statDescriptions as StatDescription[])?.[
-                            index
-                          ]?.name
-                        }
-                      />
-                      <Select
-                        value={stat.type}
-                        name={`statDescriptions[${index}].type`}
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={StatDescriptionStatType.Numeric}>
-                          Numeric
-                        </MenuItem>
-                        <MenuItem value={StatDescriptionStatType.Enum}>
-                          Enumerable
-                        </MenuItem>
-                      </Select>
-                    </Stack>
-                    <TextField
-                      label="Description"
-                      value={stat.description}
-                      name={`statDescriptions[${index}].description`}
-                      onChange={handleChange}
-                      fullWidth
-                      multiline
-                    />
-                    {stat.type === StatDescriptionStatType.Enum && (
-                      <>
-                        <TextField
-                          label="Possible values"
-                          value={stat.possibleValuesInput}
-                          name={`statDescriptions[${index}].possibleValuesInput`}
-                          fullWidth
-                          InputProps={{
-                            endAdornment: (
-                              <IconButton onClick={addPossibleValue(index)}>
-                                <AddIcon />
-                              </IconButton>
-                            ),
-                          }}
-                          onChange={handleChange}
-                        />
-                        <Stack
-                          direction="row"
-                          spacing={0}
-                          sx={{ flexWrap: "wrap", gap: 1 }}
-                        >
-                          {stat.possibleValues.map(
-                            (value: string, chipIndex: number) => (
-                              <Chip
-                                key={chipIndex}
-                                label={value}
-                                onDelete={removePossibleValue(index, chipIndex)}
-                              />
-                            )
-                          )}
-                        </Stack>
-                      </>
-                    )}
-                  </Stack>
-                </CardContent>
-                <CardActions>
-                  <IconButton onClick={removeStat(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            ))}
-          </Stack>
-          <IconButton onClick={addStat}>
-            <AddCircleIcon />
-          </IconButton>
-
-          <LoadingButton variant="contained" loading={loading} type="submit">
-            Create
-          </LoadingButton>
-        </Stack>
-      </form>
+        )}
+      </Card>
     </Container>
   );
 };

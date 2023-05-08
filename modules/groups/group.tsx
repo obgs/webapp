@@ -8,6 +8,7 @@ import {
   Stack,
   Tab,
 } from "@mui/material";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
@@ -54,6 +55,9 @@ const Group: React.FC = () => {
 
   return (
     <Box>
+      <Head>
+        <title>OBGS | {group.name}</title>
+      </Head>
       <Card showSettings group={group} />
 
       <TabContext value={tab}>

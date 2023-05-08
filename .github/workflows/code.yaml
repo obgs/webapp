@@ -12,6 +12,9 @@ jobs:
     strategy:
       matrix:
         mode:
+          - name: Typescript
+            command: pnpm tsc:check
+
           - name: Eslint
             command: pnpm eslint:check
 
