@@ -31,7 +31,7 @@ services:
       - minio-data:/data
 
   migrate:
-    image: ghcr.io/open-boardgame-stats/backend-migrations:sha-a255b32
+    image: ghcr.io/open-boardgame-stats/backend-migrations:sha-122e133
     command: migrate apply -u postgresql://postgres:postgres@postgres:5432/obgs?sslmode=disable
     networks:
       - e2e
@@ -40,7 +40,7 @@ services:
         condition: service_healthy
 
   seed:
-    image: ghcr.io/open-boardgame-stats/backend:sha-3fa8353
+    image: ghcr.io/open-boardgame-stats/backend:sha-122e133
     volumes:
       - ./.backend.yaml:/.backend.yaml
     networks:
@@ -51,7 +51,7 @@ services:
         condition: service_completed_successfully
 
   backend:
-    image: ghcr.io/open-boardgame-stats/backend:sha-3fa8353
+    image: ghcr.io/open-boardgame-stats/backend:sha-122e133
     volumes:
       - ./.backend.yaml:/.backend.yaml
     ports:

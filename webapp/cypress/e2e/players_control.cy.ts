@@ -1,7 +1,15 @@
-import { logInTestUser1, logInTestUser2, logOff } from "./utils";
+import {
+  logInTestUser1,
+  logInTestUser2,
+  logOff,
+  visitHome,
+  visitIncReq,
+  visitOutSup,
+  visitReqSup,
+} from "./utils";
 
 const addNewPlayer = (playerName: string) => {
-  cy.visit("/");
+  visitHome();
   logInTestUser1();
   cy.contains("My players").click();
   cy.get("button").contains("Add new player").click();
@@ -10,8 +18,22 @@ const addNewPlayer = (playerName: string) => {
 };
 
 const requestPlayer = (playerName2: string) => {
-  cy.visit("players/request_supervision");
-  cy.contains(playerName2).click();
+  visitReqSup();
+  cy.get("[data-cy='playerReqTest']").contains(playerName2).click();
+  cy.get("button").contains("Request").click();
+  visitReqSup();
+};
+
+const reqWithMessage = (playerName3: string, testMessage: string) => {
+  visitReqSup();
+  cy.get("[data-cy='playerReqTest']").contains(playerName3).click();
+  cy.get(".MuiBox-root")
+    .contains("Requesting")
+    .parent()
+    .find("textarea")
+    .first()
+    .focus();
+  cy.focused().type(testMessage);
   cy.get("button").contains("Request").click();
 };
 
@@ -20,7 +42,7 @@ const checkNoReq = () => {
   cy.contains("No requests");
   logOff();
   logInTestUser2();
-  cy.visit("players/outgoing_requests");
+  visitOutSup();
   cy.contains("No requests");
 };
 
@@ -32,7 +54,7 @@ describe("Players control", () => {
     requestPlayer("test-player-01");
     logOff();
     logInTestUser1();
-    cy.visit("players/incoming_requests");
+    visitIncReq();
     cy.contains("test-player-01").click();
     cy.get("button").contains("Allow").click();
     //On success test-user-2 will see test-player-01 on page "My players"
@@ -49,7 +71,7 @@ describe("Players control", () => {
     requestPlayer("test-player-02");
     logOff();
     logInTestUser1();
-    cy.visit("players/incoming_requests");
+    visitIncReq();
     cy.contains("test-player-02").click();
     cy.get("button").contains("Reject").click();
     //On success test-user-1 will not see this request anymore,
@@ -61,21 +83,13 @@ describe("Players control", () => {
     addNewPlayer("test-player-03");
     logOff();
     logInTestUser2();
-    cy.visit("players/request_supervision");
-    cy.contains("test-player-03").click();
-    cy.get(".MuiBox-root")
-      .contains("Requesting")
-      .parent()
-      .find("textarea")
-      .first()
-      .focus();
-    cy.focused().type("test message");
-    cy.get("button").contains("Request").click();
+    visitReqSup();
+    reqWithMessage("test-player-03", "test message");
     logOff();
     logInTestUser1();
-    cy.visit("players/incoming_requests");
-    cy.get(".MuiTable-root").children().contains("test-player-03").click();
-    cy.contains("test message");
+    visitIncReq();
+    cy.get("[data-cy='playerIncTest']").contains("test-player-03").click();
+    cy.get(".MuiBox-root").contains("test message");
     cy.get("button").contains("Allow").click();
     //On success both users will see no requests
     checkNoReq();

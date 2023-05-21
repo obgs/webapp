@@ -63,7 +63,7 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
           <Grid container direction="row" spacing={2}>
             <Grid item xs={8}>
               <TextField
-                label="Name"
+                label="Name *"
                 {...register(`genericStats.${index}.name`)}
                 error={
                   touchedFields.genericStats &&
@@ -74,6 +74,7 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
                   errors.genericStats?.[index]?.name?.message
                 }
                 fullWidth
+                data-cy="nameStat"
               />
             </Grid>
             <Grid item xs={4}>
@@ -82,7 +83,12 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
                 name={`genericStats.${index}.type`}
                 defaultValue={StatDescriptionStatType.Numeric}
                 render={({ field: { onChange, value } }) => (
-                  <Select value={value} onChange={onChange} fullWidth>
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    fullWidth
+                    data-cy="typeStat"
+                  >
                     <MenuItem value={StatDescriptionStatType.Numeric}>
                       Numeric
                     </MenuItem>
@@ -99,20 +105,22 @@ const Stat: React.FC<Props> = ({ index, remove }) => {
             {...register(`genericStats.${index}.description`)}
             fullWidth
             multiline
+            data-cy="descStat"
           />
           {type === StatDescriptionStatType.Enum && (
             <>
               <TextField
-                label="Possible values"
+                label="Possible values *"
                 {...register(`genericStats.${index}.possibleValuesInput`)}
                 fullWidth
                 InputProps={{
                   endAdornment: (
-                    <IconButton onClick={addPossibleValue}>
+                    <IconButton onClick={addPossibleValue} data-cy="plusStat">
                       <AddIcon />
                     </IconButton>
                   ),
                 }}
+                data-cy="valuesStat"
               />
               <Stack
                 direction="row"

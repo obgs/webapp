@@ -1,5 +1,9 @@
-const goToLogIn = () => {
+const visitHome = () => {
   cy.visit("/");
+};
+
+const goToLogIn = () => {
+  visitHome();
   cy.contains("Log in").click();
 };
 
@@ -17,11 +21,13 @@ const logIn = (email: string, password: string) => {
 const logInTestUser1 = () => {
   cy.contains("Log in").click();
   logIn("test-user-1@obgs.app", "12345");
+  cy.contains("test-user-1");
 };
 
 const logInTestUser2 = () => {
   cy.contains("Log in").click();
   logIn("test-user-2@obgs.app", "12345");
+  cy.contains("test-user-2");
 };
 
 const logOff = () => {
@@ -29,4 +35,35 @@ const logOff = () => {
   cy.contains("Logout").click();
 };
 
-export { goToLogIn, logIn, logOff, logInTestUser1, logInTestUser2 };
+const visitGames = () => {
+  cy.get("[data-cy='gamesNavTest']").first().click();
+  cy.contains("Games are the templates for your statistics.");
+};
+
+const visitIncReq = () => {
+  cy.contains("Incoming request").click();
+  cy.contains("Player ID");
+};
+
+const visitReqSup = () => {
+  cy.contains("Request supervision").click();
+  cy.contains("Here you can request supervision");
+};
+
+const visitOutSup = () => {
+  cy.contains("Outgoing requests").click();
+  cy.contains("Approvals");
+};
+
+export {
+  goToLogIn,
+  logIn,
+  logOff,
+  logInTestUser1,
+  logInTestUser2,
+  visitGames,
+  visitIncReq,
+  visitReqSup,
+  visitOutSup,
+  visitHome,
+};
