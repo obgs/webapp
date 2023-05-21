@@ -33,7 +33,7 @@ const Stat: React.FC<Props> = ({ index, genericStats, remove }) => {
     <Card>
       <CardContent>
         <Grid container spacing={2}>
-          <Label>Name</Label>
+          <Label>Name *</Label>
           <Grid item xs={8}>
             <Controller
               control={control}
@@ -51,6 +51,7 @@ const Stat: React.FC<Props> = ({ index, genericStats, remove }) => {
                     errors.aggregateStats?.[index]?.name?.message
                   }
                   fullWidth
+                  data-cy="nameAggStat"
                 />
               )}
             />
@@ -63,18 +64,23 @@ const Stat: React.FC<Props> = ({ index, genericStats, remove }) => {
               name={`aggregateStats.${index}.description`}
               defaultValue=""
               render={({ field }) => (
-                <TextField {...field} fullWidth multiline />
+                <TextField
+                  {...field}
+                  fullWidth
+                  multiline
+                  data-cy="descAggStat"
+                />
               )}
             />
           </Grid>
-          <Label>Stats</Label>
+          <Label>Stats *</Label>
           <Grid item xs={8}>
             <Controller
               control={control}
               name={`aggregateStats.${index}.references`}
               defaultValue={[]}
               render={({ field }) => (
-                <Select multiple {...field} fullWidth>
+                <Select multiple {...field} fullWidth data-cy="dropListStat">
                   {genericStats.genericStats
                     .filter((s) => s.type === StatDescriptionStatType.Numeric)
                     .map((stat) => (

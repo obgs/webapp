@@ -12,7 +12,9 @@ const NavBar = () => {
       <ListSubheader>OBGS</ListSubheader>
       <NavLink href="/">Home</NavLink>
       <ListSubheader>Players</ListSubheader>
-      <NavLink href="/players">Browse</NavLink>
+      <NavLink href="/players" data-cy="playersNavTest">
+        Browse
+      </NavLink>
       {authenticated && (
         <>
           <NavLink href="/players/supervised">My players</NavLink>
@@ -24,11 +26,17 @@ const NavBar = () => {
         </>
       )}
       <ListSubheader>Groups</ListSubheader>
-      <NavLink href="/groups">Browse</NavLink>
+      <NavLink href="/groups" data-cy="groupsNavTest">
+        Browse
+      </NavLink>
       <ListSubheader>Games</ListSubheader>
-      <NavLink href="/games">Browse</NavLink>
+      <NavLink href="/games" data-cy="gamesNavTest">
+        Browse
+      </NavLink>
       <ListSubheader>Matches</ListSubheader>
-      <NavLink href="/matches">Browse</NavLink>
+      <NavLink href="/matches" data-cy="matchesNavTest">
+        Browse
+      </NavLink>
     </List>
   );
 };

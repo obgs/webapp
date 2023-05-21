@@ -1,5 +1,7 @@
+import { visitHome } from "./utils";
+
 const goToSignUp = () => {
-  cy.visit("/");
+  visitHome();
   cy.contains("Log in").click();
   cy.contains("Sign up");
   cy.contains("here").click();
