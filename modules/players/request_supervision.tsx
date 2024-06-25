@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import RequestSupervisionModal from "./components/RequestSupervisionModal";
 import Search from "./components/Search";
 import { PlayerFieldsFragment, PlayerWhereInput } from "graphql/generated";
+import { Title } from "modules/nav";
 import { useUser } from "utils/user";
 
 const RequestSupervision = () => {
@@ -52,6 +53,7 @@ const RequestSupervision = () => {
 
   return (
     <>
+      <Title text="Request player supervision" />
       <Typography variant="body1">
         Here you can request supervision of any player in the system. Use the
         filters below to find players that you need.

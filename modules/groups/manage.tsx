@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import Applications from "./components/Applications";
 import Members from "./components/Members";
 import Settings from "./components/Settings";
+import { Title } from "modules/nav";
 
 const ManageGroup = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const ManageGroup = () => {
   if (typeof id !== "string") {
     return (
       <Container>
+        <Title text="Group settings" />
         <Typography variant="body1">Invalid URL</Typography>
       </Container>
     );

@@ -10,6 +10,7 @@ import {
   MyPlayersQuery,
   MyPlayersDocument,
 } from "graphql/generated";
+import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const Supervised = () => {
@@ -57,6 +58,7 @@ const Supervised = () => {
 
   return (
     <>
+      <Title text="My players" />
       <Typography variant="body1">
         These are players that you are supervising
       </Typography>

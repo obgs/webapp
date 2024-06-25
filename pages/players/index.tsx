@@ -1,12 +1,7 @@
 import type { NextPage } from "next";
 
-import Title from "components/Title";
 import { Browse } from "modules/players";
 
-const BrowsePlayers: NextPage = () => (
-  <Title text="Browse players">
-    <Browse />
-  </Title>
-);
+const BrowsePlayers: NextPage = () => <Browse />;
 
 export default BrowsePlayers;

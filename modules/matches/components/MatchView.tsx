@@ -13,6 +13,7 @@ import {
   MatchFieldsFragment,
   StatDescriptionStatType,
 } from "graphql/generated";
+import { Title } from "modules/nav";
 import { byOrderNumber } from "modules/stats/utils";
 
 type Order = "asc" | "desc";
@@ -77,6 +78,7 @@ const MatchView: React.FC<Props> = ({ match }) => {
 
   return (
     <Container>
+      <Title text={`Match ${match.id}`} />
       <Table>
         <TableHead>
           <TableRow>

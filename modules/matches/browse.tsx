@@ -23,6 +23,7 @@ import {
   PlayerWhereInput,
   useSearchMatchesLazyQuery,
 } from "graphql/generated";
+import { Title } from "modules/nav";
 import { usePagination, useSnackbarError } from "utils/apollo";
 import { useUser } from "utils/user";
 
@@ -93,6 +94,7 @@ const Browse = () => {
 
   return (
     <Container>
+      <Title text="Matches" />
       <Toolbar
         sx={{
           pl: { sm: 2 },

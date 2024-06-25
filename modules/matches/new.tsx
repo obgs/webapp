@@ -35,17 +35,17 @@ import StatInput from "./components/StatInput";
 import { FormValues, schema } from "./components/schema";
 import GameAutocomplete from "components/GameAutocomplete";
 import {
-  GameFieldsFragment,
   PlayerFieldsFragment,
   StatDescriptionStatType,
   useCreateMatchMutation,
   StatInput as StatInputType,
   GameVersionFieldsFragment,
 } from "graphql/generated";
+import { Title } from "modules/nav";
 import { parseEnumMetadata } from "modules/stats";
+import { byOrderNumber } from "modules/stats/utils";
 import { useSnackbarError } from "utils/apollo";
 import { useUser } from "utils/user";
-import { byOrderNumber } from "modules/stats/utils";
 
 const steps = ["Select game", "Enter stats"];
 const viewTypes = ["table", "list"] as const;
@@ -92,7 +92,7 @@ const CreateMatch = () => {
               : "",
         };
       }, {}) ?? {},
-    [version]
+    [statDescriptions]
   );
 
   // add user's main player to the list of players
@@ -153,6 +153,7 @@ const CreateMatch = () => {
 
   return (
     <Container>
+      <Title text="New match" />
       <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
         {steps.map((step) => (
           <Step key={step}>

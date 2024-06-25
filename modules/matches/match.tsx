@@ -1,5 +1,4 @@
 import { CircularProgress, Stack } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 
@@ -32,14 +31,7 @@ const Match: React.FC = () => {
     );
   }
 
-  return (
-    <>
-      <Head>
-        <title>OBGS | Match {match.id}</title>
-      </Head>
-      <MatchView match={match} />
-    </>
-  );
+  return <MatchView match={match} />;
 };
 
 export default Match;

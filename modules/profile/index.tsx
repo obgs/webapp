@@ -6,6 +6,7 @@ import React, { useEffect, useMemo } from "react";
 
 import { ImageInput, useImageInput } from "components/ImageInput";
 import { useUpdateUserMutation, MeQuery, MeDocument } from "graphql/generated";
+import { Title } from "modules/nav";
 import { useUser } from "utils/user";
 
 const Input = styled(TextField)`
@@ -88,6 +89,7 @@ const Profile = () => {
           alignItems: "center",
         }}
       >
+        <Title text="Profile" />
         <CircularProgress />
       </Box>
     );
@@ -95,6 +97,7 @@ const Profile = () => {
 
   return (
     <Container>
+      <Title text="Profile" />
       <Box
         sx={{
           display: "flex",

@@ -18,6 +18,7 @@ import { GenericStatsValues } from "./components/CreateGameForm/GenericStats/sch
 import Order from "./components/CreateGameForm/Order";
 import Preview from "./components/CreateGameForm/Preview";
 import { SearchGamesDocument, useCreateGameMutation } from "graphql/generated";
+import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const CreateGame = () => {
@@ -106,6 +107,7 @@ const CreateGame = () => {
 
   return (
     <Container>
+      <Title text="New game" />
       <Card sx={{ maxWidth: 600 }}>
         {activeStep === 0 && (
           <GeneralInformation
