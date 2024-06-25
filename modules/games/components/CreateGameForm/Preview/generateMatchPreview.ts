@@ -98,6 +98,7 @@ const generateMatchPreview = (values: FormValues): MatchFieldsFragment => {
         id: s.id,
         name: s.name,
         type: s.type,
+        orderNumber: s.orderNumber,
       })),
       versionNumber: 1,
       game: {
