@@ -4339,9 +4339,22 @@ export type AuthenticatedDirectiveResolver<
   Args = AuthenticatedDirectiveArgs
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type DeferDirectiveArgs = {
+  if?: Maybe<Scalars["Boolean"]>;
+  label?: Maybe<Scalars["String"]>;
+};
+
+export type DeferDirectiveResolver<
+  Result,
+  Parent,
+  ContextType = any,
+  Args = DeferDirectiveArgs
+> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type GoFieldDirectiveArgs = {
   forceResolver?: Maybe<Scalars["Boolean"]>;
   name?: Maybe<Scalars["String"]>;
+  omittable?: Maybe<Scalars["Boolean"]>;
 };
 
 export type GoFieldDirectiveResolver<
@@ -4352,6 +4365,7 @@ export type GoFieldDirectiveResolver<
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type GoModelDirectiveArgs = {
+  forceGenerate?: Maybe<Scalars["Boolean"]>;
   model?: Maybe<Scalars["String"]>;
   models?: Maybe<Array<Scalars["String"]>>;
 };
@@ -5080,6 +5094,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
 
 export type DirectiveResolvers<ContextType = any> = ResolversObject<{
   authenticated?: AuthenticatedDirectiveResolver<any, any, ContextType>;
+  defer?: DeferDirectiveResolver<any, any, ContextType>;
   goField?: GoFieldDirectiveResolver<any, any, ContextType>;
   goModel?: GoModelDirectiveResolver<any, any, ContextType>;
 }>;
