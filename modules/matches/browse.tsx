@@ -153,7 +153,7 @@ const Browse = () => {
                   key={match.id}
                   onClick={() => router.push(`/matches/${match.id}`)}
                 >
-                  <TableCell>{match.game.name}</TableCell>
+                  <TableCell>{match.gameVersion.game.name}</TableCell>
                   <TableCell>
                     {match.players
                       .map(

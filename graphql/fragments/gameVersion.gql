@@ -1,0 +1,10 @@
+fragment gameVersionFields on GameVersion {
+  id
+  versionNumber
+  statDescriptions {
+    ...statDescriptionFields
+  }
+  game {
+    name
+  }
+}

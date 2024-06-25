@@ -1,11 +1,22 @@
-import { Autocomplete, AutocompleteProps, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteProps,
+  FormLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import { GameFieldsFragment, useSearchGamesLazyQuery } from "graphql/generated";
+import {
+  GameFieldsFragment,
+  GameVersionFieldsFragment,
+  useSearchGamesLazyQuery,
+} from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
-interface Props
-  extends Omit<
+interface Props {
+  gameInputProps?: Omit<
     AutocompleteProps<
       GameFieldsFragment | null | undefined,
       false,
@@ -13,54 +24,83 @@ interface Props
       false
     >,
     "onChange" | "options" | "renderInput"
-  > {
-  onChange: (value: GameFieldsFragment) => void;
+  >;
+  onGameChange?: (value: GameFieldsFragment) => void;
+  onVersionChange?: (value: GameVersionFieldsFragment) => void;
 }
 
-const GameAutocomplete: React.FC<Props> = ({ onChange, ...rest }) => {
+const GameAutocomplete: React.FC<Props> = ({
+  onGameChange,
+  onVersionChange,
+  ...rest
+}) => {
   const [search, { data, loading, error }] = useSearchGamesLazyQuery();
   useSnackbarError(error);
 
-  const [value, setValue] = useState<GameFieldsFragment | null>(null);
-  const [inputValue, setInputValue] = useState("");
+  const [game, setGame] = useState<GameFieldsFragment | null>(null);
+  const [version, setVersion] = useState<GameVersionFieldsFragment | null>(
+    null
+  );
+  const [gameInput, setGameInputValue] = useState("");
 
   useEffect(() => {
-    if (value) {
-      onChange(value);
-    }
-  }, [value, onChange]);
+    game && onGameChange?.(game);
+    version && onVersionChange?.(version);
+  }, [game, version, onGameChange, onVersionChange]);
 
   useEffect(() => {
-    if (!inputValue) return;
-
     search({
       variables: {
         where: {
-          nameContains: inputValue,
+          nameContains: gameInput,
         },
         first: 10,
       },
     });
-  }, [inputValue, search]);
+  }, [gameInput, search]);
 
   const options = data?.games.edges?.map((e) => e?.node) ?? [];
 
   return (
-    <Autocomplete
-      renderInput={(params) => <TextField label="Game" {...params} />}
-      getOptionLabel={(option) => option?.name ?? ""}
-      loading={loading}
-      options={options}
-      onInputChange={(_, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      onChange={(_, newValue) => {
-        setValue(newValue ?? null);
-      }}
-      isOptionEqualToValue={(option) => option?.id === value?.id}
-      autoComplete
-      {...rest}
-    />
+    <>
+      <FormLabel>Game</FormLabel>
+      <Autocomplete
+        renderInput={(params) => <TextField {...params} />}
+        getOptionLabel={(option) => option?.name ?? ""}
+        loading={loading}
+        options={options}
+        onInputChange={(_, newInputValue) => {
+          setGameInputValue(newInputValue);
+        }}
+        onChange={(_, newValue) => {
+          setGame(newValue ?? null);
+          setVersion(newValue?.versions?.[0] ?? null);
+        }}
+        isOptionEqualToValue={(option) => option?.id === game?.id}
+        autoComplete
+        {...rest}
+      />
+      {game && (
+        <>
+          <FormLabel>Version</FormLabel>
+          <Select
+            value={version?.id}
+            onChange={(e) => {
+              const newVersion = game.versions.find(
+                (v) => v.id === e.target.value
+              );
+              setVersion(newVersion ?? null);
+            }}
+          >
+            {game.versions.map((v) => (
+              <MenuItem key={v.id} value={v.id}>
+                {v.versionNumber}
+              </MenuItem>
+            ))}
+          </Select>
+        </>
+      )}
+    </>
   );
 };
 

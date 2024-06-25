@@ -15,7 +15,7 @@ fragment gameFields on Game {
       ...userFields
     }
   }
-  statDescriptions {
-    ...statDescriptionFields
+  versions {
+    ...gameVersionFields
   }
 }

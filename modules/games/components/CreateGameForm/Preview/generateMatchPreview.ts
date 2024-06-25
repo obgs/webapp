@@ -92,26 +92,16 @@ const generateMatchPreview = (values: FormValues): MatchFieldsFragment => {
 
   return {
     id: "1",
-    game: {
+    gameVersion: {
       id: "1",
-      name: values.name,
-      minPlayers: values.minPlayers,
-      maxPlayers: values.maxPlayers,
-      favorites: {
-        total: 0,
-        users: [],
-      },
-      isFavorite: false,
       statDescriptions: statDescriptions.map((s) => ({
         id: s.id,
         name: s.name,
         type: s.type,
       })),
-      author: {
-        id: "1",
-        name: "Author name",
-        email: "author@obgs.app",
-        avatarURL: faker.image.avatar(),
+      versionNumber: 1,
+      game: {
+        name: "Game Preview",
       },
     },
     players,
