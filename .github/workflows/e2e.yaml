@@ -24,8 +24,5 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
-      - name: Set up docker caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-
       - name: Run tests
         run: cypress/automation/run.sh
