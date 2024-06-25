@@ -5,6 +5,7 @@ import React, { useMemo, useState } from "react";
 import Card from "./components/Card";
 import { GameWhereInput, useSearchGamesLazyQuery } from "graphql/generated";
 import { useAuth } from "modules/auth";
+import { Title } from "modules/nav";
 import { usePagination, useSnackbarError } from "utils/apollo";
 
 const Browse = () => {
@@ -31,6 +32,7 @@ const Browse = () => {
 
   return (
     <Container>
+      <Title text="Browse games" />
       <Typography variant="body1">
         Games are the templates for your statistics. They are created and
         maintained by community members. You can create your own games or use

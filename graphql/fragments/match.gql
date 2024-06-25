@@ -1,7 +1,7 @@
 fragment matchFields on Match {
   id
-  game {
-    ...gameFields
+  gameVersion {
+    ...gameVersionFields
   }
   players {
     ...playerFields

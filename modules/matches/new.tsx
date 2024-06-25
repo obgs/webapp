@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import FindPlayerModal from "./components/FindPlayerModal";
@@ -35,13 +35,15 @@ import StatInput from "./components/StatInput";
 import { FormValues, schema } from "./components/schema";
 import GameAutocomplete from "components/GameAutocomplete";
 import {
-  GameFieldsFragment,
   PlayerFieldsFragment,
   StatDescriptionStatType,
   useCreateMatchMutation,
   StatInput as StatInputType,
+  GameVersionFieldsFragment,
 } from "graphql/generated";
+import { Title } from "modules/nav";
 import { parseEnumMetadata } from "modules/stats";
+import { byOrderNumber } from "modules/stats/utils";
 import { useSnackbarError } from "utils/apollo";
 import { useUser } from "utils/user";
 
@@ -51,7 +53,9 @@ const viewTypes = ["table", "list"] as const;
 const CreateMatch = () => {
   const { user } = useUser();
 
-  const [game, setGame] = useState<GameFieldsFragment | null | undefined>();
+  const [version, setVersion] = useState<
+    GameVersionFieldsFragment | null | undefined
+  >();
   const [players, setPlayers] = useState<PlayerFieldsFragment[]>([]);
   const form = useForm<FormValues>({
     defaultValues: {},
@@ -68,10 +72,14 @@ const CreateMatch = () => {
   }, [mobile]);
 
   const { setValue, handleSubmit } = form;
+  const statDescriptions = useMemo(
+    () => version?.statDescriptions.slice().sort(byOrderNumber) || [],
+    [version]
+  );
 
   const createPlayerStats: () => Record<string, string> = useCallback(
     () =>
-      game?.statDescriptions.reduce((acc, d) => {
+      statDescriptions?.reduce((acc, d) => {
         // aggregate stats are not editable and are calculated automatically on the server
         if (d.type === StatDescriptionStatType.Aggregate) return acc;
         return {
@@ -84,19 +92,15 @@ const CreateMatch = () => {
               : "",
         };
       }, {}) ?? {},
-    [game]
+    [statDescriptions]
   );
 
   // add user's main player to the list of players
   useEffect(() => {
-    if (!user?.mainPlayer || players.length || !game) return;
+    if (!user?.mainPlayer || players.length || !version) return;
     setPlayers([user.mainPlayer]);
     setValue(user.mainPlayer.id, createPlayerStats());
-  }, [user, game, players, createPlayerStats, setValue]);
-
-  const onGameChange = useCallback((g: GameFieldsFragment) => {
-    setGame(g);
-  }, []);
+  }, [user, version, players, createPlayerStats, setValue]);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -121,11 +125,11 @@ const CreateMatch = () => {
   const router = useRouter();
   const onSubmit = useCallback(
     async (values: FormValues) => {
-      if (!game) return;
+      if (!version) return;
       await createMatch({
         variables: {
           input: {
-            gameId: game.id,
+            gameVersionId: version.id,
             playerIds: players.map((p) => p.id),
             stats: Object.entries(values).flatMap(
               ([playerId, playerStats]): StatInputType[] => {
@@ -144,11 +148,12 @@ const CreateMatch = () => {
       enqueueSnackbar("Match created", { variant: "success" });
       router.push("/matches");
     },
-    [createMatch, enqueueSnackbar, game, players, router]
+    [createMatch, enqueueSnackbar, players, router, version]
   );
 
   return (
     <Container>
+      <Title text="New match" />
       <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
         {steps.map((step) => (
           <Step key={step}>
@@ -158,11 +163,13 @@ const CreateMatch = () => {
       </Stepper>
       {activeStep === 0 && (
         <>
-          <GameAutocomplete onChange={onGameChange} sx={{ mb: 2 }} />
+          <Stack spacing={2} sx={{ mb: 2 }}>
+            <GameAutocomplete onVersionChange={setVersion} />
+          </Stack>
           <Button
             onClick={() => setActiveStep(1)}
             variant="contained"
-            disabled={!game}
+            disabled={!version}
           >
             Continue
           </Button>
@@ -205,7 +212,7 @@ const CreateMatch = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Player</TableCell>
-                    {game?.statDescriptions.map((d) => (
+                    {statDescriptions.map((d) => (
                       <TableCell key={d.id}>{d.name}</TableCell>
                     ))}
                   </TableRow>
@@ -218,7 +225,7 @@ const CreateMatch = () => {
                           ? "You"
                           : player.name || player.owner?.name}
                       </TableCell>
-                      {game?.statDescriptions.map((d) => (
+                      {statDescriptions.map((d) => (
                         <TableCell key={d.id}>
                           <StatInput statDescription={d} playerId={player.id} />
                         </TableCell>
@@ -228,7 +235,7 @@ const CreateMatch = () => {
                 </TableBody>
               </Table>
             ) : (
-              game?.statDescriptions.map((stat, i) => (
+              statDescriptions.map((stat, i) => (
                 <Box key={stat.id} sx={{ mb: 2 }}>
                   <Typography variant="h6" sx={{ mb: 2 }}>
                     {stat.name}
@@ -269,7 +276,7 @@ const CreateMatch = () => {
                       </Grid>
                     ))}
                   </Stack>
-                  {i !== game.statDescriptions.length - 1 && (
+                  {i !== statDescriptions.length - 1 && (
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   )}
                 </Box>

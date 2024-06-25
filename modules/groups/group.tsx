@@ -8,13 +8,13 @@ import {
   Stack,
   Tab,
 } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
 import Card from "./components/Card";
 import Members from "./components/Members";
 import { useGroupQuery } from "graphql/generated";
+import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const Group: React.FC = () => {
@@ -55,9 +55,7 @@ const Group: React.FC = () => {
 
   return (
     <Box>
-      <Head>
-        <title>OBGS | {group.name}</title>
-      </Head>
+      <Title text={group.name} />
       <Card showSettings group={group} />
 
       <TabContext value={tab}>

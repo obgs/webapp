@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 import List from "./components/List";
 import { useSearchGroupsLazyQuery } from "graphql/generated";
 import { useAuth } from "modules/auth";
+import { Title } from "modules/nav";
 import { usePagination, useSnackbarError } from "utils/apollo";
 
 const Browse = () => {
@@ -30,26 +31,29 @@ const Browse = () => {
   const router = useRouter();
 
   return (
-    <List
-      groups={groups}
-      loading={loading}
-      toolbar={
-        authenticated && (
-          <Box mb={2}>
-            <Button
-              variant="contained"
-              onClick={() => router.push("/groups/new")}
-            >
-              Create new group
-            </Button>
-          </Box>
-        )
-      }
-      paginationProps={{
-        ...pagination,
-        count: !groups ? -1 : totalGroups,
-      }}
-    />
+    <>
+      <Title text="Browse groups" />
+      <List
+        groups={groups}
+        loading={loading}
+        toolbar={
+          authenticated && (
+            <Box mb={2}>
+              <Button
+                variant="contained"
+                onClick={() => router.push("/groups/new")}
+              >
+                Create new group
+              </Button>
+            </Box>
+          )
+        }
+        paginationProps={{
+          ...pagination,
+          count: !groups ? -1 : totalGroups,
+        }}
+      />
+    </>
   );
 };
 

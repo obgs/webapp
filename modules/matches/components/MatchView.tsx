@@ -13,6 +13,8 @@ import {
   MatchFieldsFragment,
   StatDescriptionStatType,
 } from "graphql/generated";
+import { Title } from "modules/nav";
+import { byOrderNumber } from "modules/stats/utils";
 
 type Order = "asc" | "desc";
 
@@ -22,9 +24,11 @@ interface Props {
 
 const MatchView: React.FC<Props> = ({ match }) => {
   const [order, setOrder] = useState<Order>("desc");
-  const [orderBy, setOrderBy] = useState(
-    match?.game.statDescriptions[0].id || ""
+  const statDescriptions = useMemo(
+    () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
+    [match.gameVersion.statDescriptions]
   );
+  const [orderBy, setOrderBy] = useState(statDescriptions[0].id || "");
 
   const sortedStats = useMemo(() => {
     const statsByPlayer = match?.stats?.reduce((acc, stat) => {
@@ -40,9 +44,7 @@ const MatchView: React.FC<Props> = ({ match }) => {
       };
     }, {} as Record<string, Record<string, string>>);
     return Object.entries(statsByPlayer || {}).sort((a, b) => {
-      const statType = match?.game.statDescriptions.find(
-        (s) => s.id === orderBy
-      )?.type;
+      const statType = statDescriptions.find((s) => s.id === orderBy)?.type;
 
       const aStat =
         statType === StatDescriptionStatType.Numeric
@@ -60,7 +62,7 @@ const MatchView: React.FC<Props> = ({ match }) => {
       }
       return aStat > bStat ? -1 : 1;
     });
-  }, [match, order, orderBy]);
+  }, [match?.stats, statDescriptions, orderBy, order]);
 
   const handleSort = useCallback(
     (fieldId: string) => {
@@ -76,11 +78,12 @@ const MatchView: React.FC<Props> = ({ match }) => {
 
   return (
     <Container>
+      <Title text={`Match ${match.id}`} />
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>Player</TableCell>
-            {match.game.statDescriptions.map((stat) => (
+            {statDescriptions.map((stat) => (
               <TableCell key={stat.id}>
                 <TableSortLabel
                   active={orderBy === stat.id}
@@ -101,7 +104,7 @@ const MatchView: React.FC<Props> = ({ match }) => {
               return (
                 <TableRow key={playerId}>
                   <TableCell>{player?.name || player?.owner?.name}</TableCell>
-                  {match.game.statDescriptions.map((stat) => (
+                  {statDescriptions.map((stat) => (
                     <TableCell key={stat.id}>{stats[stat.id]}</TableCell>
                   ))}
                 </TableRow>

@@ -1,12 +1,7 @@
 import type { NextPage } from "next";
 
-import Title from "components/Title";
 import { Browse } from "modules/matches";
 
-const BrowseMatches: NextPage = () => (
-  <Title text="Browse matches">
-    <Browse />
-  </Title>
-);
+const BrowseMatches: NextPage = () => <Browse />;
 
 export default BrowseMatches;

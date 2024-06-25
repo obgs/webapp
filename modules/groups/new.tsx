@@ -4,6 +4,7 @@ import { useSnackbar } from "notistack";
 import React from "react";
 
 import Form, { SubmitCallback } from "./components/Form";
+import { Title } from "modules/nav";
 
 const CreateGroup = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -16,6 +17,7 @@ const CreateGroup = () => {
 
   return (
     <Container>
+      <Title text="New group" />
       <Typography variant="h4">Create a new group</Typography>
       <Form onSubmit={onSubmit} buttonLabel="Create" />
     </Container>

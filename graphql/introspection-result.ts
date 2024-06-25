@@ -7,6 +7,7 @@ const result: PossibleTypesResultData = {
   possibleTypes: {
     Node: [
       "Game",
+      "GameVersion",
       "Group",
       "GroupMembership",
       "GroupMembershipApplication",
