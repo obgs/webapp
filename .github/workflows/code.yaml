@@ -39,7 +39,7 @@ jobs:
           version: 7
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.13.0
+          node-version: 18.20.2
           cache: pnpm
       - name: Install dependencies
         run: pnpm install
