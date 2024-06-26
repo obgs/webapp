@@ -1,3 +1,5 @@
+"use client";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
@@ -12,7 +14,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import NavBar from "./NavBar";

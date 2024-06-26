@@ -7,7 +7,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import React, { PropsWithChildren } from "react";
 
 interface Props {
@@ -22,17 +22,20 @@ const NavLink = ({
   icon,
   "data-cy": dataCy,
 }: PropsWithChildren<Props>) => {
-  const { route } = useRouter();
+  const path = usePathname();
 
   return (
-    <Link href={href} passHref data-cy={dataCy}>
-      <ListItem>
-        <ListItemButton selected={href === route}>
-          {icon && <ListItemIcon>{icon}</ListItemIcon>}
-          <ListItemText primary={children} />
-        </ListItemButton>
-      </ListItem>
-    </Link>
+    <ListItem>
+      <ListItemButton
+        component={Link}
+        href={href}
+        data-cy={dataCy}
+        selected={href === path}
+      >
+        {icon && <ListItemIcon>{icon}</ListItemIcon>}
+        <ListItemText primary={children} />
+      </ListItemButton>
+    </ListItem>
   );
 };
 

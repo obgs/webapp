@@ -12,9 +12,9 @@ import {
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
+import { AggregateStatsValues } from "./schema";
 import { GenericStatsValues } from "../GenericStats/schema";
 import Label from "../Label";
-import { AggregateStatsValues } from "./schema";
 import { StatDescriptionStatType } from "graphql/generated";
 
 interface Props {

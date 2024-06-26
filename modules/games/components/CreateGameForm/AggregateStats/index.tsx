@@ -12,9 +12,9 @@ import { nanoid } from "nanoid";
 import React from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 
-import { FormValues } from "..";
 import Stat from "./Stat";
 import { aggregateStatSchema, AggregateStatsValues } from "./schema";
+import { FormValues } from "..";
 
 interface Props {
   values: FormValues;

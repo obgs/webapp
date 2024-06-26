@@ -8,8 +8,8 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import React, { PropsWithChildren, useMemo } from "react";
 
-import result from "../../graphql/introspection-result";
 import typePolicies from "./typePolicies";
+import result from "../../graphql/introspection-result";
 import { useAuth } from "modules/auth";
 
 const ApolloProvider = ({ children }: PropsWithChildren) => {

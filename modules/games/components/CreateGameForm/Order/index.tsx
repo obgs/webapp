@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 
-import { FormValues } from "..";
 import OrderItem from "./OrderItem";
 import { StatItem } from "./StatItem";
+import { FormValues } from "..";
 import { StatDescriptionStatType } from "graphql/generated";
 
 interface Props {

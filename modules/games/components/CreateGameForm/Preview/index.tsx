@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 
-import { FormValues } from "..";
 import generateMatchPreview from "./generateMatchPreview";
+import { FormValues } from "..";
 import { MatchView } from "modules/matches";
 
 interface Props {
