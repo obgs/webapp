@@ -1,5 +1,7 @@
-import { Card, Container } from "@mui/material";
-import { useRouter } from "next/router";
+"use client";
+
+import { Card } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 
@@ -18,10 +20,9 @@ import { GenericStatsValues } from "./components/CreateGameForm/GenericStats/sch
 import Order from "./components/CreateGameForm/Order";
 import Preview from "./components/CreateGameForm/Preview";
 import { SearchGamesDocument, useCreateGameMutation } from "graphql/generated";
-import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
-const CreateGame = () => {
+const Form = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [create, { loading, error }] = useCreateGameMutation();
   useSnackbarError(error);
@@ -106,43 +107,40 @@ const CreateGame = () => {
   }, []);
 
   return (
-    <Container>
-      <Title text="New game" />
-      <Card sx={{ maxWidth: 600 }}>
-        {activeStep === 0 && (
-          <GeneralInformation
-            values={values}
-            onSubmit={onGeneralInformationSubmit}
-          />
-        )}
-        {activeStep === 1 && (
-          <GenericStats
-            values={values}
-            goBack={goBack}
-            onSubmit={onGenericStatsSubmit}
-          />
-        )}
-        {activeStep === 2 && (
-          <AggregateStats
-            values={values}
-            goBack={goBack}
-            onSubmit={onAggregateStatsSubmit}
-          />
-        )}
-        {activeStep === 3 && (
-          <Order values={values} goBack={goBack} onConfirm={onOrderSubmit} />
-        )}
-        {activeStep === 4 && (
-          <Preview
-            values={values}
-            loading={loading}
-            goBack={goBack}
-            onSubmit={onSubmit}
-          />
-        )}
-      </Card>
-    </Container>
+    <Card sx={{ maxWidth: 600 }}>
+      {activeStep === 0 && (
+        <GeneralInformation
+          values={values}
+          onSubmit={onGeneralInformationSubmit}
+        />
+      )}
+      {activeStep === 1 && (
+        <GenericStats
+          values={values}
+          goBack={goBack}
+          onSubmit={onGenericStatsSubmit}
+        />
+      )}
+      {activeStep === 2 && (
+        <AggregateStats
+          values={values}
+          goBack={goBack}
+          onSubmit={onAggregateStatsSubmit}
+        />
+      )}
+      {activeStep === 3 && (
+        <Order values={values} goBack={goBack} onConfirm={onOrderSubmit} />
+      )}
+      {activeStep === 4 && (
+        <Preview
+          values={values}
+          loading={loading}
+          goBack={goBack}
+          onSubmit={onSubmit}
+        />
+      )}
+    </Card>
   );
 };
 
-export default CreateGame;
+export default Form;

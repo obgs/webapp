@@ -29,13 +29,13 @@ const Contexts: React.FC<PropsWithChildren> = ({ children }) => {
     <AppRouterCacheProvider>
       <ThemeProvider theme={theme}>
         <DndProvider backend={HTML5Backend}>
-          <ApolloProvider>
-            <UserProvider>
-              <SnackbarProvider>
-                <AuthProvider>{children}</AuthProvider>
-              </SnackbarProvider>
-            </UserProvider>
-          </ApolloProvider>
+          <AuthProvider>
+            <ApolloProvider>
+              <UserProvider>
+                <SnackbarProvider>{children}</SnackbarProvider>
+              </UserProvider>
+            </ApolloProvider>
+          </AuthProvider>
         </DndProvider>
       </ThemeProvider>
     </AppRouterCacheProvider>

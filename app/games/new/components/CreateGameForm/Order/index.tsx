@@ -60,7 +60,7 @@ const Order: React.FC<Props> = ({ values, goBack, onConfirm }) => {
             )}
             <Stack alignItems="center" direction="row" spacing={1}>
               {stat.references.map((referredStat, i) => (
-                <>
+                <React.Fragment key={referredStat}>
                   <Chip
                     label={
                       // find the referenced stats by id
@@ -70,7 +70,7 @@ const Order: React.FC<Props> = ({ values, goBack, onConfirm }) => {
                     }
                   />
                   {i < stat.references.length - 1 && <Typography>+</Typography>}
-                </>
+                </React.Fragment>
               ))}
             </Stack>
           </>
