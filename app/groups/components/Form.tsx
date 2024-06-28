@@ -1,3 +1,5 @@
+"use client";
+
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
@@ -14,6 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 import React, { useEffect } from "react";
 import * as yup from "yup";
 
@@ -51,17 +55,23 @@ export type SubmitCallback = (values: FormValues) => Promise<void>;
 
 interface Props {
   buttonLabel: string;
-  onSubmit: SubmitCallback;
   id?: string;
   initialValues?: FormValues;
 }
 
 const Form: React.FC<Props> = ({
   buttonLabel,
-  onSubmit,
   id,
   initialValues = defaultValues,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+
+  const onSubmit: SubmitCallback = async ({ name }) => {
+    enqueueSnackbar(`Group ${name} created.`, { variant: "success" });
+    router.push("/groups");
+  };
+
   const [createOrUpdateGroup, { loading, error }] =
     useCreateOrUpdateGroupMutation();
   useSnackbarError(error);
