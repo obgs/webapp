@@ -17,7 +17,8 @@
     "baseUrl": ".",
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/groups/*": ["app/groups/*"]
+      "@/groups/*": ["app/groups/*"],
+      "@/matches/*": ["app/matches/*"]
     }
   },
   "include": [

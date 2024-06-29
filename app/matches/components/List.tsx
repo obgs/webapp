@@ -1,3 +1,5 @@
+"use client";
+
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {
   Button,
