@@ -1,3 +1,5 @@
+"use client";
+
 import ErrorIcon from "@mui/icons-material/Error";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
@@ -8,18 +10,17 @@ import {
   Stack,
   Tab,
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
-import Card from "./components/Card";
-import Members from "./components/Members";
+import Card from "../components/Card";
+import Members from "../components/Members";
 import { useGroupQuery } from "graphql/generated";
-import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const Group: React.FC = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const params = useParams();
+  const id = params?.id;
 
   const { data, loading, error } = useGroupQuery({
     skip: !id || typeof id !== "string",
@@ -55,7 +56,6 @@ const Group: React.FC = () => {
 
   return (
     <Box>
-      <Title text={group.name} />
       <Card showSettings group={group} />
 
       <TabContext value={tab}>

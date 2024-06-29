@@ -1,15 +1,23 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 
 import client from "./client";
 import AuthContext from "./context";
+import { saveTokens as saveTokensToCookie } from "./tokens";
 import storage from "modules/storage";
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
+  const [, startTransition] = useTransition();
 
   const router = useRouter();
 
@@ -17,9 +25,11 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     (access_token: string, refresh_token: string) => {
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
-      storage.saveTokens({
-        accessToken: access_token,
-        refreshToken: refresh_token,
+      startTransition(async () => {
+        await saveTokensToCookie({
+          accessToken: access_token,
+          refreshToken: refresh_token,
+        });
       });
       setAuthenticated(true);
     },
