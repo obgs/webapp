@@ -1,16 +1,17 @@
+"use client";
+
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo, useState } from "react";
 
-import List from "./components/List";
+import List from "@/players/components/List";
 import {
   useMyPlayersQuery,
   useCreatePlayerMutation,
   MyPlayersQuery,
   MyPlayersDocument,
 } from "graphql/generated";
-import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const Supervised = () => {
@@ -58,7 +59,6 @@ const Supervised = () => {
 
   return (
     <>
-      <Title text="My players" />
       <Typography variant="body1">
         These are players that you are supervising
       </Typography>
