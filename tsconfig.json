@@ -18,7 +18,8 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/groups/*": ["app/groups/*"],
-      "@/matches/*": ["app/matches/*"]
+      "@/matches/*": ["app/matches/*"],
+      "@/players/*": ["app/players/*"]
     }
   },
   "include": [

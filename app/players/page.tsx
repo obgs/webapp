@@ -1,13 +1,15 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-import Search from "./components/Search";
-import { Title } from "modules/nav";
+import Search from "@/players/components/Search";
+
+export const metadata = {
+  title: "Browse players",
+};
 
 const Browse = () => {
   return (
     <Box>
-      <Title text="Browse players" />
       <Typography variant="body1">
         Players are the basic building blocks of you board game statistics.
         Users have a &quot;main player&quot; created for them as soon as they

@@ -1,3 +1,5 @@
+"use client";
+
 import ReplayIcon from "@mui/icons-material/Replay";
 import {
   Box,
@@ -12,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 
-import PlayersList from "./List";
+import List from "@/players/components/List";
 import {
   PlayerFieldsFragment,
   PlayerWhereInput,
@@ -83,7 +85,7 @@ const Search: React.FC<Props> = ({ onSelect, filter }) => {
           </Button>
         </Stack>
       </Box>
-      <PlayersList
+      <List
         players={players}
         loading={loading}
         toolbar={
