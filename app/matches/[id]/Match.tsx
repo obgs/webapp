@@ -1,14 +1,15 @@
+"use client";
+
 import { CircularProgress, Stack } from "@mui/material";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
 
-import MatchView from "./components/MatchView";
+import MatchView from "@/matches/components/MatchView";
 import { useMatchQuery } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 
 const Match: React.FC = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useParams() || {};
 
   const { data, loading, error } = useMatchQuery({
     skip: !id || typeof id !== "string",
