@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import ListIcon from "@mui/icons-material/List";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -25,14 +27,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import FindPlayerModal from "./components/FindPlayerModal";
-import StatInput from "./components/StatInput";
-import { FormValues, schema } from "./components/schema";
+import FindPlayerModal from "@/matches/components/FindPlayerModal";
+import StatInput from "@/matches/components/StatInput";
+import { FormValues, schema } from "@/matches/components/schema";
 import GameAutocomplete from "components/GameAutocomplete";
 import {
   PlayerFieldsFragment,
@@ -41,7 +43,6 @@ import {
   StatInput as StatInputType,
   GameVersionFieldsFragment,
 } from "graphql/generated";
-import { Title } from "modules/nav";
 import { parseEnumMetadata } from "modules/stats";
 import { byOrderNumber } from "modules/stats/utils";
 import { useSnackbarError } from "utils/apollo";
@@ -50,7 +51,7 @@ import { useUser } from "utils/user";
 const steps = ["Select game", "Enter stats"];
 const viewTypes = ["table", "list"] as const;
 
-const CreateMatch = () => {
+const Form = () => {
   const { user } = useUser();
 
   const [version, setVersion] = useState<
@@ -153,7 +154,6 @@ const CreateMatch = () => {
 
   return (
     <Container>
-      <Title text="New match" />
       <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
         {steps.map((step) => (
           <Step key={step}>
@@ -305,4 +305,4 @@ const CreateMatch = () => {
   );
 };
 
-export default CreateMatch;
+export default Form;
