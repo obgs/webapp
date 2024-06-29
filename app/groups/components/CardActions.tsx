@@ -4,7 +4,7 @@ import { Button, CardActions as MUICardActions, Tooltip } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 
-import GroupMembershipApplicationModal from "./ApplicationModal";
+import ApplicationModal from "@/groups/components/ApplicationModal";
 import {
   GroupFieldsFragment,
   GroupFieldsFragmentDoc,
@@ -98,7 +98,7 @@ const CardActions: React.FC<Props> = ({ group }) => {
   return (
     <>
       <MUICardActions>{joinButton}</MUICardActions>
-      <GroupMembershipApplicationModal
+      <ApplicationModal
         group={group}
         open={applyModalOpen}
         onClose={() => setApplyModalOpen(false)}

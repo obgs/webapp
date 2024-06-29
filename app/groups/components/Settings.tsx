@@ -3,7 +3,7 @@
 import { Alert } from "@mui/material";
 import React, { useMemo } from "react";
 
-import Form from "./Form";
+import Form from "@/groups/components/Form";
 import { useGroupSettingsQuery } from "graphql/generated";
 
 interface Props {

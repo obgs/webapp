@@ -13,8 +13,8 @@ import {
 import { useParams } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
-import Card from "../components/Card";
-import Members from "../components/Members";
+import Card from "@/groups/components/Card";
+import Members from "@/groups/components/Members";
 import { useGroupQuery } from "graphql/generated";
 import { useSnackbarError } from "utils/apollo";
 

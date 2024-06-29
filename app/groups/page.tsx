@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import React from "react";
 
-import List from "./components/List";
+import List from "@/groups/components/List";
 
 export const metadata = {
   title: "OBGS | Browse groups",

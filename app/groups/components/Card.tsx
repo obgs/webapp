@@ -12,9 +12,9 @@ import Link from "next/link";
 import pluralize from "pluralize";
 import React from "react";
 
-import CardActions from "./CardActions";
-import GroupJoinPolicyChip from "./JoinPolicyChip";
-import GroupRoleChip from "./RoleChip";
+import CardActions from "@/groups/components/CardActions";
+import GroupJoinPolicyChip from "@/groups/components/JoinPolicyChip";
+import GroupRoleChip from "@/groups/components/RoleChip";
 import { GroupFieldsFragment, GroupMembershipRole } from "graphql/generated";
 
 interface Props {

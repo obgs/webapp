@@ -4,7 +4,7 @@ import { Box, Button, TablePagination, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 
-import Card from "./Card";
+import Card from "@/groups/components/Card";
 import { useSearchGroupsLazyQuery } from "graphql/generated";
 import { useAuth } from "modules/auth";
 import { usePagination, useSnackbarError } from "utils/apollo";

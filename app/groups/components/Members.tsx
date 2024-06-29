@@ -21,8 +21,8 @@ import {
 import { useSnackbar } from "notistack";
 import React, { useCallback, useMemo, useState } from "react";
 
-import KickMemberModal from "./KickMemberModal";
-import useGroupMembersPagination from "./useGroupMembersPagination";
+import KickMemberModal from "@/groups/components/KickMemberModal";
+import useGroupMembersPagination from "@/groups/components/useGroupMembersPagination";
 import {
   GroupMembershipFieldsFragment,
   GroupMembershipFieldsFragmentDoc,

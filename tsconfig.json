@@ -15,7 +15,10 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-    "plugins": [{ "name": "next" }]
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/groups/*": ["app/groups/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
