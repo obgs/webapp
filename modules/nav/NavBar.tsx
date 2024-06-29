@@ -18,11 +18,11 @@ const NavBar = () => {
       {authenticated && (
         <>
           <NavLink href="/players/supervised">My players</NavLink>
-          <NavLink href="/players/request_supervision">
+          <NavLink href="/players/request-supervision">
             Request supervision
           </NavLink>
-          <NavLink href="/players/incoming_requests">Incoming requests</NavLink>
-          <NavLink href="/players/outgoing_requests">Outgoing requests</NavLink>
+          <NavLink href="/players/incoming-requests">Incoming requests</NavLink>
+          <NavLink href="/players/outgoing-requests">Outgoing requests</NavLink>
         </>
       )}
       <ListSubheader>Groups</ListSubheader>

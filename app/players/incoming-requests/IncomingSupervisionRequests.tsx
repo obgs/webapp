@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   CircularProgress,
@@ -10,7 +12,7 @@ import {
 } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
 
-import ResolveSupervisionRequestModal from "./components/ResolveSupervisionRequestModal";
+import ResolveSupervisionRequestModal from "@/players/components/ResolveSupervisionRequestModal";
 import {
   PlayerSupervisionRequestFieldsFragment,
   useIncomingSupervisionRequestsQuery,
