@@ -4,7 +4,7 @@ import React from "react";
 import GameList from "./GameList";
 
 export const metadata = {
-  title: "OBGS | Browse games",
+  title: "Browse games",
 };
 
 const Browse = () => {

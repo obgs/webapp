@@ -25,7 +25,7 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   if (!id) {
     return {
-      title: "OBGS | Invalid group",
+      title: "Invalid group",
     };
   }
 
@@ -36,12 +36,12 @@ export const generateMetadata = async ({
   });
   if (res.data.node?.__typename !== "Group") {
     return {
-      title: `OBGS | Invalid group`,
+      title: `Invalid group`,
     };
   }
 
   return {
-    title: `OBGS | Manage ${res.data.node.name}`,
+    title: `Manage ${res.data.node.name}`,
   };
 };
 

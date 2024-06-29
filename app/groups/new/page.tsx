@@ -4,7 +4,7 @@ import React from "react";
 import Form from "../components/Form";
 
 export const metadata = {
-  title: "OBGS | New group",
+  title: "New group",
 };
 
 const CreateGroup = () => {

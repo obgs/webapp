@@ -8,6 +8,13 @@ import "../styles/globals.css";
 import Contexts from "./Contexts";
 import { Layout } from "modules/nav";
 
+export const metadata = {
+  title: {
+    template: "OBGS | %s",
+    default: "OBGS",
+  },
+};
+
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">

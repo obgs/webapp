@@ -4,7 +4,7 @@ import React from "react";
 import Form from "./Form";
 
 export const metadata = {
-  title: "OBGS | New game",
+  title: "New game",
 };
 
 const CreateGame = () => {

@@ -4,7 +4,7 @@ import React from "react";
 import List from "@/groups/components/List";
 
 export const metadata = {
-  title: "OBGS | Browse groups",
+  title: "Browse groups",
 };
 
 const Browse = () => {
