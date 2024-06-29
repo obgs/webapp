@@ -1,3 +1,5 @@
+"use client";
+
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {
   Avatar,

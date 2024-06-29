@@ -1,8 +1,9 @@
-import { Alert } from "@mui/material";
-import { useSnackbar } from "notistack";
-import React, { useCallback, useMemo } from "react";
+"use client";
 
-import Form, { SubmitCallback } from "./Form";
+import { Alert } from "@mui/material";
+import React, { useMemo } from "react";
+
+import Form from "./Form";
 import { useGroupSettingsQuery } from "graphql/generated";
 
 interface Props {
@@ -21,14 +22,6 @@ const Settings: React.FC<Props> = ({ groupId }) => {
     [data?.node]
   );
 
-  const { enqueueSnackbar } = useSnackbar();
-  const onSubmit: SubmitCallback = useCallback(
-    async ({ name }) => {
-      enqueueSnackbar(`Group ${name} updated.`, { variant: "success" });
-    },
-    [enqueueSnackbar]
-  );
-
   if (error) {
     return <Alert severity="error">Error loading group settings</Alert>;
   }
@@ -43,7 +36,6 @@ const Settings: React.FC<Props> = ({ groupId }) => {
 
   return (
     <Form
-      onSubmit={onSubmit}
       buttonLabel="Update"
       id={group.id}
       initialValues={{
