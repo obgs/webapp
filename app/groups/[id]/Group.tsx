@@ -39,6 +39,7 @@ const Group: React.FC = () => {
   if (loading || !group) {
     return (
       <Stack flex={1} alignItems="center" justifyContent="center">
+        <title>{`OBGS | Group loading ...`}</title>
         <CircularProgress />
       </Stack>
     );
@@ -47,6 +48,7 @@ const Group: React.FC = () => {
   if (!group) {
     return (
       <Container>
+        <title>{`OBGS | Group not found`}</title>
         <Alert severity="error" icon={<ErrorIcon />}>
           Group not found
         </Alert>
@@ -56,6 +58,7 @@ const Group: React.FC = () => {
 
   return (
     <Box>
+      <title>{`OBGS | ${group.name}`}</title>
       <Card showSettings group={group} />
 
       <TabContext value={tab}>
