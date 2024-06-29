@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   CircularProgress,
@@ -11,7 +13,6 @@ import {
 import React, { useMemo } from "react";
 
 import { usePendingSupervisionRequestsQuery } from "graphql/generated";
-import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const OutgoingSupervisionRequests = () => {
@@ -22,7 +23,6 @@ const OutgoingSupervisionRequests = () => {
 
   return (
     <Box>
-      <Title text="Outgoing supervision requests" />
       {loading ? (
         <CircularProgress />
       ) : (
