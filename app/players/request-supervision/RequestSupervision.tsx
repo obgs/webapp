@@ -1,8 +1,10 @@
+"use client";
+
 import { Typography } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
 
-import RequestSupervisionModal from "./components/RequestSupervisionModal";
-import Search from "./components/Search";
+import RequestSupervisionModal from "@/players/components/RequestSupervisionModal";
+import Search from "@/players/components/Search";
 import { PlayerFieldsFragment, PlayerWhereInput } from "graphql/generated";
 import { Title } from "modules/nav";
 import { useUser } from "utils/user";
