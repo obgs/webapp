@@ -11,8 +11,8 @@ import {
 import React, { useCallback, useState } from "react";
 
 import generateMatchPreview from "./generateMatchPreview";
-import { FormValues } from "..";
-import { MatchView } from "modules/matches";
+import MatchView from "@/matches/components/MatchView";
+import { FormValues } from "app/games/new/components/CreateGameForm";
 
 interface Props {
   values: FormValues;
