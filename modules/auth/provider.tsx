@@ -47,6 +47,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       );
       saveTokens(access_token, refresh_token);
       router.push("/");
+      router.refresh();
     },
     [saveTokens, router]
   );
@@ -59,6 +60,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       );
       saveTokens(access_token, refresh_token);
       router.push("/");
+      router.refresh();
     },
     [router, saveTokens]
   );
@@ -68,6 +70,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       const { access_token, refresh_token } = await client.googleSignin(token);
       saveTokens(access_token, refresh_token);
       router.push("/");
+      router.refresh();
     },
     [router, saveTokens]
   );
@@ -80,6 +83,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       setAuthenticated(false);
     });
     router.push("/");
+    router.refresh();
   };
 
   const googleClientID = process.env.NEXT_PUBLIC_OAUTH_GOOGLE_CLIENT_ID || "";
