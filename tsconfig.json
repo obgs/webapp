@@ -14,8 +14,20 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/groups/*": ["app/groups/*"],
+      "@/matches/*": ["app/matches/*"],
+      "@/players/*": ["app/players/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types/*.d.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "types/*.d.ts",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "cypress/**/*"]
 }

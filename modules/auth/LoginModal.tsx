@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
-import NextLink from "next/link";
 import React, { useState } from "react";
 
 import useAuth from "./useAuth";
@@ -115,11 +114,13 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
         </Box>
         <Typography>
           Not registered? Sign up{" "}
-          <NextLink href="/auth/signup" passHref>
-            <Link sx={{ cursor: "pointer" }} onClick={onClose}>
-              here
-            </Link>
-          </NextLink>
+          <Link
+            sx={{ cursor: "pointer" }}
+            href="/auth/signup"
+            onClick={onClose}
+          >
+            here
+          </Link>
         </Typography>
       </Box>
     </Modal>
