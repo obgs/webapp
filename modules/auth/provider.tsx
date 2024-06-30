@@ -10,8 +10,11 @@ import {
 
 import client from "./client";
 import AuthContext from "./context";
-import { saveTokens as saveTokensToCookie } from "./tokens";
-import storage from "modules/storage";
+import {
+  clearTokens,
+  loadTokens,
+  saveTokens as saveTokensToCookie,
+} from "./tokens";
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -69,23 +72,27 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     [router, saveTokens]
   );
 
-  const signout = useCallback(() => {
-    setAccessToken(null);
-    setRefreshToken(null);
-    storage.clean();
-    setAuthenticated(false);
+  const signout = () => {
+    startTransition(async () => {
+      await clearTokens();
+      setAccessToken(null);
+      setRefreshToken(null);
+      setAuthenticated(false);
+    });
     router.push("/");
-  }, [router]);
+  };
 
   const googleClientID = process.env.NEXT_PUBLIC_OAUTH_GOOGLE_CLIENT_ID || "";
 
   useEffect(() => {
-    const tokens = storage.loadTokens();
-    if (tokens) {
-      setAccessToken(tokens.accessToken);
-      setRefreshToken(tokens.refreshToken);
-      setAuthenticated(true);
-    }
+    startTransition(async () => {
+      const res = await loadTokens();
+      if (res) {
+        setAccessToken(res.accessToken);
+        setRefreshToken(res.refreshToken);
+        setAuthenticated(true);
+      }
+    });
   }, []);
 
   return (
