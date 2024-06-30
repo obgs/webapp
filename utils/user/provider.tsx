@@ -6,7 +6,10 @@ import { useAuth } from "modules/auth";
 
 const UserProvider = ({ children }: PropsWithChildren) => {
   const { authenticated } = useAuth();
-  const { data, loading } = useMeQuery({ skip: !authenticated });
+  const { data, loading } = useMeQuery({
+    skip: !authenticated,
+    fetchPolicy: "network-only",
+  });
 
   return (
     <UserContext.Provider

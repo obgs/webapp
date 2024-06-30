@@ -1,4 +1,10 @@
-import { goToLogIn, logIn, logOff } from "./utils";
+import {
+  goToLogIn,
+  logIn,
+  logInTestUser1,
+  logInTestUser2,
+  logOff,
+} from "./utils";
 
 describe("Log in", () => {
   it("logs in", () => {
@@ -28,5 +34,12 @@ describe("Log in", () => {
     logOff();
     //On success you got the button "Log in"
     cy.contains("Log in");
+  });
+
+  it("allows logging into another user after logging out", () => {
+    cy.visit("/");
+    logInTestUser1();
+    logOff();
+    logInTestUser2();
   });
 });
