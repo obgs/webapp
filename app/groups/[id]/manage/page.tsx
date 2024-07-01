@@ -11,7 +11,6 @@ import {
   GroupQuery,
   GroupQueryVariables,
 } from "graphql/generated";
-import { Title } from "modules/nav";
 import { getClient } from "utils/apollo/client.rsc";
 
 interface Props {
@@ -48,7 +47,6 @@ const ManageGroup: React.FC<Props> = ({ params: { id } }) => {
   if (typeof id !== "string") {
     return (
       <Container>
-        <Title text="Group settings" />
         <Typography variant="body1">Invalid URL</Typography>
       </Container>
     );
