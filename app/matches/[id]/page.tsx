@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material";
+import { Container, Divider, Stack, Typography } from "@mui/material";
 
+import MatchCharts from "@/matches/components/MatchCharts";
 import MatchTable from "@/matches/components/MatchTable";
 import {
   MatchDocument,
@@ -14,7 +15,7 @@ interface Props {
   };
 }
 
-export const generateMetadata = ({ params: id }: Props) => {
+export const generateMetadata = ({ params: { id } }: Props) => {
   return {
     title: `Match ${id}`,
   };
@@ -32,7 +33,17 @@ const MatchPage = async ({ params: { id } }: Props) => {
     return <Typography>Match not found</Typography>;
   }
 
-  return <MatchTable match={data.node} />;
+  return (
+    <Container>
+      <Stack spacing={2}>
+        <Typography variant="h5">Charts</Typography>
+        <MatchCharts match={data.node} />
+        <Divider />
+        <Typography variant="h5">Table</Typography>
+        <MatchTable match={data.node} />
+      </Stack>
+    </Container>
+  );
 };
 
 export default MatchPage;
