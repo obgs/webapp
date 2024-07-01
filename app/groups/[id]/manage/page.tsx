@@ -12,7 +12,7 @@ import {
   GroupQueryVariables,
 } from "graphql/generated";
 import { Title } from "modules/nav";
-import { createClient } from "utils/apollo/server";
+import { getClient } from "utils/apollo/client.rsc";
 
 interface Props {
   params: {
@@ -29,8 +29,7 @@ export const generateMetadata = async ({
     };
   }
 
-  const client = createClient();
-  const res = await client.query<GroupQuery, GroupQueryVariables>({
+  const res = await getClient().query<GroupQuery, GroupQueryVariables>({
     query: GroupDocument,
     variables: { id },
   });
