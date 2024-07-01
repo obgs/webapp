@@ -1,8 +1,17 @@
 "use client";
 
-import { Box } from "@mui/material";
-import { BarChart, BarSeriesType } from "@mui/x-charts";
-import { useMemo } from "react";
+import {
+  BarPlot,
+  BarSeriesType,
+  ChartsAxisHighlight,
+  ChartsLegend,
+  ChartsTooltip,
+  HighlightItemData,
+  ResponsiveChartContainer,
+} from "@mui/x-charts";
+import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
+import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   MatchFieldsFragment,
@@ -12,6 +21,7 @@ import { byOrderNumber } from "modules/stats/utils";
 
 interface Props {
   match: MatchFieldsFragment;
+  highlightedPlayer: string;
 }
 
 const isNumericStat = (s: StatDescriptionStatType) =>
@@ -19,7 +29,7 @@ const isNumericStat = (s: StatDescriptionStatType) =>
     s
   );
 
-const MatchCharts = ({ match }: Props) => {
+const MatchCharts = ({ match, highlightedPlayer }: Props) => {
   const statDescriptions = useMemo(
     () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
     [match.gameVersion.statDescriptions]
@@ -38,33 +48,60 @@ const MatchCharts = ({ match }: Props) => {
     };
   }, {} as Record<string, Record<string, string>>);
 
-  const xAxisData = statDescriptions
-    .filter((s) => isNumericStat(s.type))
-    .map((stat) => stat.name);
-
-  const series = match.players.map(
-    (player): BarSeriesType => ({
-      data: statDescriptions
+  const xAxisData = useMemo(
+    () =>
+      statDescriptions
         .filter((s) => isNumericStat(s.type))
-        .map((stat) => Number(statsByPlayer?.[player.id]?.[stat.id]) || 0),
-      type: "bar",
-      id: player.id,
-      label: player.name,
-    })
+        .map((stat) => stat.name),
+    [statDescriptions]
   );
-  return (
-    <Box width="100%">
-      <BarChart
-        height={500}
-        xAxis={[
-          {
-            data: xAxisData,
-            scaleType: "band",
+
+  const series = useMemo(
+    () =>
+      match.players.map(
+        (player): BarSeriesType => ({
+          data: statDescriptions
+            .filter((s) => isNumericStat(s.type))
+            .map((stat) => Number(statsByPlayer?.[player.id]?.[stat.id]) || 0),
+          type: "bar",
+          id: player.id,
+          label: player.name,
+          highlightScope: {
+            fade: "global",
+            highlight: "series",
           },
-        ]}
-        series={series}
-      />
-    </Box>
+        })
+      ),
+    [match.players, statsByPlayer, statDescriptions]
+  );
+  const [highlighted, setHighlighted] = useState<HighlightItemData>();
+
+  useEffect(() => {
+    setHighlighted({
+      seriesId: highlightedPlayer,
+      dataIndex: match.players.findIndex((p) => p.id === highlightedPlayer),
+    });
+  }, [highlightedPlayer, match.players]);
+
+  return (
+    <ResponsiveChartContainer
+      height={500}
+      xAxis={[
+        {
+          data: xAxisData,
+          scaleType: "band",
+        },
+      ]}
+      series={series}
+      highlightedItem={highlighted}
+    >
+      <BarPlot barLabel="value" />
+      <ChartsLegend direction="row" />
+      <ChartsXAxis />
+      <ChartsYAxis />
+      <ChartsTooltip />
+      <ChartsAxisHighlight x="band" />
+    </ResponsiveChartContainer>
   );
 };
 
