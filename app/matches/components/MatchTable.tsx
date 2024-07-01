@@ -23,7 +23,7 @@ interface Props {
   match: MatchFieldsFragment;
 }
 
-const MatchView: React.FC<Props> = ({ match }) => {
+const MatchTable: React.FC<Props> = ({ match }) => {
   const [order, setOrder] = useState<Order>("desc");
   const statDescriptions = useMemo(
     () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
@@ -117,4 +117,4 @@ const MatchView: React.FC<Props> = ({ match }) => {
   );
 };
 
-export default MatchView;
+export default MatchTable;

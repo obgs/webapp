@@ -11,7 +11,7 @@ import {
 import React, { useCallback, useState } from "react";
 
 import generateMatchPreview from "./generateMatchPreview";
-import MatchView from "@/matches/components/MatchView";
+import MatchTable from "@/matches/components/MatchTable";
 import { FormValues } from "app/games/new/components/CreateGameForm";
 
 interface Props {
@@ -37,7 +37,7 @@ const Preview: React.FC<Props> = ({ values, loading, goBack, onSubmit }) => {
           like.
         </Typography>
         <Divider sx={{ mb: 2 }} />
-        <MatchView match={match} />
+        <MatchTable match={match} />
         <Divider sx={{ mb: 2, mt: 2 }} />
         <Button
           variant="contained"
