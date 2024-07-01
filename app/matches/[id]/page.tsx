@@ -1,4 +1,12 @@
-import Match from "./Match";
+import { Typography } from "@mui/material";
+
+import MatchView from "@/matches/components/MatchView";
+import {
+  MatchDocument,
+  MatchQuery,
+  MatchQueryVariables,
+} from "graphql/generated";
+import { getClient } from "utils/apollo/client.rsc";
 
 interface Props {
   params: {
@@ -12,6 +20,19 @@ export const generateMetadata = ({ params: id }: Props) => {
   };
 };
 
-const MatchPage = () => <Match />;
+const MatchPage = async ({ params: { id } }: Props) => {
+  const { data } = await getClient().query<MatchQuery, MatchQueryVariables>({
+    query: MatchDocument,
+    variables: {
+      id,
+    },
+  });
+
+  if (data?.node?.__typename !== "Match") {
+    return <Typography>Match not found</Typography>;
+  }
+
+  return <MatchView match={data.node} />;
+};
 
 export default MatchPage;
