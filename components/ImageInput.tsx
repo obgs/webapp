@@ -68,7 +68,12 @@ export const ImageInput: React.FC<Props> = ({
         }}
       >
         {existingAvatarURL ? (
-          <Image src={existingAvatarURL} alt="avatar" />
+          <Image
+            src={existingAvatarURL}
+            alt="avatar"
+            width={200}
+            height={200}
+          />
         ) : (
           <AccountCircle
             sx={{
