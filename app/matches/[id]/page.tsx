@@ -1,7 +1,6 @@
-import { Container, Divider, Stack, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
-import MatchCharts from "@/matches/components/MatchCharts";
-import MatchTable from "@/matches/components/MatchTable";
+import MatchView from "@/matches/components/MatchView";
 import {
   MatchDocument,
   MatchQuery,
@@ -35,13 +34,7 @@ const MatchPage = async ({ params: { id } }: Props) => {
 
   return (
     <Container>
-      <Stack spacing={2}>
-        <Typography variant="h5">Charts</Typography>
-        <MatchCharts match={data.node} />
-        <Divider />
-        <Typography variant="h5">Table</Typography>
-        <MatchTable match={data.node} />
-      </Stack>
+      <MatchView match={data.node} />
     </Container>
   );
 };

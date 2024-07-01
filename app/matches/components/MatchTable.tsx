@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Container,
   Table,
   TableBody,
   TableCell,
@@ -21,9 +20,10 @@ type Order = "asc" | "desc";
 
 interface Props {
   match: MatchFieldsFragment;
+  onHover?: (playerId: string) => void;
 }
 
-const MatchTable: React.FC<Props> = ({ match }) => {
+const MatchTable: React.FC<Props> = ({ match, onHover }) => {
   const [order, setOrder] = useState<Order>("desc");
   const statDescriptions = useMemo(
     () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
@@ -78,42 +78,51 @@ const MatchTable: React.FC<Props> = ({ match }) => {
   );
 
   return (
-    <Container>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Player</TableCell>
-            {statDescriptions.map((stat) => (
-              <TableCell key={stat.id}>
-                <TableSortLabel
-                  active={orderBy === stat.id}
-                  direction={orderBy === stat.id ? order : "desc"}
-                  onClick={() => handleSort(stat.id)}
-                >
-                  {stat.name}
-                </TableSortLabel>
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortedStats.map(
-            ([playerId, stats]: [string, Record<string, string>]) => {
-              const player = match.players.find((p) => p.id === playerId);
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Player</TableCell>
+          {statDescriptions.map((stat) => (
+            <TableCell key={stat.id}>
+              <TableSortLabel
+                active={orderBy === stat.id}
+                direction={orderBy === stat.id ? order : "desc"}
+                onClick={() => handleSort(stat.id)}
+              >
+                {stat.name}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {sortedStats.map(
+          ([playerId, stats]: [string, Record<string, string>]) => {
+            const player = match.players.find((p) => p.id === playerId);
 
-              return (
-                <TableRow key={playerId}>
-                  <TableCell>{player?.name || player?.owner?.name}</TableCell>
-                  {statDescriptions.map((stat) => (
-                    <TableCell key={stat.id}>{stats[stat.id]}</TableCell>
-                  ))}
-                </TableRow>
-              );
-            }
-          )}
-        </TableBody>
-      </Table>
-    </Container>
+            return (
+              <TableRow hover key={playerId}>
+                <TableCell
+                  onMouseOver={() => onHover?.(playerId)}
+                  onMouseLeave={() => onHover?.("")}
+                >
+                  {player?.name || player?.owner?.name}
+                </TableCell>
+                {statDescriptions.map((stat) => (
+                  <TableCell
+                    onMouseOver={() => onHover?.(playerId)}
+                    onMouseLeave={() => onHover?.("")}
+                    key={stat.id}
+                  >
+                    {stats[stat.id]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            );
+          }
+        )}
+      </TableBody>
+    </Table>
   );
 };
 
