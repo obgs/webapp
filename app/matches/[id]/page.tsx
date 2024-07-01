@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-import MatchView from "@/matches/components/MatchView";
+import MatchTable from "@/matches/components/MatchTable";
 import {
   MatchDocument,
   MatchQuery,
@@ -32,7 +32,7 @@ const MatchPage = async ({ params: { id } }: Props) => {
     return <Typography>Match not found</Typography>;
   }
 
-  return <MatchView match={data.node} />;
+  return <MatchTable match={data.node} />;
 };
 
 export default MatchPage;
