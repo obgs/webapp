@@ -13,6 +13,7 @@ const nextConfig = {
     });
     return config;
   },
+  transpilePackages: ["@mui/x-charts"],
 };
 
 module.exports = nextConfig;
