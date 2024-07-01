@@ -17,7 +17,6 @@ import {
   PlayerSupervisionRequestFieldsFragment,
   useIncomingSupervisionRequestsQuery,
 } from "graphql/generated";
-import { Title } from "modules/nav";
 import { useSnackbarError } from "utils/apollo";
 
 const IncomingSupervisionRequests = () => {
@@ -43,7 +42,6 @@ const IncomingSupervisionRequests = () => {
 
   return (
     <Box>
-      <Title text="Incoming supervision requests" />
       {loading ? (
         <CircularProgress />
       ) : (
