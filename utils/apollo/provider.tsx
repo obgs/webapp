@@ -1,12 +1,11 @@
 import { ApolloNextAppProvider } from "@apollo/experimental-nextjs-app-support";
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { PropsWithChildren } from "react";
 
-import { createClient } from "./server";
+import { createClient } from "utils/apollo/client";
 
 const ApolloProvider = ({ children }: PropsWithChildren) => {
-  const makeClient = useCallback(() => createClient(), []);
   return (
-    <ApolloNextAppProvider makeClient={makeClient}>
+    <ApolloNextAppProvider makeClient={createClient}>
       {children}
     </ApolloNextAppProvider>
   );
