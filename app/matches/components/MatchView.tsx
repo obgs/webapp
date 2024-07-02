@@ -3,7 +3,7 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 
-import MatchCharts from "@/matches/components/MatchCharts";
+import MatchScoreDistributionBarChart from "@/matches/components/MatchScoreDistributionBarChart";
 import MatchTable from "@/matches/components/MatchTable";
 import { MatchFieldsFragment } from "graphql/generated";
 
@@ -16,7 +16,10 @@ const MatchView: React.FC<Props> = ({ match }) => {
   return (
     <Stack spacing={2}>
       <Typography variant="h5">Charts</Typography>
-      <MatchCharts highlightedPlayer={highlightedPlayer} match={match} />
+      <MatchScoreDistributionBarChart
+        highlightedPlayer={highlightedPlayer}
+        match={match}
+      />
       <Divider />
       <Typography variant="h5">Table</Typography>
       <MatchTable onHover={setHighlightedPlayer} match={match} />
