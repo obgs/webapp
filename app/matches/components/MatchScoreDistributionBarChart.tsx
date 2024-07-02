@@ -29,7 +29,10 @@ const isNumericStat = (s: StatDescriptionStatType) =>
     s
   );
 
-const MatchCharts = ({ match, highlightedPlayer }: Props) => {
+const MatchScoreDistributionBarChart = ({
+  match,
+  highlightedPlayer,
+}: Props) => {
   const statDescriptions = useMemo(
     () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
     [match.gameVersion.statDescriptions]
@@ -105,4 +108,4 @@ const MatchCharts = ({ match, highlightedPlayer }: Props) => {
   );
 };
 
-export default MatchCharts;
+export default MatchScoreDistributionBarChart;
