@@ -21,7 +21,10 @@ const MatchView: React.FC<Props> = ({ match }) => {
         highlightedPlayer={highlightedPlayer}
         match={match}
       />
-      <MatchPlayerPerformanceComparisonRadarChart match={match} />
+      <MatchPlayerPerformanceComparisonRadarChart
+        highlightedPlayer={highlightedPlayer}
+        match={match}
+      />
       <Divider />
       <Typography variant="h5">Table</Typography>
       <MatchTable onHover={setHighlightedPlayer} match={match} />
