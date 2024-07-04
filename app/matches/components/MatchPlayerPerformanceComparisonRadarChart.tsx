@@ -21,6 +21,7 @@ import { byOrderNumber } from "modules/stats/utils";
 
 interface Props {
   match: MatchFieldsFragment;
+  highlightedPlayer: string;
 }
 
 const getColor = (index: number) =>
@@ -31,7 +32,10 @@ const getColor = (index: number) =>
 const isNumericStat = (s: StatDescriptionStatType) =>
   [StatDescriptionStatType.Numeric].includes(s);
 
-const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
+const MatchPlayerPerformanceComparisonRadarChart = ({
+  match,
+  highlightedPlayer,
+}: Props) => {
   const theme = useTheme();
   const statDescriptions = useMemo(
     () =>
@@ -89,7 +93,7 @@ const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
             dataKey={player.id}
             stroke={getColor(index)}
             fill={getColor(index)}
-            fillOpacity={0.5}
+            fillOpacity={highlightedPlayer === player.id ? 0.6 : 0.1}
           />
         ))}
         <Radar
