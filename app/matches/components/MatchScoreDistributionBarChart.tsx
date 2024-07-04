@@ -1,12 +1,14 @@
 "use client";
 
 import {
+  AllSeriesType,
   BarPlot,
   BarSeriesType,
   ChartsAxisHighlight,
   ChartsLegend,
   ChartsTooltip,
   HighlightItemData,
+  LinePlot,
   ResponsiveChartContainer,
 } from "@mui/x-charts";
 import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
@@ -59,9 +61,9 @@ const MatchScoreDistributionBarChart = ({
     [statDescriptions]
   );
 
-  const series = useMemo(
-    () =>
-      match.players.map(
+  const series: AllSeriesType[] = useMemo(
+    () => [
+      ...match.players.map(
         (player): BarSeriesType => ({
           data: statDescriptions
             .filter((s) => isNumericStat(s.type))
@@ -75,7 +77,22 @@ const MatchScoreDistributionBarChart = ({
           },
         })
       ),
-    [match.players, statsByPlayer, statDescriptions]
+      {
+        data: match.gameVersion.metrics.numericStats.map((stat) =>
+          Number(stat.globalAverage.toFixed(2))
+        ),
+        type: "line",
+        curve: "step",
+        id: "average",
+        label: "Average",
+      },
+    ],
+    [
+      match.players,
+      match.gameVersion.metrics.numericStats,
+      statDescriptions,
+      statsByPlayer,
+    ]
   );
   const [highlighted, setHighlighted] = useState<HighlightItemData>();
 
@@ -99,6 +116,7 @@ const MatchScoreDistributionBarChart = ({
       highlightedItem={highlighted}
     >
       <BarPlot barLabel="value" />
+      <LinePlot />
       <ChartsLegend direction="row" />
       <ChartsXAxis />
       <ChartsYAxis />
