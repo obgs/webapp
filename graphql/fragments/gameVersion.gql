@@ -7,4 +7,23 @@ fragment gameVersionFields on GameVersion {
   game {
     name
   }
+  metrics {
+    numericStats {
+      stat {
+        id
+        name
+      }
+      globalAverage
+    }
+    enumStats {
+      stat {
+        id
+        name
+      }
+      global {
+        value
+        occurences
+      }
+    }
+  }
 }

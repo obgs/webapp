@@ -15,4 +15,5 @@ fragment matchFields on Match {
       ...playerFields
     }
   }
+  createdAt
 }

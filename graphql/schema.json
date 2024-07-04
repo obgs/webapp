@@ -488,6 +488,122 @@
         },
         {
           "kind": "OBJECT",
+          "name": "EnumMetric",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "stat",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "StatDescription",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "global",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "EnumOccurences",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "EnumOccurences",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "OBJECT",
+          "name": "EnumOccurences",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "value",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurences",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "OBJECT",
           "name": "Favorites",
           "description": null,
           "specifiedByURL": null,
@@ -904,6 +1020,22 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "metrics",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "GameVersionMetrics",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": [],
@@ -914,6 +1046,128 @@
               "ofType": null
             }
           ],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "OBJECT",
+          "name": "GameVersionMetrics",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "numericStats",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "NumericMetric",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "enumStats",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "EnumMetric",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "adoption",
+              "description": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "GranularityInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TimeFloatMetric",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "matchesCreated",
+              "description": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "TimeSeriesInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TimeSeries",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
           "enumValues": [],
           "possibleTypes": []
         },
@@ -1706,6 +1960,68 @@
                     "name": "UserWhereInput",
                     "ofType": null
                   }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "ENUM",
+          "name": "Granularity",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [
+            {
+              "name": "DAY",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "WEEK",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MONTH",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "YEAR",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": []
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "GranularityInput",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [
+            {
+              "name": "value",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "Granularity",
+                  "ofType": null
                 }
               },
               "defaultValue": null
@@ -3519,6 +3835,22 @@
               "deprecationReason": null
             },
             {
+              "name": "createdAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "gameVersion",
               "description": null,
               "args": [],
@@ -3835,6 +4167,102 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAt",
+              "description": "created_at field predicates",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtNEQ",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtIn",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Time",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtNotIn",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Time",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtGT",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtGTE",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtLT",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "createdAtLTE",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
                 "ofType": null
               },
               "defaultValue": null
@@ -4488,6 +4916,62 @@
               "ofType": null
             }
           ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "NumericMetric",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "stat",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "StatDescription",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "globalAverage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "userAverage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
         },
         {
           "kind": "ENUM",
@@ -6776,6 +7260,211 @@
           "description": "The `String`scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
           "specifiedByURL": null,
           "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Time",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "OBJECT",
+          "name": "TimeFloatMetric",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "value",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "trend",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "OBJECT",
+          "name": "TimeSeries",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "series",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "TimeSeriesPeriod",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "TimeSeriesInput",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [],
+          "inputFields": [
+            {
+              "name": "granularity",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "GranularityInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "start",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "end",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": [],
+          "enumValues": [],
+          "possibleTypes": []
+        },
+        {
+          "kind": "OBJECT",
+          "name": "TimeSeriesPeriod",
+          "description": null,
+          "specifiedByURL": null,
+          "fields": [
+            {
+              "name": "start",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "end",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "activityCount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "inputFields": [],
           "interfaces": [],
           "enumValues": [],

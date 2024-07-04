@@ -57,7 +57,7 @@ const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
     };
   }, {} as Record<string, Record<string, string>>);
 
-  const data = statDescriptions.map((stat) => ({
+  const data = statDescriptions.map((stat, index) => ({
     stat: stat.name,
     ...match.players.reduce(
       (acc, player) => ({
@@ -66,6 +66,8 @@ const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
       }),
       {}
     ),
+    average:
+      match.gameVersion.metrics.numericStats[index].globalAverage.toFixed(2),
   }));
   return (
     <ResponsiveContainer height={500} width="50%">
@@ -90,6 +92,13 @@ const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
             fillOpacity={0.5}
           />
         ))}
+        <Radar
+          name="Average"
+          dataKey="average"
+          stroke={getColor(match.players.length)}
+          fill={getColor(match.players.length)}
+          fillOpacity={0.5}
+        />
         <Legend />
       </RadarChart>
     </ResponsiveContainer>
