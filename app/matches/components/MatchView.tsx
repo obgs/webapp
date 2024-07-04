@@ -13,21 +13,22 @@ interface Props {
 }
 
 const MatchView: React.FC<Props> = ({ match }) => {
-  const [highlightedPlayer, setHighlightedPlayer] = useState("");
+  const [highlightItem, setHighlightItem] = useState("");
   return (
     <Stack spacing={2}>
       <Typography variant="h5">Charts</Typography>
       <MatchScoreDistributionBarChart
-        highlightedPlayer={highlightedPlayer}
+        highlightedPlayer={highlightItem}
         match={match}
       />
       <MatchPlayerPerformanceComparisonRadarChart
-        highlightedPlayer={highlightedPlayer}
+        highlightItem={highlightItem}
         match={match}
+        onLegendHover={setHighlightItem}
       />
       <Divider />
       <Typography variant="h5">Table</Typography>
-      <MatchTable onHover={setHighlightedPlayer} match={match} />
+      <MatchTable onHover={setHighlightItem} match={match} />
     </Stack>
   );
 };

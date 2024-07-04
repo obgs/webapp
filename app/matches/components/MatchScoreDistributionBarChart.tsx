@@ -117,7 +117,7 @@ const MatchScoreDistributionBarChart = ({
     >
       <BarPlot barLabel="value" />
       <LinePlot />
-      <ChartsLegend direction="row" />
+      <ChartsLegend />
       <ChartsXAxis />
       <ChartsYAxis />
       <ChartsTooltip />

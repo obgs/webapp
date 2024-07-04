@@ -21,7 +21,8 @@ import { byOrderNumber } from "modules/stats/utils";
 
 interface Props {
   match: MatchFieldsFragment;
-  highlightedPlayer: string;
+  highlightItem: string;
+  onLegendHover: (dataKey: string) => void;
 }
 
 const getColor = (index: number) =>
@@ -34,7 +35,8 @@ const isNumericStat = (s: StatDescriptionStatType) =>
 
 const MatchPlayerPerformanceComparisonRadarChart = ({
   match,
-  highlightedPlayer,
+  highlightItem,
+  onLegendHover,
 }: Props) => {
   const theme = useTheme();
   const statDescriptions = useMemo(
@@ -93,7 +95,7 @@ const MatchPlayerPerformanceComparisonRadarChart = ({
             dataKey={player.id}
             stroke={getColor(index)}
             fill={getColor(index)}
-            fillOpacity={highlightedPlayer === player.id ? 0.6 : 0.1}
+            fillOpacity={highlightItem === player.id ? 0.6 : 0.1}
           />
         ))}
         <Radar
@@ -101,9 +103,12 @@ const MatchPlayerPerformanceComparisonRadarChart = ({
           dataKey="average"
           stroke={getColor(match.players.length)}
           fill={getColor(match.players.length)}
-          fillOpacity={0.5}
+          fillOpacity={highlightItem === "average" ? 0.6 : 0.1}
         />
-        <Legend />
+        <Legend
+          onMouseOver={({ payload: { dataKey } }) => onLegendHover(dataKey)}
+          onMouseOut={() => onLegendHover("")}
+        />
       </RadarChart>
     </ResponsiveContainer>
   );
