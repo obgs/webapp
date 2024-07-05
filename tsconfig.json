@@ -19,7 +19,8 @@
     "paths": {
       "@/groups/*": ["app/groups/*"],
       "@/matches/*": ["app/matches/*"],
-      "@/players/*": ["app/players/*"]
+      "@/players/*": ["app/players/*"],
+      "@/charts/*": ["modules/charts/*"]
     }
   },
   "include": [
