@@ -1,18 +1,14 @@
-import { useTheme } from "@mui/material";
+import { alpha, Stack, useTheme } from "@mui/material";
 import { blueberryTwilightPalette } from "@mui/x-charts";
-import React, { useMemo } from "react";
 import {
-  RadarChart,
-  PolarGrid,
-  Legend,
-  PolarAngleAxis,
-  ResponsiveContainer,
-  Tooltip,
-  Radar,
-  PolarRadiusAxis,
-} from "recharts";
+  ChartOptions,
+  ChartData,
+  ChartDataset,
+  LegendItem,
+} from "chart.js/auto";
+import React, { useMemo } from "react";
 
-import RechartsTooltip from "@/matches/components/RechartsTooltip";
+import ChartjsCanvas from "components/ChartjsCanvas";
 import {
   MatchFieldsFragment,
   StatDescriptionStatType,
@@ -21,8 +17,6 @@ import { byOrderNumber } from "modules/stats/utils";
 
 interface Props {
   match: MatchFieldsFragment;
-  highlightItem: string;
-  onLegendHover: (dataKey: string) => void;
 }
 
 const getColor = (index: number) =>
@@ -33,11 +27,7 @@ const getColor = (index: number) =>
 const isNumericStat = (s: StatDescriptionStatType) =>
   [StatDescriptionStatType.Numeric].includes(s);
 
-const MatchPlayerPerformanceComparisonRadarChart = ({
-  match,
-  highlightItem,
-  onLegendHover,
-}: Props) => {
+const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
   const theme = useTheme();
   const statDescriptions = useMemo(
     () =>
@@ -63,54 +53,86 @@ const MatchPlayerPerformanceComparisonRadarChart = ({
     };
   }, {} as Record<string, Record<string, string>>);
 
-  const data = statDescriptions.map((stat, index) => ({
-    stat: stat.name,
-    ...match.players.reduce(
-      (acc, player) => ({
-        ...acc,
-        [player.id]: Number(statsByPlayer?.[player.id]?.[stat.id]) || 0,
-      }),
-      {}
-    ),
-    average:
-      match.gameVersion.metrics.numericStats[index].globalAverage.toFixed(2),
-  }));
+  const data: ChartData<"radar"> = useMemo(
+    () => ({
+      labels: statDescriptions.map((s) => s.name),
+      datasets: [
+        ...match.players.map(
+          (player, index): ChartDataset<"radar"> => ({
+            label: player.name,
+            data: statDescriptions.map(
+              (stat) => Number(statsByPlayer?.[player.id]?.[stat.id]) || 0
+            ),
+            backgroundColor: alpha(getColor(index), 0.6),
+            type: "radar",
+            pointRadius: 3,
+          })
+        ),
+        {
+          label: "average",
+          data: statDescriptions.map(
+            (stat) =>
+              match.gameVersion.metrics.numericStats.find(
+                (s) => s.stat.id === stat.id
+              )?.globalAverage || 0
+          ),
+          backgroundColor: alpha(getColor(match.players.length), 0.6),
+          type: "radar",
+          pointRadius: 3,
+        },
+      ],
+    }),
+    [
+      match.gameVersion.metrics.numericStats,
+      match.players,
+      statDescriptions,
+      statsByPlayer,
+    ]
+  );
+  const options: ChartOptions<"radar"> = useMemo(
+    () => ({
+      responsive: true,
+      scales: {
+        r: {
+          pointLabels: {
+            color: theme.palette.text.primary,
+          },
+          angleLines: {
+            color: theme.palette.divider,
+          },
+          ticks: {
+            color: theme.palette.text.primary,
+            backdropColor: theme.palette.background.default,
+          },
+          grid: {
+            color: theme.palette.divider,
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: theme.palette.text.primary,
+            generateLabels: (chart) => {
+              return chart.data.datasets.map(
+                (dataset, i): LegendItem => ({
+                  text: dataset.label || "",
+                  fontColor: theme.palette.text.primary,
+                  fillStyle: getColor(i),
+                  datasetIndex: i,
+                })
+              );
+            },
+          },
+        },
+      },
+    }),
+    [theme]
+  );
   return (
-    <ResponsiveContainer height={500} width="50%">
-      <RadarChart data={data}>
-        <Tooltip
-          content={(props) => <RechartsTooltip {...props} payloadKey="stat" />}
-        />
-        <PolarGrid />
-        <PolarAngleAxis
-          dataKey="stat"
-          tickSize={15}
-          tick={{ fill: theme.palette.text.primary }}
-        />
-        <PolarRadiusAxis angle={180 / statDescriptions.length} />
-        {match.players.map((player, index) => (
-          <Radar
-            key={player.id}
-            name={player.name}
-            dataKey={player.id}
-            stroke={getColor(index)}
-            fill={getColor(index)}
-            fillOpacity={highlightItem === player.id ? 0.6 : 0.1}
-          />
-        ))}
-        <Radar
-          name="Average"
-          dataKey="average"
-          stroke={getColor(match.players.length)}
-          fill={getColor(match.players.length)}
-          fillOpacity={highlightItem === "average" ? 0.6 : 0.1}
-        />
-        <Legend
-          onMouseOver={({ payload: { dataKey } }) => onLegendHover(dataKey)}
-          onMouseOut={() => onLegendHover("")}
-        />
-      </RadarChart>
-    </ResponsiveContainer>
+    <Stack alignItems="center" height={500} width="100%">
+      <ChartjsCanvas type="radar" data={data} options={options} />
+    </Stack>
   );
 };
 
