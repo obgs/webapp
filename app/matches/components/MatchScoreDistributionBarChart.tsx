@@ -1,20 +1,19 @@
 "use client";
 
+import { useTheme } from "@mui/material";
+import { blueberryTwilightPalette } from "@mui/x-charts";
+import { useMemo } from "react";
 import {
-  AllSeriesType,
-  BarPlot,
-  BarSeriesType,
-  ChartsAxisHighlight,
-  ChartsLegend,
-  ChartsTooltip,
-  HighlightItemData,
-  LinePlot,
-  ResponsiveChartContainer,
-} from "@mui/x-charts";
-import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
-import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
-import { useEffect, useMemo, useState } from "react";
+  Bar,
+  ComposedChart,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
+import RechartsTooltip from "@/matches/components/RechartsTooltip";
 import {
   MatchFieldsFragment,
   StatDescriptionStatType,
@@ -26,6 +25,11 @@ interface Props {
   highlightedPlayer: string;
 }
 
+const getColor = (index: number) =>
+  blueberryTwilightPalette("dark")[
+    index % blueberryTwilightPalette("dark").length
+  ];
+
 const isNumericStat = (s: StatDescriptionStatType) =>
   [StatDescriptionStatType.Numeric, StatDescriptionStatType.Aggregate].includes(
     s
@@ -36,7 +40,13 @@ const MatchScoreDistributionBarChart = ({
   highlightedPlayer,
 }: Props) => {
   const statDescriptions = useMemo(
-    () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
+    () =>
+      match.gameVersion.statDescriptions
+        .slice()
+        .filter((s) => isNumericStat(s.type))
+        // filter out the highest stat
+        .slice(0, -1)
+        .sort(byOrderNumber),
     [match.gameVersion.statDescriptions]
   );
 
@@ -52,77 +62,45 @@ const MatchScoreDistributionBarChart = ({
       },
     };
   }, {} as Record<string, Record<string, string>>);
+  const theme = useTheme();
 
-  const xAxisData = useMemo(
+  const data = useMemo(
     () =>
-      statDescriptions
-        .filter((s) => isNumericStat(s.type))
-        .map((stat) => stat.name),
-    [statDescriptions]
-  );
-
-  const series: AllSeriesType[] = useMemo(
-    () => [
-      ...match.players.map(
-        (player): BarSeriesType => ({
-          data: statDescriptions
-            .filter((s) => isNumericStat(s.type))
-            .map((stat) => Number(statsByPlayer?.[player.id]?.[stat.id]) || 0),
-          type: "bar",
-          id: player.id,
-          label: player.name,
-          highlightScope: {
-            fade: "global",
-            highlight: "series",
-          },
-        })
-      ),
-      {
-        data: match.gameVersion.metrics.numericStats.map((stat) =>
-          Number(stat.globalAverage.toFixed(2))
+      statDescriptions.map((stat) => ({
+        name: stat.name,
+        ...match.players.reduce(
+          (acc, player) => ({
+            ...acc,
+            [player.id]: Number(statsByPlayer?.[player.id]?.[stat.id]) ?? 0,
+          }),
+          {}
         ),
-        type: "line",
-        curve: "step",
-        id: "average",
-        label: "Average",
-      },
-    ],
-    [
-      match.players,
-      match.gameVersion.metrics.numericStats,
-      statDescriptions,
-      statsByPlayer,
-    ]
+      })),
+    [match.players, statDescriptions, statsByPlayer]
   );
-  const [highlighted, setHighlighted] = useState<HighlightItemData>();
-
-  useEffect(() => {
-    setHighlighted({
-      seriesId: highlightedPlayer,
-      dataIndex: match.players.findIndex((p) => p.id === highlightedPlayer),
-    });
-  }, [highlightedPlayer, match.players]);
 
   return (
-    <ResponsiveChartContainer
-      height={500}
-      xAxis={[
-        {
-          data: xAxisData,
-          scaleType: "band",
-        },
-      ]}
-      series={series}
-      highlightedItem={highlighted}
-    >
-      <BarPlot barLabel="value" />
-      <LinePlot />
-      <ChartsLegend />
-      <ChartsXAxis />
-      <ChartsYAxis />
-      <ChartsTooltip />
-      <ChartsAxisHighlight x="band" />
-    </ResponsiveChartContainer>
+    <ResponsiveContainer height={500}>
+      <ComposedChart data={data}>
+        {match.players.map((player, index) => (
+          <Bar
+            activeBar
+            key={player.id}
+            dataKey={player.id}
+            fill={getColor(index)}
+          />
+        ))}
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Legend
+          formatter={(value) => match.players.find((p) => p.id === value)?.name}
+        />
+        <Tooltip
+          cursor={false}
+          content={(props) => <RechartsTooltip {...props} payloadKey="name" />}
+        />
+      </ComposedChart>
+    </ResponsiveContainer>
   );
 };
 
