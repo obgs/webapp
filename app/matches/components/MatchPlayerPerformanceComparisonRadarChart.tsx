@@ -2,13 +2,13 @@ import { useECharts } from "@kbox-labs/react-echarts";
 import { useTheme } from "@mui/material";
 import React, { useMemo } from "react";
 
+import { color } from "@/charts/colors";
 import {
   MatchFieldsFragment,
   StatDescriptionStatType,
 } from "graphql/generated";
 import { byOrderNumber } from "modules/stats/utils";
 
-import { color } from "@/charts/colors";
 
 interface Props {
   match: MatchFieldsFragment;
