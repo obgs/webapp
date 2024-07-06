@@ -1,43 +1,23 @@
+import { useECharts } from "@kbox-labs/react-echarts";
 import { useTheme } from "@mui/material";
-import { blueberryTwilightPalette } from "@mui/x-charts";
 import React, { useMemo } from "react";
-import {
-  RadarChart,
-  PolarGrid,
-  Legend,
-  PolarAngleAxis,
-  ResponsiveContainer,
-  Tooltip,
-  Radar,
-  PolarRadiusAxis,
-} from "recharts";
 
-import RechartsTooltip from "@/matches/components/RechartsTooltip";
 import {
   MatchFieldsFragment,
   StatDescriptionStatType,
 } from "graphql/generated";
 import { byOrderNumber } from "modules/stats/utils";
 
+import { color } from "@/charts/colors";
+
 interface Props {
   match: MatchFieldsFragment;
-  highlightItem: string;
-  onLegendHover: (dataKey: string) => void;
 }
-
-const getColor = (index: number) =>
-  blueberryTwilightPalette("dark")[
-    index % blueberryTwilightPalette("dark").length
-  ];
 
 const isNumericStat = (s: StatDescriptionStatType) =>
   [StatDescriptionStatType.Numeric].includes(s);
 
-const MatchPlayerPerformanceComparisonRadarChart = ({
-  match,
-  highlightItem,
-  onLegendHover,
-}: Props) => {
+const MatchPlayerPerformanceComparisonRadarChart = ({ match }: Props) => {
   const theme = useTheme();
   const statDescriptions = useMemo(
     () =>
@@ -63,55 +43,68 @@ const MatchPlayerPerformanceComparisonRadarChart = ({
     };
   }, {} as Record<string, Record<string, string>>);
 
-  const data = statDescriptions.map((stat, index) => ({
-    stat: stat.name,
-    ...match.players.reduce(
-      (acc, player) => ({
-        ...acc,
-        [player.id]: Number(statsByPlayer?.[player.id]?.[stat.id]) || 0,
-      }),
-      {}
-    ),
-    average:
-      match.gameVersion.metrics.numericStats[index].globalAverage.toFixed(2),
-  }));
-  return (
-    <ResponsiveContainer height={500} width="50%">
-      <RadarChart data={data}>
-        <Tooltip
-          content={(props) => <RechartsTooltip {...props} payloadKey="stat" />}
-        />
-        <PolarGrid />
-        <PolarAngleAxis
-          dataKey="stat"
-          tickSize={15}
-          tick={{ fill: theme.palette.text.primary }}
-        />
-        <PolarRadiusAxis angle={180 / statDescriptions.length} />
-        {match.players.map((player, index) => (
-          <Radar
-            key={player.id}
-            name={player.name}
-            dataKey={player.id}
-            stroke={getColor(index)}
-            fill={getColor(index)}
-            fillOpacity={highlightItem === player.id ? 0.6 : 0.1}
-          />
-        ))}
-        <Radar
-          name="Average"
-          dataKey="average"
-          stroke={getColor(match.players.length)}
-          fill={getColor(match.players.length)}
-          fillOpacity={highlightItem === "average" ? 0.6 : 0.1}
-        />
-        <Legend
-          onMouseOver={({ payload: { dataKey } }) => onLegendHover(dataKey)}
-          onMouseOut={() => onLegendHover("")}
-        />
-      </RadarChart>
-    </ResponsiveContainer>
-  );
+  const [ref] = useECharts<HTMLDivElement>({
+    color,
+    title: {
+      text: "Player Performance Comparison",
+      textStyle: {
+        color: theme.palette.text.primary,
+        fontWeight: 400,
+        minMargin: 10,
+      },
+    },
+    legend: {
+      data: [...match.players.map((player) => player.name), "Global average"],
+      textStyle: {
+        color: theme.palette.text.primary,
+      },
+      bottom: 0,
+    },
+    radar: {
+      indicator: statDescriptions.map((stat) => ({
+        name: stat.name,
+      })),
+      splitArea: {
+        areaStyle: {
+          color: [theme.palette.background.default],
+        },
+      },
+      splitNumber: 4,
+    },
+    series: [
+      {
+        type: "radar",
+        name: "Player Performance",
+        areaStyle: { opacity: 0.5 },
+        emphasis: { areaStyle: { opacity: 1 } },
+        data: [
+          ...match.players.map((player) => ({
+            name: player.name,
+            value: statDescriptions.map((stat) =>
+              Number(statsByPlayer?.[player.id]?.[stat.id])
+            ),
+            symbol: "none",
+          })),
+          {
+            name: "Global average",
+            value: match.gameVersion.metrics.numericStats.map((stat) =>
+              stat.globalAverage.toFixed(2)
+            ),
+            symbol: "none",
+          },
+        ],
+      },
+    ],
+    tooltip: {
+      backgroundColor: theme.palette.background.paper,
+      borderWidth: 0,
+      textStyle: {
+        color: theme.palette.text.primary,
+      },
+    },
+  });
+
+  return <div ref={ref} style={{ height: 400, width: "50%" }} />;
 };
 
 export default MatchPlayerPerformanceComparisonRadarChart;
