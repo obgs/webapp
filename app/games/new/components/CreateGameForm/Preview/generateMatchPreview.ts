@@ -104,9 +104,14 @@ const generateMatchPreview = (values: FormValues): MatchFieldsFragment => {
       game: {
         name: "Game Preview",
       },
+      metrics: {
+        enumStats: [],
+        numericStats: [],
+      },
     },
     players,
     stats,
+    createdAt: new Date().toISOString(),
   };
 };
 
