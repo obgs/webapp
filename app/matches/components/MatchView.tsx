@@ -1,7 +1,7 @@
 "use client";
 
 import { Divider, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 import MatchPlayerPerformanceComparisonRadarChart from "@/matches/components/MatchPlayerPerformanceComparisonRadarChart";
 import MatchScoreDistributionBarChart from "@/matches/components/MatchScoreDistributionBarChart";
@@ -13,22 +13,14 @@ interface Props {
 }
 
 const MatchView: React.FC<Props> = ({ match }) => {
-  const [highlightItem, setHighlightItem] = useState("");
   return (
     <Stack spacing={2}>
       <Typography variant="h5">Charts</Typography>
-      <MatchScoreDistributionBarChart
-        highlightedPlayer={highlightItem}
-        match={match}
-      />
-      <MatchPlayerPerformanceComparisonRadarChart
-        highlightItem={highlightItem}
-        match={match}
-        onLegendHover={setHighlightItem}
-      />
+      <MatchScoreDistributionBarChart match={match} />
+      <MatchPlayerPerformanceComparisonRadarChart match={match} />
       <Divider />
       <Typography variant="h5">Table</Typography>
-      <MatchTable onHover={setHighlightItem} match={match} />
+      <MatchTable match={match} />
     </Stack>
   );
 };

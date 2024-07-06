@@ -1,19 +1,9 @@
 "use client";
 
-import {
-  AllSeriesType,
-  BarPlot,
-  BarSeriesType,
-  ChartsAxisHighlight,
-  ChartsLegend,
-  ChartsTooltip,
-  HighlightItemData,
-  LinePlot,
-  ResponsiveChartContainer,
-} from "@mui/x-charts";
-import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
-import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
-import { useEffect, useMemo, useState } from "react";
+import { useECharts } from "@kbox-labs/react-echarts";
+import { useTheme } from "@mui/material";
+import { BarSeriesOption } from "echarts";
+import { useMemo } from "react";
 
 import {
   MatchFieldsFragment,
@@ -21,9 +11,10 @@ import {
 } from "graphql/generated";
 import { byOrderNumber } from "modules/stats/utils";
 
+import { color } from "@/charts/colors";
+
 interface Props {
   match: MatchFieldsFragment;
-  highlightedPlayer: string;
 }
 
 const isNumericStat = (s: StatDescriptionStatType) =>
@@ -31,15 +22,18 @@ const isNumericStat = (s: StatDescriptionStatType) =>
     s
   );
 
-const MatchScoreDistributionBarChart = ({
-  match,
-  highlightedPlayer,
-}: Props) => {
+const MatchScoreDistributionBarChart = ({ match }: Props) => {
+  const theme = useTheme();
   const statDescriptions = useMemo(
-    () => match.gameVersion.statDescriptions.slice().sort(byOrderNumber),
+    () =>
+      match.gameVersion.statDescriptions
+        .slice()
+        .filter((s) => isNumericStat(s.type))
+        // filter out the highest stat
+        .slice(0, -1)
+        .sort(byOrderNumber),
     [match.gameVersion.statDescriptions]
   );
-
   const statsByPlayer = match?.stats?.reduce((acc, stat) => {
     if (!stat.player) {
       return acc;
@@ -53,77 +47,78 @@ const MatchScoreDistributionBarChart = ({
     };
   }, {} as Record<string, Record<string, string>>);
 
-  const xAxisData = useMemo(
-    () =>
-      statDescriptions
-        .filter((s) => isNumericStat(s.type))
-        .map((stat) => stat.name),
-    [statDescriptions]
-  );
-
-  const series: AllSeriesType[] = useMemo(
-    () => [
-      ...match.players.map(
-        (player): BarSeriesType => ({
-          data: statDescriptions
-            .filter((s) => isNumericStat(s.type))
-            .map((stat) => Number(statsByPlayer?.[player.id]?.[stat.id]) || 0),
-          type: "bar",
-          id: player.id,
-          label: player.name,
-          highlightScope: {
-            fade: "global",
-            highlight: "series",
-          },
-        })
-      ),
-      {
-        data: match.gameVersion.metrics.numericStats.map((stat) =>
-          Number(stat.globalAverage.toFixed(2))
-        ),
-        type: "line",
-        curve: "step",
-        id: "average",
-        label: "Average",
+  const [ref] = useECharts<HTMLDivElement>({
+    color,
+    renderer: "svg",
+    legend: {
+      data: [...match.players.map((player) => player.name)],
+      textStyle: {
+        color: theme.palette.text.primary,
       },
-    ],
-    [
-      match.players,
-      match.gameVersion.metrics.numericStats,
-      statDescriptions,
-      statsByPlayer,
-    ]
-  );
-  const [highlighted, setHighlighted] = useState<HighlightItemData>();
-
-  useEffect(() => {
-    setHighlighted({
-      seriesId: highlightedPlayer,
-      dataIndex: match.players.findIndex((p) => p.id === highlightedPlayer),
-    });
-  }, [highlightedPlayer, match.players]);
-
-  return (
-    <ResponsiveChartContainer
-      height={500}
-      xAxis={[
-        {
-          data: xAxisData,
-          scaleType: "band",
+    },
+    xAxis: {
+      type: "category",
+      data: statDescriptions.map((stat) => stat.name),
+      axisLabel: {
+        color: theme.palette.text.primary,
+        interval: 0,
+      },
+    },
+    yAxis: {
+      type: "value",
+      axisLabel: {
+        color: theme.palette.text.primary,
+      },
+      axisLine: {
+        lineStyle: {
+          color: theme.palette.divider,
+          width: 1,
+          opacity: 1,
         },
-      ]}
-      series={series}
-      highlightedItem={highlighted}
-    >
-      <BarPlot barLabel="value" />
-      <LinePlot />
-      <ChartsLegend />
-      <ChartsXAxis />
-      <ChartsYAxis />
-      <ChartsTooltip />
-      <ChartsAxisHighlight x="band" />
-    </ResponsiveChartContainer>
-  );
+        symbol: ["none", "arrow"],
+        symbolOffset: [0, 10],
+        show: true,
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: theme.palette.divider,
+          width: 1,
+          type: "dashed",
+        },
+      },
+    },
+    series: match.players.map(
+      (player): BarSeriesOption => ({
+        name: player.name,
+        data: statDescriptions.map((stat) =>
+          Number(statsByPlayer?.[player.id]?.[stat.id])
+        ),
+        type: "bar",
+        emphasis: {
+          focus: "series",
+        },
+      })
+    ),
+    tooltip: {
+      trigger: "item",
+      backgroundColor: theme.palette.background.paper,
+      borderWidth: 0,
+      textStyle: {
+        color: theme.palette.text.primary,
+      },
+    },
+    title: {
+      text: "Score Distribution",
+      textStyle: {
+        color: theme.palette.text.primary,
+        fontWeight: 400,
+      },
+    },
+    animation: true,
+  });
+
+  return <div ref={ref} style={{ height: 400, width: "100%" }} />;
 };
 
 export default MatchScoreDistributionBarChart;
