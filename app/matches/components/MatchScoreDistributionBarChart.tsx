@@ -12,7 +12,6 @@ import {
 } from "graphql/generated";
 import { byOrderNumber } from "modules/stats/utils";
 
-
 interface Props {
   match: MatchFieldsFragment;
 }
